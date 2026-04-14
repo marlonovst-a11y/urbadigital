@@ -22,17 +22,6 @@ const HAZARD_LABELS: Record<HazardId, string> = {
   casabaja: 'Vivienda en zona baja',
 };
 
-const PELIGROS: { id: HazardId; left: string; top: string; width: string; height: string }[] = [
-  { id: 'cables',     left: '51.7%', top: '33.0%', width: '10%', height: '8%' },
-  { id: 'vidrios',    left: '22.7%', top: '38.5%', width: '6%',  height: '8%' },
-  { id: 'olla',       left: '68.3%', top: '38.1%', width: '6%',  height: '8%' },
-  { id: 'basura',     left: '31.9%', top: '52.1%', width: '6%',  height: '8%' },
-  { id: 'roedor',     left: '25.3%', top: '56.5%', width: '6%',  height: '8%' },
-  { id: 'pisomojado', left: '60.0%', top: '55.1%', width: '8%',  height: '8%' },
-  { id: 'calleinund', left: '47.7%', top: '58.7%', width: '10%', height: '8%' },
-  { id: 'casabaja',   left: '46.1%', top: '52.9%', width: '8%',  height: '8%' },
-];
-
 const TIMER_SECONDS = 25;
 
 export default function Level2({ participantId, nickname, onComplete }: Level2Props) {
@@ -41,13 +30,24 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
   const [finished, setFinished] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [svgContent, setSvgContent] = useState<string>('');
+  const svgRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const foundRef = useRef<Set<HazardId>>(new Set());
+  const finishedRef = useRef(false);
 
   useEffect(() => {
     fetch('/nivel2.svg')
       .then(r => r.text())
       .then(text => setSvgContent(text));
   }, []);
+
+  useEffect(() => {
+    foundRef.current = found;
+  }, [found]);
+
+  useEffect(() => {
+    finishedRef.current = finished;
+  }, [finished]);
 
   useEffect(() => {
     if (finished || found.size === 8) return;
@@ -73,14 +73,39 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
     }
   }, [found]);
 
-  const handleFindHazard = (id: HazardId) => {
-    if (found.has(id) || finished) return;
-    setFound(prev => {
-      const next = new Set(prev);
-      next.add(id);
-      return next;
-    });
-  };
+  useEffect(() => {
+    if (!svgContent || !svgRef.current) return;
+
+    const addEvents = () => {
+      if (!svgRef.current) return;
+
+      const svgEl = svgRef.current.querySelector('svg');
+      if (svgEl) {
+        (svgEl as SVGElement & { style: CSSStyleDeclaration }).style.pointerEvents = 'all';
+      }
+
+      const ids = ['cables', 'vidrios', 'olla', 'basura', 'roedor', 'pisomojado', 'calleinund', 'casabaja'];
+      ids.forEach(id => {
+        const el = svgRef.current?.querySelector(`#${id}`) as SVGElement & { style: CSSStyleDeclaration } | null;
+        if (el) {
+          el.style.pointerEvents = 'all';
+          el.style.cursor = 'pointer';
+          el.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!foundRef.current.has(id as HazardId) && !finishedRef.current) {
+              setFound(prev => {
+                const next = new Set(prev);
+                next.add(id as HazardId);
+                return next;
+              });
+            }
+          });
+        }
+      });
+    };
+
+    setTimeout(addEvents, 500);
+  }, [svgContent]);
 
   const calculateScore = () => {
     const count = found.size;
@@ -104,16 +129,10 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
   const timerPercent = (timeLeft / TIMER_SECONDS) * 100;
   const timerColor = timeLeft > 15 ? '#1ABC9C' : timeLeft > 8 ? '#F39C12' : '#E74C3C';
 
-  const handleCalibration = (e: React.MouseEvent) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
-    const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
-    console.log(`left: '${x}%', top: '${y}%'`);
-  };
-
   return (
-    <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden', background: '#1a2a4a' }} onClick={handleCalibration}>
+    <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden', background: '#1a2a4a' }}>
       <div
+        ref={svgRef}
         dangerouslySetInnerHTML={{ __html: svgContent }}
         style={{
           position: 'absolute',
@@ -123,42 +142,8 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          pointerEvents: 'none',
         }}
       />
-
-      {PELIGROS.map(p => (
-        <div
-          key={p.id}
-          onClick={() => handleFindHazard(p.id)}
-          style={{
-            position: 'absolute',
-            left: p.left,
-            top: p.top,
-            width: p.width,
-            height: p.height,
-            zIndex: 10,
-            cursor: found.has(p.id) || finished ? 'default' : 'pointer',
-            border: found.has(p.id) ? '2px solid #F9D030' : '1px dashed rgba(255,255,255,0.2)',
-            borderRadius: 6,
-            background: found.has(p.id) ? 'rgba(249,208,48,0.12)' : 'transparent',
-            boxShadow: found.has(p.id) ? '0 0 14px rgba(249,208,48,0.45)' : 'none',
-            transition: 'border 0.2s, background 0.2s, box-shadow 0.2s',
-          }}
-          onMouseEnter={e => {
-            if (!found.has(p.id) && !finished) {
-              (e.currentTarget as HTMLDivElement).style.border = '1px dashed rgba(249,208,48,0.5)';
-              (e.currentTarget as HTMLDivElement).style.background = 'rgba(249,208,48,0.06)';
-            }
-          }}
-          onMouseLeave={e => {
-            if (!found.has(p.id)) {
-              (e.currentTarget as HTMLDivElement).style.border = '1px dashed rgba(255,255,255,0.2)';
-              (e.currentTarget as HTMLDivElement).style.background = 'transparent';
-            }
-          }}
-        />
-      ))}
 
       <div
         style={{
