@@ -22,6 +22,17 @@ const HAZARD_LABELS: Record<HazardId, string> = {
   casabaja: 'Vivienda en zona baja',
 };
 
+const HAZARD_RECTS: { id: HazardId; x: number; y: number; width: number; height: number }[] = [
+  { id: 'cables',     x: 900,  y: 180, width: 400, height: 120 },
+  { id: 'vidrios',    x: 200,  y: 300, width: 150, height: 180 },
+  { id: 'olla',       x: 1100, y: 280, width: 150, height: 160 },
+  { id: 'basura',     x: 480,  y: 580, width: 150, height: 150 },
+  { id: 'roedor',     x: 350,  y: 620, width: 130, height: 150 },
+  { id: 'pisomojado', x: 900,  y: 620, width: 200, height: 120 },
+  { id: 'calleinund', x: 720,  y: 660, width: 280, height: 130 },
+  { id: 'casabaja',   x: 680,  y: 500, width: 220, height: 180 },
+];
+
 const TIMER_SECONDS = 25;
 
 export default function Level2({ participantId, nickname, onComplete }: Level2Props) {
@@ -29,25 +40,7 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
   const [found, setFound] = useState<Set<HazardId>>(new Set());
   const [finished, setFinished] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [svgContent, setSvgContent] = useState<string>('');
-  const svgRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const foundRef = useRef<Set<HazardId>>(new Set());
-  const finishedRef = useRef(false);
-
-  useEffect(() => {
-    fetch('/nivel2.svg')
-      .then(r => r.text())
-      .then(text => setSvgContent(text));
-  }, []);
-
-  useEffect(() => {
-    foundRef.current = found;
-  }, [found]);
-
-  useEffect(() => {
-    finishedRef.current = finished;
-  }, [finished]);
 
   useEffect(() => {
     if (finished || found.size === 8) return;
@@ -73,39 +66,14 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
     }
   }, [found]);
 
-  useEffect(() => {
-    if (!svgContent || !svgRef.current) return;
-
-    const addEvents = () => {
-      if (!svgRef.current) return;
-
-      const svgEl = svgRef.current.querySelector('svg');
-      if (svgEl) {
-        (svgEl as SVGElement & { style: CSSStyleDeclaration }).style.pointerEvents = 'all';
-      }
-
-      const ids = ['cables', 'vidrios', 'olla', 'basura', 'roedor', 'pisomojado', 'calleinund', 'casabaja'];
-      ids.forEach(id => {
-        const el = svgRef.current?.querySelector(`#${id}`) as SVGElement & { style: CSSStyleDeclaration } | null;
-        if (el) {
-          el.style.pointerEvents = 'all';
-          el.style.cursor = 'pointer';
-          el.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (!foundRef.current.has(id as HazardId) && !finishedRef.current) {
-              setFound(prev => {
-                const next = new Set(prev);
-                next.add(id as HazardId);
-                return next;
-              });
-            }
-          });
-        }
-      });
-    };
-
-    setTimeout(addEvents, 500);
-  }, [svgContent]);
+  const handleFindHazard = (id: HazardId) => {
+    if (found.has(id) || finished) return;
+    setFound(prev => {
+      const next = new Set(prev);
+      next.add(id);
+      return next;
+    });
+  };
 
   const calculateScore = () => {
     const count = found.size;
@@ -131,19 +99,36 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
 
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden', background: '#1a2a4a' }}>
-      <div
-        ref={svgRef}
-        dangerouslySetInnerHTML={{ __html: svgContent }}
-        style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      />
+      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+          <img
+            src="/nivel2.svg"
+            alt="nivel 2"
+            style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+          />
+          <svg
+            viewBox="0 0 1920 1080"
+            preserveAspectRatio="xMidYMid meet"
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
+          >
+            {HAZARD_RECTS.map(rect => (
+              <rect
+                key={rect.id}
+                x={rect.x}
+                y={rect.y}
+                width={rect.width}
+                height={rect.height}
+                fill={found.has(rect.id) ? 'yellow' : 'transparent'}
+                fillOpacity={found.has(rect.id) ? 0.3 : 0}
+                stroke={found.has(rect.id) ? 'yellow' : 'transparent'}
+                strokeWidth={found.has(rect.id) ? 8 : 0}
+                style={{ cursor: found.has(rect.id) || finished ? 'default' : 'pointer' }}
+                onClick={() => handleFindHazard(rect.id)}
+              />
+            ))}
+          </svg>
+        </div>
+      </div>
 
       <div
         style={{
@@ -303,12 +288,7 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
               textAlign: 'center',
             }}
           >
-            <div
-              style={{
-                fontSize: 'clamp(32px, 6vw, 56px)',
-                marginBottom: 8,
-              }}
-            >
+            <div style={{ fontSize: 'clamp(32px, 6vw, 56px)', marginBottom: 8 }}>
               {found.size === 8 ? '🏆' : found.size >= 5 ? '👍' : found.size >= 3 ? '🙂' : '💪'}
             </div>
 
