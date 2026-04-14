@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Header from './Header';
 import { checkNicknameCooldown } from '@/lib/supabase';
 import NicknameCooldownDialog from './NicknameCooldownDialog';
 
@@ -41,7 +40,7 @@ export default function NicknameInput({ onContinue }: NicknameInputProps) {
     try {
       const cooldownCheck = await checkNicknameCooldown(nickname.trim());
 
-     if (cooldownCheck.played) {
+      if (cooldownCheck.played) {
         setCooldownData({
           allowedAt: cooldownCheck.nextAvailable || new Date(),
           remainingMinutes: 180
@@ -58,56 +57,95 @@ export default function NicknameInput({ onContinue }: NicknameInputProps) {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && canContinue) {
+      handleContinue();
+    }
+  };
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#ECEEEF]">
-      <Header />
-
-      <main className="pt-24 flex-1 flex items-center justify-center px-4">
-        <div className="max-w-md w-full">
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <div className="mb-8 text-center">
-              <div className="inline-block mb-4">
-                <img src="/papa.svg" alt="Roberto" style={{ height: '150px' }} />
-              </div>
-              <p className="text-gray-600">Hola, soy Roberto, el papá de la familia</p>
-            </div>
-
-            <div className="bg-blue-50 border-l-4 border-[#2167AE] p-4 mb-6 rounded">
-              <p className="text-gray-700">
-                ¿Cuál es tu apodo? Te identificaremos con él durante todo el juego.
-              </p>
-            </div>
-
-            <div className="mb-6">
-              <input
-                type="text"
-                value={nickname}
-                onChange={handleChange}
-                placeholder="Tu apodo aquí..."
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#2167AE] transition-colors"
-                maxLength={20}
-              />
-              <div className="flex justify-between items-center mt-2">
-                <span className={`text-sm ${error ? 'text-red-500' : 'text-gray-500'}`}>
-                  {error || `${nickname.length}/20 caracteres`}
-                </span>
-              </div>
-            </div>
-
-            <button
-              onClick={handleContinue}
-              disabled={!canContinue}
-              className={`w-full font-bold py-3 px-6 rounded-lg transition-colors duration-300 ${
-                canContinue
-                  ? 'bg-[#2167AE] text-white hover:bg-[#1E2D6B]'
-                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              }`}
-            >
-              {isSubmitting ? 'Verificando...' : 'Continuar'}
-            </button>
-          </div>
-        </div>
-      </main>
+    <div
+      style={{
+        width: '100vw',
+        height: '100vh',
+        backgroundImage: 'url(/nickname.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          left: '50%',
+          top: '55%',
+          transform: 'translate(-50%, -50%)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '12px',
+          width: '400px',
+        }}
+      >
+        <input
+          type="text"
+          value={nickname}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          placeholder="Tu apodo aquí..."
+          maxLength={20}
+          style={{
+            width: '400px',
+            padding: '12px 16px',
+            borderRadius: '12px',
+            border: '2px solid rgba(33, 103, 174, 0.4)',
+            background: 'rgba(255, 255, 255, 0.85)',
+            fontSize: '18px',
+            fontWeight: 500,
+            color: '#1a2a3a',
+            outline: 'none',
+            boxSizing: 'border-box',
+            textAlign: 'center',
+          }}
+        />
+        {error && (
+          <span
+            style={{
+              color: '#c0392b',
+              fontSize: '13px',
+              fontWeight: 600,
+              background: 'rgba(255,255,255,0.8)',
+              borderRadius: '6px',
+              padding: '2px 10px',
+            }}
+          >
+            {error}
+          </span>
+        )}
+        <button
+          onClick={handleContinue}
+          disabled={!canContinue}
+          style={{
+            width: '200px',
+            height: '60px',
+            borderRadius: '16px',
+            border: 'none',
+            background: canContinue ? '#f5c518' : 'rgba(200,200,200,0.7)',
+            color: canContinue ? '#1a2a00' : '#888',
+            fontWeight: 800,
+            fontSize: '18px',
+            letterSpacing: '0.08em',
+            cursor: canContinue ? 'pointer' : 'not-allowed',
+            fontFamily: 'inherit',
+            transition: 'background 0.2s, color 0.2s',
+            textTransform: 'uppercase',
+          }}
+        >
+          {isSubmitting ? 'Verificando...' : 'Continuar'}
+        </button>
+      </div>
 
       {showCooldownDialog && cooldownData && (
         <NicknameCooldownDialog
