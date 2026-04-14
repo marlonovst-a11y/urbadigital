@@ -26,31 +26,31 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
     <div className="min-h-screen flex flex-col bg-[#ECEEEF]">
       <Header />
 
-      <main className="pt-24 flex-1 px-4 pb-8">
+      <main className="pt-14 md:pt-24 flex-1 px-3 md:px-4 pb-8">
         <div className="max-w-3xl mx-auto">
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <div className="mb-6">
-              <div className="inline-block px-4 py-2 bg-[#1ABC9C] text-white font-bold rounded-full mb-4">
+          <div className="bg-white rounded-lg shadow-lg p-4 md:p-8">
+            <div className="mb-4 md:mb-6">
+              <div className="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-[#1ABC9C] text-white font-bold rounded-full mb-3 md:mb-4 text-sm md:text-base">
                 +10 puntos al completar
               </div>
-              <h1 className="text-3xl font-bold text-[#1E2D6B] mb-2">
+              <h1 className="text-2xl md:text-3xl font-bold text-[#1E2D6B] mb-2">
                 Evaluación Final
               </h1>
-              <p className="text-gray-700">
+              <p className="text-gray-700 text-sm md:text-base">
                 Responde estas tres preguntas para desbloquear tus 10 puntos finales.
               </p>
             </div>
 
-            <div className="space-y-8">
-              <div className="bg-[#ECEEEF] rounded-lg p-6">
-                <h3 className="font-bold text-[#1E2D6B] mb-4">
+            <div className="space-y-5 md:space-y-8">
+              <div className="bg-[#ECEEEF] rounded-lg p-4 md:p-6">
+                <h3 className="font-bold text-[#1E2D6B] mb-3 md:mb-4 text-sm md:text-base">
                   1. ¿Has aprendido algo nuevo de estos consejos, contenidos y materiales?
                 </h3>
-                <div className="space-y-3">
+                <div className="space-y-2 md:space-y-3">
                   {['Sí, significativamente', 'Sí, moderadamente', 'Sí, de forma limitada', 'No, en absoluto'].map((option) => (
                     <label
                       key={option}
-                      className={`block p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                      className={`block p-3 md:p-4 rounded-lg border-2 cursor-pointer transition-all ${
                         answer1 === option
                           ? 'bg-[#2167AE] border-[#2167AE] text-white'
                           : 'bg-white border-gray-300 text-gray-800 hover:border-[#2167AE]'
@@ -64,21 +64,21 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
                         onChange={(e) => setAnswer1(e.target.value)}
                         className="sr-only"
                       />
-                      <span className="font-medium">{option}</span>
+                      <span className="font-medium text-sm md:text-base">{option}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
-              <div className="bg-[#ECEEEF] rounded-lg p-6">
-                <h3 className="font-bold text-[#1E2D6B] mb-4">
+              <div className="bg-[#ECEEEF] rounded-lg p-4 md:p-6">
+                <h3 className="font-bold text-[#1E2D6B] mb-3 md:mb-4 text-sm md:text-base">
                   2. ¿Fue útil la información/contenido que revisaste en la plataforma?
                 </h3>
-                <div className="space-y-3">
+                <div className="space-y-2 md:space-y-3">
                   {['Sí, mucho', 'Sí, bastante', 'Sí, poco', 'No, nada'].map((option) => (
                     <label
                       key={option}
-                      className={`block p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                      className={`block p-3 md:p-4 rounded-lg border-2 cursor-pointer transition-all ${
                         answer2 === option
                           ? 'bg-[#2167AE] border-[#2167AE] text-white'
                           : 'bg-white border-gray-300 text-gray-800 hover:border-[#2167AE]'
@@ -92,21 +92,21 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
                         onChange={(e) => setAnswer2(e.target.value)}
                         className="sr-only"
                       />
-                      <span className="font-medium">{option}</span>
+                      <span className="font-medium text-sm md:text-base">{option}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
-              <div className="bg-[#ECEEEF] rounded-lg p-6">
-                <h3 className="font-bold text-[#1E2D6B] mb-4">
+              <div className="bg-[#ECEEEF] rounded-lg p-4 md:p-6">
+                <h3 className="font-bold text-[#1E2D6B] mb-3 md:mb-4 text-sm md:text-base">
                   3. ¿Piensas aplicar estos consejos?
                 </h3>
-                <div className="space-y-3">
+                <div className="space-y-2 md:space-y-3">
                   {['Sí, definitivamente los aplicaré', 'Probablemente los aplicaré', 'Es poco probable que los aplique', 'No los aplicaré'].map((option) => (
                     <label
                       key={option}
-                      className={`block p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                      className={`block p-3 md:p-4 rounded-lg border-2 cursor-pointer transition-all ${
                         answer3 === option
                           ? 'bg-[#2167AE] border-[#2167AE] text-white'
                           : 'bg-white border-gray-300 text-gray-800 hover:border-[#2167AE]'
@@ -120,7 +120,7 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
                         onChange={(e) => setAnswer3(e.target.value)}
                         className="sr-only"
                       />
-                      <span className="font-medium">{option}</span>
+                      <span className="font-medium text-sm md:text-base">{option}</span>
                     </label>
                   ))}
                 </div>
@@ -130,7 +130,7 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
             <button
               onClick={handleSubmit}
               disabled={!isComplete}
-              className={`w-full py-3 mt-8 font-bold rounded-lg transition-colors text-lg ${
+              className={`w-full py-3 mt-6 md:mt-8 font-bold rounded-lg transition-colors text-sm md:text-lg min-h-[44px] ${
                 isComplete
                   ? 'bg-[#1ABC9C] text-white hover:bg-[#27AE60] cursor-pointer'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'

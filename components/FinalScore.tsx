@@ -52,28 +52,28 @@ export default function FinalScore({ participantId, nickname, totalScore, levelS
     <div className="min-h-screen flex flex-col bg-[#ECEEEF]">
       <Header />
 
-      <main className="pt-24 flex-1 px-4 pb-8">
+      <main className="pt-14 md:pt-24 flex-1 px-3 md:px-4 pb-8">
         <div className="max-w-3xl mx-auto">
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <h1 className="text-3xl font-bold text-[#1E2D6B] mb-8 text-center">
+          <div className="bg-white rounded-lg shadow-lg p-4 md:p-8">
+            <h1 className="text-2xl md:text-3xl font-bold text-[#1E2D6B] mb-5 md:mb-8 text-center">
               Tu Puntaje Final
             </h1>
 
-            <div className="flex flex-col items-center mb-8">
-              <div className="w-48 h-48 rounded-full bg-[#2167AE] flex items-center justify-center shadow-xl mb-4">
+            <div className="flex flex-col items-center mb-5 md:mb-8">
+              <div className="w-36 h-36 md:w-48 md:h-48 rounded-full bg-[#2167AE] flex items-center justify-center shadow-xl mb-4">
                 <div className="text-center">
-                  <div className="text-6xl font-bold text-white">{totalScore}</div>
-                  <div className="text-white text-lg">/100</div>
+                  <div className="text-5xl md:text-6xl font-bold text-white">{totalScore}</div>
+                  <div className="text-white text-base md:text-lg">/100</div>
                 </div>
               </div>
-              <p className="text-2xl font-bold text-[#1E2D6B] text-center">
+              <p className="text-lg md:text-2xl font-bold text-[#1E2D6B] text-center">
                 {getMessage(totalScore)}
               </p>
             </div>
 
-            <div className="bg-[#ECEEEF] rounded-lg p-6 mb-6">
-              <h3 className="font-bold text-[#1E2D6B] mb-4">Desglose por nivel</h3>
-              <table className="w-full">
+            <div className="bg-[#ECEEEF] rounded-lg p-4 md:p-6 mb-4 md:mb-6">
+              <h3 className="font-bold text-[#1E2D6B] mb-3 md:mb-4 text-sm md:text-base">Desglose por nivel</h3>
+              <table className="w-full text-xs md:text-sm">
                 <thead>
                   <tr className="border-b-2 border-gray-300">
                     <th className="text-left py-2 text-[#1E2D6B]">Nivel</th>
@@ -82,32 +82,32 @@ export default function FinalScore({ participantId, nickname, totalScore, levelS
                 </thead>
                 <tbody className="text-gray-700">
                   <tr className="border-b border-gray-200">
-                    <td className="py-2">Nivel 1: Trivia de Prevención</td>
+                    <td className="py-1.5 md:py-2">N1: Trivia de Prevención</td>
                     <td className="text-right font-semibold">{levelScores.level1}/20</td>
                   </tr>
                   <tr className="border-b border-gray-200">
-                    <td className="py-2">Nivel 2: Identifica el Riesgo</td>
+                    <td className="py-1.5 md:py-2">N2: Identifica el Riesgo</td>
                     <td className="text-right font-semibold">{levelScores.level2}/20</td>
                   </tr>
                   <tr className="border-b border-gray-200">
-                    <td className="py-2">Nivel 3: Arrastra y Decide</td>
+                    <td className="py-1.5 md:py-2">N3: Arrastra y Decide</td>
                     <td className="text-right font-semibold">{levelScores.level3}/20</td>
                   </tr>
                   <tr className="border-b border-gray-200">
-                    <td className="py-2">Nivel 4: Reto de Respuesta Rápida</td>
+                    <td className="py-1.5 md:py-2">N4: Reto de Respuesta Rápida</td>
                     <td className="text-right font-semibold">{levelScores.level4}/20</td>
                   </tr>
                   <tr className="border-b border-gray-200">
-                    <td className="py-2">Nivel 5: Crucigrama de Multiamenazas</td>
+                    <td className="py-1.5 md:py-2">N5: Crucigrama de Multiamenazas</td>
                     <td className="text-right font-semibold">{levelScores.level5}/20</td>
                   </tr>
                   <tr className="border-b-2 border-gray-300">
-                    <td className="py-2">Evaluación Final</td>
+                    <td className="py-1.5 md:py-2">Evaluación Final</td>
                     <td className="text-right font-semibold">{levelScores.evaluation}/10</td>
                   </tr>
                   <tr>
-                    <td className="py-2 font-bold text-[#1E2D6B]">Total</td>
-                    <td className="text-right font-bold text-[#1E2D6B] text-lg">{totalScore}/100</td>
+                    <td className="py-1.5 md:py-2 font-bold text-[#1E2D6B]">Total</td>
+                    <td className="text-right font-bold text-[#1E2D6B] text-sm md:text-lg">{totalScore}/100</td>
                   </tr>
                 </tbody>
               </table>
@@ -115,34 +115,34 @@ export default function FinalScore({ participantId, nickname, totalScore, levelS
 
             <button
               onClick={() => setIsRankingOpen(true)}
-              className="w-full py-3 bg-[#2167AE] text-white font-bold rounded-lg hover:bg-[#1E2D6B] transition-colors text-lg mb-4 flex items-center justify-center gap-2"
+              className="w-full py-3 bg-[#2167AE] text-white font-bold rounded-lg hover:bg-[#1E2D6B] transition-colors text-sm md:text-lg mb-3 md:mb-4 flex items-center justify-center gap-2 min-h-[44px]"
             >
-              <Trophy className="w-6 h-6" fill="currentColor" />
+              <Trophy className="w-5 h-5 md:w-6 md:h-6" fill="currentColor" />
               Ver ranking de participantes
             </button>
 
-            <div className="mb-6">
-              <h3 className="font-bold text-[#1E2D6B] mb-3 text-center">Comparte tu logro</h3>
-              <div className="flex justify-center gap-4">
+            <div className="mb-4 md:mb-6">
+              <h3 className="font-bold text-[#1E2D6B] mb-2 md:mb-3 text-center text-sm md:text-base">Comparte tu logro</h3>
+              <div className="flex justify-center gap-2 md:gap-4 flex-wrap">
                 <button
                   onClick={() => handleShare('facebook')}
-                  className="flex items-center gap-2 px-4 py-2 bg-[#1877F2] text-white rounded-lg hover:opacity-90 transition-opacity"
+                  className="flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-2 bg-[#1877F2] text-white rounded-lg hover:opacity-90 transition-opacity text-sm min-h-[44px]"
                 >
-                  <Facebook className="w-5 h-5" fill="currentColor" />
+                  <Facebook className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" />
                   Facebook
                 </button>
                 <button
                   onClick={() => handleShare('whatsapp')}
-                  className="flex items-center gap-2 px-4 py-2 bg-[#25D366] text-white rounded-lg hover:opacity-90 transition-opacity"
+                  className="flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-2 bg-[#25D366] text-white rounded-lg hover:opacity-90 transition-opacity text-sm min-h-[44px]"
                 >
-                  <MessageCircle className="w-5 h-5" fill="currentColor" />
+                  <MessageCircle className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" />
                   WhatsApp
                 </button>
                 <button
                   onClick={() => handleShare('linkedin')}
-                  className="flex items-center gap-2 px-4 py-2 bg-[#0A66C2] text-white rounded-lg hover:opacity-90 transition-opacity"
+                  className="flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-2 bg-[#0A66C2] text-white rounded-lg hover:opacity-90 transition-opacity text-sm min-h-[44px]"
                 >
-                  <Linkedin className="w-5 h-5" fill="currentColor" />
+                  <Linkedin className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" />
                   LinkedIn
                 </button>
               </div>
@@ -150,7 +150,7 @@ export default function FinalScore({ participantId, nickname, totalScore, levelS
 
             <button
               onClick={onContinue}
-              className="w-full py-3 bg-[#2167AE] text-white font-bold rounded-lg hover:bg-[#1E2D6B] transition-colors text-lg"
+              className="w-full py-3 bg-[#2167AE] text-white font-bold rounded-lg hover:bg-[#1E2D6B] transition-colors text-sm md:text-lg min-h-[44px]"
             >
               Finalizar
             </button>

@@ -292,7 +292,7 @@ const handleDiagnosticSubmit = async (data: DiagnosticData) => {
   return (
     <>
       {(
-        <div style={{ position: 'fixed', top: '16px', right: '16px', zIndex: 9999, background: 'rgba(0,0,0,0.7)', borderRadius: '8px', padding: '6px 10px', display: 'flex', gap: '6px', alignItems: 'center' }}>
+        <div className="hidden md:flex" style={{ position: 'fixed', top: '16px', right: '16px', zIndex: 9999, background: 'rgba(0,0,0,0.7)', borderRadius: '8px', padding: '6px 10px', gap: '6px', alignItems: 'center' }}>
           {([
             { label: 'N1', screen: 'level1' },
             { label: 'N2', screen: 'level2' },

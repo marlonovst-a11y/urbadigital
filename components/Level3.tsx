@@ -357,33 +357,33 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
     return (
       <div className="min-h-screen flex flex-col bg-[#ECEEEF]">
         <Header />
-        <main className="pt-24 flex-1 px-4 pb-8 flex items-center justify-center">
+        <main className="pt-14 md:pt-24 flex-1 px-3 md:px-4 pb-8 flex items-center justify-center">
           <div className="max-w-2xl w-full bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div className="bg-[#2167AE] px-8 py-6 text-white">
-              <h2 className="text-2xl font-bold mb-1">Nivel 3 completado</h2>
+            <div className="bg-[#2167AE] px-4 md:px-8 py-4 md:py-6 text-white">
+              <h2 className="text-xl md:text-2xl font-bold mb-1">Nivel 3 completado</h2>
               <p className="text-blue-100 text-sm">Antes, Durante y Después del desastre</p>
             </div>
-            <div className="px-8 py-6">
-              <div className="flex gap-6 mb-6">
-                <div className="flex-1 bg-[#EAF4FB] rounded-xl p-4 text-center">
-                  <p className="text-3xl font-bold text-[#2167AE]">{correctCount}/9</p>
-                  <p className="text-sm text-gray-500 mt-1">Respuestas correctas</p>
+            <div className="px-4 md:px-8 py-4 md:py-6">
+              <div className="flex gap-3 md:gap-6 mb-4 md:mb-6">
+                <div className="flex-1 bg-[#EAF4FB] rounded-xl p-3 md:p-4 text-center">
+                  <p className="text-2xl md:text-3xl font-bold text-[#2167AE]">{correctCount}/9</p>
+                  <p className="text-xs md:text-sm text-gray-500 mt-1">Respuestas correctas</p>
                 </div>
-                <div className="flex-1 bg-[#E8F8F2] rounded-xl p-4 text-center">
-                  <p className="text-3xl font-bold text-[#27AE60]">{totalScore}</p>
-                  <p className="text-sm text-gray-500 mt-1">Puntos obtenidos</p>
+                <div className="flex-1 bg-[#E8F8F2] rounded-xl p-3 md:p-4 text-center">
+                  <p className="text-2xl md:text-3xl font-bold text-[#27AE60]">{totalScore}</p>
+                  <p className="text-xs md:text-sm text-gray-500 mt-1">Puntos obtenidos</p>
                 </div>
               </div>
 
-              <div className="bg-[#F0F4FF] rounded-xl p-5 mb-6">
-                <p className="text-[#1E2D6B] text-sm leading-relaxed">
+              <div className="bg-[#F0F4FF] rounded-xl p-3 md:p-5 mb-4 md:mb-6">
+                <p className="text-[#1E2D6B] text-xs md:text-sm leading-relaxed">
                   Conocer qué hacer antes, durante y después de un desastre puede salvar vidas.
                   La preparación anticipada reduce el impacto, actuar con calma durante la emergencia
                   protege a todos, y las acciones post-desastre permiten recuperar la normalidad de forma segura.
                 </p>
               </div>
 
-              <div className="space-y-2 mb-6 max-h-64 overflow-y-auto pr-1">
+              <div className="space-y-2 mb-4 md:mb-6 max-h-64 overflow-y-auto pr-1">
                 {responses.map((r, i) => (
                   <div
                     key={i}
@@ -416,7 +416,7 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
 
               <button
                 onClick={handleContinue}
-                className="w-full py-3 bg-[#2167AE] hover:bg-[#1a5490] text-white font-bold rounded-xl transition-colors text-lg"
+                className="w-full py-3 bg-[#2167AE] hover:bg-[#1a5490] text-white font-bold rounded-xl transition-colors text-sm md:text-lg min-h-[44px]"
               >
                 Continuar al Mapa
               </button>
@@ -430,7 +430,7 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
   return (
     <div className="flex flex-col bg-[#f95966]" style={{ height: '100vh', overflow: 'hidden' }}>
       <Header />
-      <main className="flex-1 flex flex-col overflow-hidden" style={{ paddingTop: '64px' }}>
+      <main className="flex-1 flex flex-col overflow-hidden" style={{ paddingTop: '48px' }}>
         <div className="flex-1 relative overflow-hidden">
           {svgContent && (
             <div

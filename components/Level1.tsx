@@ -163,13 +163,13 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
     return (
       <div className="min-h-screen flex flex-col bg-[#2167AE] relative overflow-hidden">
         <Header />
-        <main className="pt-24 flex-1 flex items-center justify-center px-4">
+        <main className="pt-14 md:pt-24 flex-1 flex items-center justify-center px-4">
           <div className="text-center">
-            <h1 className="text-6xl font-bold text-white mb-4">{calculateTotalScore()} puntos</h1>
-            <p className="text-2xl text-white mb-8">¡Excelente trabajo, {nickname}!</p>
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">{calculateTotalScore()} puntos</h1>
+            <p className="text-lg md:text-2xl text-white mb-8">¡Excelente trabajo, {nickname}!</p>
             <button
               onClick={() => onComplete(calculateTotalScore(), responses)}
-              className="bg-white text-[#2167AE] font-bold py-4 px-8 rounded-lg hover:bg-gray-100 transition-colors text-lg"
+              className="bg-white text-[#2167AE] font-bold py-3 md:py-4 px-6 md:px-8 rounded-lg hover:bg-gray-100 transition-colors text-base md:text-lg min-h-[44px]"
             >
               Continuar al Nivel 2
             </button>
@@ -185,8 +185,8 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
     <div className="min-h-screen flex flex-col relative overflow-hidden bg-[#1E2D6B]">
       <Header />
 
-      <main className="pt-16 flex-1 flex items-center justify-center relative overflow-hidden">
-        <div className="relative w-full" style={{ maxHeight: 'calc(100vh - 64px)' }}>
+      <main className="pt-12 md:pt-16 flex-1 flex items-center justify-center relative overflow-hidden">
+        <div className="relative w-full" style={{ maxHeight: 'calc(100vh - 48px)' }}>
           <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
             <img
               src="/nivel1.svg"
@@ -343,16 +343,16 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
 
         {showMessage && (
           <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full">
+            <div className="bg-white rounded-2xl shadow-2xl p-5 md:p-8 max-w-2xl w-full">
               <p
-                className="text-xl text-[#1E2D6B] leading-relaxed mb-6 text-center"
+                className="text-base md:text-xl text-[#1E2D6B] leading-relaxed mb-4 md:mb-6 text-center"
                 style={{ fontFamily: "'ZurichCondensed', sans-serif" }}
               >
                 {question.message}
               </p>
               <button
                 onClick={handleNext}
-                className="w-full bg-[#2167AE] text-white font-bold py-4 px-8 rounded-lg hover:bg-[#1a5391] transition-colors text-lg"
+                className="w-full bg-[#2167AE] text-white font-bold py-3 md:py-4 px-6 md:px-8 rounded-lg hover:bg-[#1a5391] transition-colors text-base md:text-lg min-h-[44px]"
               >
                 {currentQuestion < questions.length - 1 ? 'Siguiente pregunta →' : 'Ver resultados'}
               </button>
