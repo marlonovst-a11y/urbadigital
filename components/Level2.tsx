@@ -23,14 +23,14 @@ const HAZARD_LABELS: Record<HazardId, string> = {
 };
 
 const PELIGROS: { id: HazardId; left: string; top: string; width: string; height: string }[] = [
-  { id: 'cables',     left: '32%', top: '15%', width: '22%', height: '7%'  },
-  { id: 'vidrios',    left: '16%', top: '35%', width: '7%',  height: '10%' },
-  { id: 'olla',       left: '64%', top: '20%', width: '6%',  height: '8%'  },
-  { id: 'basura',     left: '30%', top: '58%', width: '8%',  height: '10%' },
-  { id: 'roedor',     left: '26%', top: '62%', width: '7%',  height: '10%' },
-  { id: 'pisomojado', left: '44%', top: '68%', width: '14%', height: '8%'  },
-  { id: 'calleinund', left: '44%', top: '72%', width: '16%', height: '8%'  },
-  { id: 'casabaja',   left: '56%', top: '45%', width: '18%', height: '20%' },
+  { id: 'cables',     left: '51.7%', top: '33.0%', width: '10%', height: '8%' },
+  { id: 'vidrios',    left: '22.7%', top: '38.5%', width: '6%',  height: '8%' },
+  { id: 'olla',       left: '68.3%', top: '38.1%', width: '6%',  height: '8%' },
+  { id: 'basura',     left: '31.9%', top: '52.1%', width: '6%',  height: '8%' },
+  { id: 'roedor',     left: '25.3%', top: '56.5%', width: '6%',  height: '8%' },
+  { id: 'pisomojado', left: '60.0%', top: '55.1%', width: '8%',  height: '8%' },
+  { id: 'calleinund', left: '47.7%', top: '58.7%', width: '10%', height: '8%' },
+  { id: 'casabaja',   left: '46.1%', top: '52.9%', width: '8%',  height: '8%' },
 ];
 
 const TIMER_SECONDS = 25;
