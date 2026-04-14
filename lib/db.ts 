@@ -1,0 +1,15 @@
+import { Pool } from 'pg';
+
+const pool = new Pool({
+  host: '155.138.253.162',
+  port: 5432,
+  database: 'plan_internacional',
+  user: 'postgres',
+  password: 'JHEQWR2ZUASDasdgASd98x',
+  ssl: false,
+  max: 10,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
+});
+
+export default pool;
