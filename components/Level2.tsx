@@ -104,8 +104,15 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
   const timerPercent = (timeLeft / TIMER_SECONDS) * 100;
   const timerColor = timeLeft > 15 ? '#1ABC9C' : timeLeft > 8 ? '#F39C12' : '#E74C3C';
 
+  const handleCalibration = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+    const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
+    console.log(`left: '${x}%', top: '${y}%'`);
+  };
+
   return (
-    <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden', background: '#1a2a4a' }}>
+    <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden', background: '#1a2a4a' }} onClick={handleCalibration}>
       <div
         dangerouslySetInnerHTML={{ __html: svgContent }}
         style={{
