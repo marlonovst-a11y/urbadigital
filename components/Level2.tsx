@@ -23,14 +23,14 @@ const HAZARD_LABELS: Record<HazardId, string> = {
 };
 
 const PELIGROS: { id: HazardId; left: string; top: string; width: string; height: string }[] = [
-  { id: 'cables',     left: '25%', top: '10%', width: '20%', height: '25%' },
-  { id: 'vidrios',    left: '10%', top: '20%', width: '15%', height: '20%' },
-  { id: 'olla',       left: '60%', top: '15%', width: '15%', height: '20%' },
-  { id: 'basura',     left: '25%', top: '55%', width: '15%', height: '20%' },
-  { id: 'roedor',     left: '28%', top: '60%', width: '10%', height: '15%' },
-  { id: 'pisomojado', left: '38%', top: '60%', width: '20%', height: '20%' },
-  { id: 'calleinund', left: '55%', top: '65%', width: '25%', height: '20%' },
-  { id: 'casabaja',   left: '55%', top: '40%', width: '30%', height: '30%' },
+  { id: 'cables',     left: '30%', top: '8%',  width: '35%', height: '12%' },
+  { id: 'vidrios',    left: '8%',  top: '22%', width: '12%', height: '15%' },
+  { id: 'olla',       left: '62%', top: '18%', width: '10%', height: '12%' },
+  { id: 'basura',     left: '28%', top: '58%', width: '10%', height: '12%' },
+  { id: 'roedor',     left: '24%', top: '65%', width: '8%',  height: '12%' },
+  { id: 'pisomojado', left: '38%', top: '68%', width: '12%', height: '10%' },
+  { id: 'calleinund', left: '50%', top: '70%', width: '18%', height: '10%' },
+  { id: 'casabaja',   left: '62%', top: '42%', width: '20%', height: '22%' },
 ];
 
 const TIMER_SECONDS = 25;
@@ -132,21 +132,21 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
             height: p.height,
             zIndex: 10,
             cursor: found.has(p.id) || finished ? 'default' : 'pointer',
-            border: found.has(p.id) ? '3px solid #F9D030' : '2px solid transparent',
-            borderRadius: 8,
-            background: found.has(p.id) ? 'rgba(249,208,48,0.15)' : 'transparent',
-            boxShadow: found.has(p.id) ? '0 0 16px rgba(249,208,48,0.5)' : 'none',
+            border: found.has(p.id) ? '2px solid #F9D030' : '1px dashed rgba(255,255,255,0.2)',
+            borderRadius: 6,
+            background: found.has(p.id) ? 'rgba(249,208,48,0.12)' : 'transparent',
+            boxShadow: found.has(p.id) ? '0 0 14px rgba(249,208,48,0.45)' : 'none',
             transition: 'border 0.2s, background 0.2s, box-shadow 0.2s',
           }}
           onMouseEnter={e => {
             if (!found.has(p.id) && !finished) {
-              (e.currentTarget as HTMLDivElement).style.border = '2px solid rgba(249,208,48,0.5)';
-              (e.currentTarget as HTMLDivElement).style.background = 'rgba(249,208,48,0.08)';
+              (e.currentTarget as HTMLDivElement).style.border = '1px dashed rgba(249,208,48,0.5)';
+              (e.currentTarget as HTMLDivElement).style.background = 'rgba(249,208,48,0.06)';
             }
           }}
           onMouseLeave={e => {
             if (!found.has(p.id)) {
-              (e.currentTarget as HTMLDivElement).style.border = '2px solid transparent';
+              (e.currentTarget as HTMLDivElement).style.border = '1px dashed rgba(255,255,255,0.2)';
               (e.currentTarget as HTMLDivElement).style.background = 'transparent';
             }
           }}
