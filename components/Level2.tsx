@@ -63,54 +63,79 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
     }
   }, [found]);
 
+  const foundRef = useRef<Set<HazardId>>(new Set());
+  const finishedRef = useRef(false);
+
+  useEffect(() => { foundRef.current = found; }, [found]);
+  useEffect(() => { finishedRef.current = finished; }, [finished]);
+
   const handleFindHazard = (id: HazardId) => {
+    if (foundRef.current.has(id) || finishedRef.current) return;
+
+    const container = svgContainerRef.current;
+    if (container) {
+      const el = container.querySelector('#' + id) as SVGGElement | null;
+      if (el) {
+        Array.from(el.querySelectorAll('*')).forEach((child: Element) => {
+          const c = child as SVGElement;
+          c.setAttribute('stroke', '#F9D030');
+          c.setAttribute('stroke-width', '4');
+        });
+        el.setAttribute('stroke', '#F9D030');
+        el.setAttribute('stroke-width', '4');
+        el.style.filter = 'drop-shadow(0 0 12px #F9D030)';
+        el.style.cursor = 'default';
+      }
+    }
+
     setFound(prev => {
-      if (prev.has(id) || finished) return prev;
       const next = new Set(prev);
       next.add(id);
-
-      if (svgContainerRef.current) {
-        const el = svgContainerRef.current.querySelector('#' + id) as SVGGElement | null;
-        if (el) {
-          Array.from(el.querySelectorAll('*')).forEach((child: Element) => {
-            const c = child as SVGElement;
-            c.setAttribute('stroke', '#F9D030');
-            c.setAttribute('stroke-width', '4');
-          });
-          el.setAttribute('stroke', '#F9D030');
-          el.setAttribute('stroke-width', '4');
-          el.style.filter = 'drop-shadow(0 0 12px #F9D030)';
-          el.onmouseenter = null;
-          el.onmouseleave = null;
-          el.style.cursor = 'default';
-        }
-      }
-
       return next;
     });
   };
+
+  const handleFindHazardRef = useRef(handleFindHazard);
+  useEffect(() => { handleFindHazardRef.current = handleFindHazard; });
 
   useEffect(() => {
     if (!svgContent || !svgContainerRef.current) return;
 
     const container = svgContainerRef.current;
 
+    const svgEl = container.querySelector('svg');
+    if (svgEl) {
+      svgEl.style.pointerEvents = 'all';
+    }
+
     HAZARD_IDS.forEach(id => {
-      const el = container.querySelector('#' + id) as SVGGElement | null;
-      if (!el) return;
+      const elements = container.querySelectorAll('#' + id + ', [id="' + id + '"]');
+      elements.forEach(el => {
+        el.setAttribute('pointer-events', 'all');
+        (el as HTMLElement).style.cursor = 'pointer';
 
-      el.style.cursor = 'pointer';
-      el.style.transition = 'filter 0.2s';
+        const clone = el.cloneNode(true) as Element;
+        clone.setAttribute('pointer-events', 'all');
+        (clone as HTMLElement).style.cursor = 'pointer';
+        (clone as HTMLElement).style.transition = 'filter 0.2s';
 
-      el.onmouseenter = () => {
-        el.style.filter = 'brightness(1.3) drop-shadow(0 0 8px rgba(249,208,48,0.7))';
-      };
-      el.onmouseleave = () => {
-        el.style.filter = '';
-      };
-      el.onclick = () => {
-        handleFindHazard(id);
-      };
+        clone.addEventListener('mouseenter', () => {
+          if (!foundRef.current.has(id) && !finishedRef.current) {
+            (clone as HTMLElement).style.filter = 'brightness(1.3) drop-shadow(0 0 8px rgba(249,208,48,0.7))';
+          }
+        });
+        clone.addEventListener('mouseleave', () => {
+          if (!foundRef.current.has(id)) {
+            (clone as HTMLElement).style.filter = '';
+          }
+        });
+        clone.addEventListener('click', (e) => {
+          e.stopPropagation();
+          handleFindHazardRef.current(id);
+        });
+
+        el.parentNode?.replaceChild(clone, el);
+      });
     });
   }, [svgContent]);
 
@@ -164,6 +189,7 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
           alignItems: 'center',
           gap: 6,
           width: 'clamp(280px, 50vw, 520px)',
+          pointerEvents: 'none',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, width: '100%' }}>
@@ -226,6 +252,7 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
           backdropFilter: 'blur(6px)',
           padding: '10px 16px 12px',
           borderTop: '1px solid rgba(255,255,255,0.1)',
+          pointerEvents: 'none',
         }}
       >
         <div
