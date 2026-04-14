@@ -11,14 +11,13 @@ interface Level2Props {
 const TIMER_SECONDS = 25;
 
 const peligros = [
-  { id: 'cables',     label: 'Cables eléctricos expuestos',    left: '33%',  top: '17%', width: '35%', height: '5%'  },
-  { id: 'vidrios',    label: 'Ventana con vidrios rotos',       left: '15%',  top: '30%', width: '6%',  height: '8%'  },
-  { id: 'olla',       label: 'Olla sin supervisión',            left: '72%',  top: '22%', width: '5%',  height: '7%'  },
-  { id: 'basura',     label: 'Basura tapando alcantarillas',    left: '29%',  top: '58%', width: '8%',  height: '8%'  },
-  { id: 'roedor',     label: 'Roedor desplazado por agua',      left: '24%',  top: '62%', width: '6%',  height: '7%'  },
-  { id: 'pisomojado', label: 'Piso mojado',                     left: '56%',  top: '62%', width: '10%', height: '7%'  },
-  { id: 'calleinund', label: 'Calles inundadas',                left: '38%',  top: '65%', width: '20%', height: '8%'  },
-  { id: 'casabaja',   label: 'Vivienda en zona baja',           left: '13%',  top: '22%', width: '12%', height: '18%' },
+  { id: 'tomacorriente', label: 'Toma corriente',    x: 1315, y: 283, w: 72,  h: 79  },
+  { id: 'fuga_gas',      label: 'Fuga de gas',       x: 1346, y: 311, w: 51,  h: 46  },
+  { id: 'basura',        label: 'Basura',             x: 616,  y: 648, w: 145, h: 110 },
+  { id: 'roedor',        label: 'Roedor',             x: 505,  y: 759, w: 92,  h: 110 },
+  { id: 'pisomojado',    label: 'Piso mojado',        x: 1112, y: 763, w: 218, h: 55  },
+  { id: 'calleinund',    label: 'Calle inundada',     x: 750,  y: 838, w: 421, h: 102 },
+  { id: 'casabaja',      label: 'Casa baja',          x: 840,  y: 578, w: 230, h: 230 },
 ];
 
 type HazardId = typeof peligros[number]['id'];
@@ -29,7 +28,6 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
   const [finished, setFinished] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (finished || found.size === peligros.length) return;
@@ -64,17 +62,9 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
     });
   };
 
-  const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    console.log(`[calibración] left: '${x.toFixed(1)}%', top: '${y.toFixed(1)}%'`);
-  };
-
   const calculateScore = () => {
     const count = found.size;
-    if (count === 8) return 20;
+    if (count === peligros.length) return 20;
     if (count >= 5) return 15;
     if (count >= 3) return 10;
     if (count >= 1) return 5;
@@ -96,11 +86,7 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
 
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden', background: '#1a2a4a' }}>
-      <div
-        ref={containerRef}
-        onClick={handleContainerClick}
-        style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-      >
+      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ position: 'relative', width: '100%', height: '100%' }}>
           <img
             src="/nivel2.svg"
@@ -108,25 +94,27 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
             style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
           />
 
-          {peligros.map(p => (
-            <div
-              key={p.id}
-              onClick={e => { e.stopPropagation(); handleFindHazard(p.id); }}
-              style={{
-                position: 'absolute',
-                left: p.left,
-                top: p.top,
-                width: p.width,
-                height: p.height,
-                border: found.has(p.id) ? '3px solid yellow' : '2px solid red',
-                background: found.has(p.id) ? 'rgba(255,255,0,0.3)' : 'rgba(255,0,0,0.3)',
-                cursor: found.has(p.id) || finished ? 'default' : 'pointer',
-                boxSizing: 'border-box',
-                zIndex: 10,
-              }}
-              title={p.label}
-            />
-          ))}
+          <svg
+            viewBox="0 0 1920 1080"
+            preserveAspectRatio="xMidYMid meet"
+            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+          >
+            {peligros.map(p => (
+              <rect
+                key={p.id}
+                x={p.x}
+                y={p.y}
+                width={p.w}
+                height={p.h}
+                fill={found.has(p.id) ? 'yellow' : 'transparent'}
+                fillOpacity={found.has(p.id) ? 0.4 : 0}
+                stroke={found.has(p.id) ? 'yellow' : 'transparent'}
+                strokeWidth={found.has(p.id) ? 4 : 0}
+                style={{ cursor: found.has(p.id) || finished ? 'default' : 'pointer' }}
+                onClick={() => handleFindHazard(p.id)}
+              />
+            ))}
+          </svg>
         </div>
       </div>
 
@@ -162,7 +150,7 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
           </span>
         </div>
         <div style={{ background: 'rgba(255,255,255,0.92)', borderRadius: 20, padding: '4px 16px', fontWeight: 700, fontSize: 13, color: '#1E2D6B', boxShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>
-          {found.size} de 8 peligros encontrados
+          {found.size} de {peligros.length} peligros encontrados
         </div>
       </div>
 
@@ -245,10 +233,10 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
             }}
           >
             <div style={{ fontSize: 'clamp(32px, 6vw, 56px)', marginBottom: 8 }}>
-              {found.size === 8 ? '🏆' : found.size >= 5 ? '👍' : found.size >= 3 ? '🙂' : '💪'}
+              {found.size === peligros.length ? '🏆' : found.size >= 5 ? '👍' : found.size >= 3 ? '🙂' : '💪'}
             </div>
             <h2 style={{ fontSize: 'clamp(18px, 3vw, 26px)', fontWeight: 800, color: '#1E2D6B', marginBottom: 8 }}>
-              {found.size === 8 ? '¡Excelente! Encontraste todos los peligros' : `Encontraste ${found.size} de 8 peligros`}
+              {found.size === peligros.length ? '¡Excelente! Encontraste todos los peligros' : `Encontraste ${found.size} de ${peligros.length} peligros`}
             </h2>
             <div
               style={{
