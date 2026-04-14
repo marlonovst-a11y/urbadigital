@@ -63,56 +63,56 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
     }
   }, [found]);
 
+  const handleFindHazard = (id: HazardId) => {
+    setFound(prev => {
+      if (prev.has(id) || finished) return prev;
+      const next = new Set(prev);
+      next.add(id);
+
+      if (svgContainerRef.current) {
+        const el = svgContainerRef.current.querySelector('#' + id) as SVGGElement | null;
+        if (el) {
+          Array.from(el.querySelectorAll('*')).forEach((child: Element) => {
+            const c = child as SVGElement;
+            c.setAttribute('stroke', '#F9D030');
+            c.setAttribute('stroke-width', '4');
+          });
+          el.setAttribute('stroke', '#F9D030');
+          el.setAttribute('stroke-width', '4');
+          el.style.filter = 'drop-shadow(0 0 12px #F9D030)';
+          el.onmouseenter = null;
+          el.onmouseleave = null;
+          el.style.cursor = 'default';
+        }
+      }
+
+      return next;
+    });
+  };
+
   useEffect(() => {
     if (!svgContent || !svgContainerRef.current) return;
 
     const container = svgContainerRef.current;
 
-    const applyHandlers = () => {
-      HAZARD_IDS.forEach(id => {
-        const el = container.querySelector(`#${id}`) as SVGGElement | null;
-        if (!el) return;
+    HAZARD_IDS.forEach(id => {
+      const el = container.querySelector('#' + id) as SVGGElement | null;
+      if (!el) return;
 
-        el.style.cursor = 'pointer';
-        el.style.transition = 'filter 0.2s';
+      el.style.cursor = 'pointer';
+      el.style.transition = 'filter 0.2s';
 
-        el.onmouseenter = () => {
-          if (!found.has(id) && !finished) {
-            el.style.filter = 'brightness(1.3) drop-shadow(0 0 8px rgba(249,208,48,0.7))';
-          }
-        };
-        el.onmouseleave = () => {
-          if (!found.has(id)) {
-            el.style.filter = '';
-          }
-        };
-        el.onclick = () => {
-          if (!found.has(id) && !finished) {
-            setFound(prev => {
-              const next = new Set(prev);
-              next.add(id);
-              return next;
-            });
-            el.style.outline = 'none';
-            Array.from(el.querySelectorAll('*')).forEach((child: Element) => {
-              const c = child as SVGElement;
-              if (c.getAttribute('stroke') !== null || c.tagName === 'path' || c.tagName === 'polygon' || c.tagName === 'rect' || c.tagName === 'circle') {
-                c.setAttribute('stroke', '#F9D030');
-                c.setAttribute('stroke-width', '4');
-              }
-            });
-            el.setAttribute('stroke', '#F9D030');
-            el.setAttribute('stroke-width', '4');
-            el.style.filter = 'drop-shadow(0 0 10px #F9D030)';
-            el.onmouseenter = null;
-            el.onmouseleave = null;
-          }
-        };
-      });
-    };
-
-    applyHandlers();
-  }, [svgContent, found, finished]);
+      el.onmouseenter = () => {
+        el.style.filter = 'brightness(1.3) drop-shadow(0 0 8px rgba(249,208,48,0.7))';
+      };
+      el.onmouseleave = () => {
+        el.style.filter = '';
+      };
+      el.onclick = () => {
+        handleFindHazard(id);
+      };
+    });
+  }, [svgContent]);
 
   const calculateScore = () => {
     const count = found.size;
@@ -218,51 +218,70 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
       <div
         style={{
           position: 'absolute',
-          top: 12,
-          left: 12,
+          bottom: 0,
+          left: 0,
+          right: 0,
           zIndex: 20,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 4,
-          maxWidth: 180,
+          background: 'rgba(10, 20, 40, 0.82)',
+          backdropFilter: 'blur(6px)',
+          padding: '10px 16px 12px',
+          borderTop: '1px solid rgba(255,255,255,0.1)',
         }}
       >
-        {HAZARD_IDS.map(id => (
-          <div
-            key={id}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              opacity: found.has(id) ? 1 : 0.55,
-              transition: 'opacity 0.3s',
-            }}
-          >
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '6px 16px',
+            maxWidth: 900,
+            margin: '0 auto',
+          }}
+        >
+          {HAZARD_IDS.map(id => (
             <div
+              key={id}
               style={{
-                width: 14,
-                height: 14,
-                borderRadius: '50%',
-                background: found.has(id) ? '#F9D030' : 'rgba(255,255,255,0.4)',
-                border: '2px solid rgba(255,255,255,0.7)',
-                flexShrink: 0,
-                boxShadow: found.has(id) ? '0 0 6px #F9D030' : 'none',
-                transition: 'all 0.3s',
-              }}
-            />
-            <span
-              style={{
-                color: '#fff',
-                fontSize: 10,
-                fontWeight: found.has(id) ? 700 : 400,
-                textShadow: '0 1px 3px rgba(0,0,0,0.8)',
-                lineHeight: 1.2,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                transition: 'opacity 0.3s',
               }}
             >
-              {HAZARD_LABELS[id]}
-            </span>
-          </div>
-        ))}
+              <div
+                style={{
+                  width: 22,
+                  height: 22,
+                  borderRadius: '50%',
+                  background: found.has(id) ? '#F9D030' : 'rgba(255,255,255,0.15)',
+                  border: '2px solid rgba(255,255,255,0.4)',
+                  flexShrink: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: found.has(id) ? '0 0 8px #F9D030' : 'none',
+                  transition: 'all 0.3s',
+                  fontSize: 13,
+                  fontWeight: 800,
+                  color: found.has(id) ? '#333' : 'transparent',
+                }}
+              >
+                {found.has(id) ? '✓' : ''}
+              </div>
+              <span
+                style={{
+                  color: found.has(id) ? '#F9D030' : 'rgba(255,255,255,0.75)',
+                  fontSize: 14,
+                  fontWeight: found.has(id) ? 700 : 400,
+                  textShadow: '0 1px 3px rgba(0,0,0,0.8)',
+                  lineHeight: 1.3,
+                  transition: 'color 0.3s',
+                }}
+              >
+                {HAZARD_LABELS[id]}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
 
       {showModal && (
