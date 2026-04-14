@@ -239,95 +239,134 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
       <div
         ref={svgContainerRef}
         dangerouslySetInnerHTML={{ __html: svgContent }}
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
+        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}
       />
 
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '10%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 20,
-          width: '90%',
-          maxWidth: 720,
-        }}
-      >
-        <div style={{ display: 'flex', gap: 14, marginBottom: 12 }}>
-          {(['A', 'B'] as const).map(option => (
-            <div
-              key={option}
-              onClick={() => handleSelectOption(option)}
-              style={getCardStyle(option)}
+      <div style={{ position: 'relative', zIndex: 1, width: '100%', height: '100%', pointerEvents: 'none' }}>
+
+        <div
+          style={{
+            position: 'absolute',
+            top: '45%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '88%',
+            maxWidth: 680,
+            pointerEvents: 'all',
+          }}
+        >
+          <div style={{ display: 'flex', gap: 14, marginBottom: 10 }}>
+            {(['A', 'B'] as const).map(option => (
+              <div
+                key={option}
+                onClick={() => handleSelectOption(option)}
+                style={getCardStyle(option)}
+              >
+                {showFeedback && option === challenge.correcta && (
+                  <div style={{ position: 'absolute', top: -12, right: -12, background: '#1ABC9C', color: '#fff', fontWeight: 800, fontSize: 11, borderRadius: 99, padding: '3px 10px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
+                    ¡Correcto!
+                  </div>
+                )}
+                {showFeedback && selectedOption === option && option !== challenge.correcta && (
+                  <div style={{ position: 'absolute', top: -12, right: -12, background: '#E74C3C', color: '#fff', fontWeight: 800, fontSize: 11, borderRadius: 99, padding: '3px 10px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
+                    Incorrecto
+                  </div>
+                )}
+                <div style={{ fontSize: 38, lineHeight: 1 }}>
+                  {option === 'A' ? challenge.emojiA : challenge.emojiB}
+                </div>
+                <div style={{ fontWeight: 700, fontSize: 13, lineHeight: 1.3, maxWidth: 200 }}>
+                  {option === 'A' ? challenge.opcionA : challenge.opcionB}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {showFeedback && (
+            <div style={{ background: 'rgba(10,20,40,0.85)', backdropFilter: 'blur(4px)', borderRadius: 12, padding: '10px 16px', marginBottom: 10 }}>
+              <p style={{ margin: 0, color: '#fff', fontSize: 'clamp(12px,1.4vw,14px)', fontWeight: 600, lineHeight: 1.5, textAlign: 'center' }}>
+                <strong>{selectedOption === challenge.correcta ? '¡Muy bien! ' : 'Aprende de esto: '}</strong>
+                {challenge.mensaje}
+              </p>
+            </div>
+          )}
+
+          {!showFeedback ? (
+            <button
+              onClick={handleConfirm}
+              disabled={!selectedOption}
+              style={{
+                width: '100%',
+                padding: '12px 0',
+                background: selectedOption ? '#2167AE' : 'rgba(255,255,255,0.25)',
+                color: selectedOption ? '#fff' : 'rgba(255,255,255,0.5)',
+                fontWeight: 800,
+                fontSize: 'clamp(13px,1.6vw,16px)',
+                borderRadius: 12,
+                border: 'none',
+                cursor: selectedOption ? 'pointer' : 'not-allowed',
+                transition: 'all 0.2s',
+                backdropFilter: 'blur(4px)',
+              }}
             >
-              {showFeedback && option === challenge.correcta && (
-                <div style={{ position: 'absolute', top: -12, right: -12, background: '#1ABC9C', color: '#fff', fontWeight: 800, fontSize: 11, borderRadius: 99, padding: '3px 10px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
-                  ¡Correcto!
-                </div>
-              )}
-              {showFeedback && selectedOption === option && option !== challenge.correcta && (
-                <div style={{ position: 'absolute', top: -12, right: -12, background: '#E74C3C', color: '#fff', fontWeight: 800, fontSize: 11, borderRadius: 99, padding: '3px 10px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
-                  Incorrecto
-                </div>
-              )}
-              <div style={{ fontSize: 40, lineHeight: 1 }}>
-                {option === 'A' ? challenge.emojiA : challenge.emojiB}
-              </div>
-              <div style={{ fontWeight: 700, fontSize: 13, lineHeight: 1.3, maxWidth: 200 }}>
-                {option === 'A' ? challenge.opcionA : challenge.opcionB}
-              </div>
+              Confirmar respuesta
+            </button>
+          ) : (
+            <button
+              onClick={handleNext}
+              style={{
+                width: '100%',
+                padding: '12px 0',
+                background: '#1ABC9C',
+                color: '#fff',
+                fontWeight: 800,
+                fontSize: 'clamp(13px,1.6vw,16px)',
+                borderRadius: 12,
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 4px 16px rgba(26,188,156,0.4)',
+              }}
+            >
+              {currentChallenge < challenges.length - 1 ? 'Siguiente reto' : 'Ver resultados'}
+            </button>
+          )}
+        </div>
+
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '5%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            gap: 10,
+            pointerEvents: 'all',
+          }}
+        >
+          {challenges.map((_, index) => (
+            <div
+              key={index}
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 800,
+                fontSize: 14,
+                color: '#fff',
+                background: index < currentChallenge ? '#2ECC71' : index === currentChallenge ? '#F9D030' : '#9B8B3A',
+                transform: index === currentChallenge ? 'scale(1.2)' : 'scale(1)',
+                transition: 'all 0.2s',
+                boxShadow: index === currentChallenge ? '0 0 12px rgba(249,208,48,0.7)' : 'none',
+              }}
+            >
+              {index + 1}
             </div>
           ))}
         </div>
 
-        {showFeedback && (
-          <div style={{ background: 'rgba(10,20,40,0.85)', backdropFilter: 'blur(4px)', borderRadius: 12, padding: '10px 16px', marginBottom: 10 }}>
-            <p style={{ margin: 0, color: '#fff', fontSize: 'clamp(12px,1.4vw,14px)', fontWeight: 600, lineHeight: 1.5, textAlign: 'center' }}>
-              <strong>{selectedOption === challenge.correcta ? '¡Muy bien! ' : 'Aprende de esto: '}</strong>
-              {challenge.mensaje}
-            </p>
-          </div>
-        )}
-
-        {!showFeedback ? (
-          <button
-            onClick={handleConfirm}
-            disabled={!selectedOption}
-            style={{
-              width: '100%',
-              padding: '13px 0',
-              background: selectedOption ? '#2167AE' : 'rgba(255,255,255,0.25)',
-              color: selectedOption ? '#fff' : 'rgba(255,255,255,0.5)',
-              fontWeight: 800,
-              fontSize: 'clamp(13px,1.6vw,16px)',
-              borderRadius: 12,
-              border: 'none',
-              cursor: selectedOption ? 'pointer' : 'not-allowed',
-              transition: 'all 0.2s',
-              backdropFilter: 'blur(4px)',
-            }}
-          >
-            Confirmar respuesta
-          </button>
-        ) : (
-          <button
-            onClick={handleNext}
-            style={{
-              width: '100%',
-              padding: '13px 0',
-              background: '#1ABC9C',
-              color: '#fff',
-              fontWeight: 800,
-              fontSize: 'clamp(13px,1.6vw,16px)',
-              borderRadius: 12,
-              border: 'none',
-              cursor: 'pointer',
-              boxShadow: '0 4px 16px rgba(26,188,156,0.4)',
-            }}
-          >
-            {currentChallenge < challenges.length - 1 ? 'Siguiente reto' : 'Ver resultados'}
-          </button>
-        )}
       </div>
     </div>
   );
