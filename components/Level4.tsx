@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface Level4Props {
   participantId: string;
@@ -13,6 +13,8 @@ interface Challenge {
   pregunta: string;
   opcionA: string;
   opcionB: string;
+  emojiA: string;
+  emojiB: string;
   correcta: 'A' | 'B';
   mensaje: string;
 }
@@ -23,6 +25,8 @@ const challenges: Challenge[] = [
     pregunta: '¿Qué imagen ayuda más al planeta?',
     opcionA: 'Bombilla apagada / luz natural',
     opcionB: 'Casa con luces encendidas de día',
+    emojiA: '💡',
+    emojiB: '🏠',
     correcta: 'A',
     mensaje: 'Reducir el consumo de energía disminuye las emisiones de gases contaminantes.'
   },
@@ -31,6 +35,8 @@ const challenges: Challenge[] = [
     pregunta: 'Selecciona la mejor imagen:',
     opcionA: 'Agua corriendo sin uso',
     opcionB: 'Persona cerrando la llave',
+    emojiA: '🚿',
+    emojiB: '🤲',
     correcta: 'B',
     mensaje: 'Ahorrar agua es clave frente a sequías.'
   },
@@ -39,6 +45,8 @@ const challenges: Challenge[] = [
     pregunta: '¿Qué imagen cuida más el planeta?',
     opcionA: 'Persona caminando o en bicicleta',
     opcionB: 'Auto emitiendo humo',
+    emojiA: '🚲',
+    emojiB: '🚗',
     correcta: 'A',
     mensaje: 'El transporte sostenible reduce la contaminación del aire.'
   },
@@ -47,6 +55,8 @@ const challenges: Challenge[] = [
     pregunta: 'Elige la imagen correcta:',
     opcionA: 'Basura en ríos o calles',
     opcionB: 'Separación de residuos y reciclaje',
+    emojiA: '🗑️',
+    emojiB: '♻️',
     correcta: 'B',
     mensaje: 'La mala gestión de residuos agrava la contaminación ambiental.'
   },
@@ -55,6 +65,8 @@ const challenges: Challenge[] = [
     pregunta: '¿Qué imagen representa una buena decisión?',
     opcionA: 'Compra consciente y productos reutilizables',
     opcionB: 'Consumo excesivo y desechables',
+    emojiA: '🛍️',
+    emojiB: '🛒',
     correcta: 'A',
     mensaje: 'Consumir solo lo necesario reduce la presión sobre el planeta.'
   }
@@ -67,6 +79,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
   const [showFeedback, setShowFeedback] = useState(false);
   const [responses, setResponses] = useState<any[]>([]);
   const [showFinalFeedback, setShowFinalFeedback] = useState(false);
+  const svgContainerRef = useRef<HTMLDivElement>(null);
 
   const challenge = challenges[currentChallenge];
 
@@ -76,9 +89,16 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
       .then(text => setSvgContent(text));
   }, []);
 
-  const currentSvg = svgContent
-    ? svgContent.replace('TEXTO_ACCION', challenge.pregunta)
-    : '';
+  useEffect(() => {
+    if (!svgContainerRef.current || !svgContent) return;
+    const svgEl = svgContainerRef.current.querySelector('svg');
+    if (!svgEl) return;
+    svgEl.setAttribute('width', '100%');
+    svgEl.setAttribute('height', '100%');
+    svgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    const bocadillo = svgContainerRef.current.querySelector('#bocadillo text');
+    if (bocadillo) bocadillo.textContent = challenges[currentChallenge].pregunta;
+  }, [svgContent, currentChallenge]);
 
   const handleSelectOption = (option: 'A' | 'B') => {
     if (showFeedback) return;
@@ -94,7 +114,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
       correcta: isCorrect,
       puntos: isCorrect ? 4 : 0
     };
-    setResponses([...responses, response]);
+    setResponses(prev => [...prev, response]);
     setShowFeedback(true);
   };
 
@@ -108,29 +128,41 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
     }
   };
 
-  const calculateScore = () => {
-    return responses.reduce((acc, r) => acc + r.puntos, 0);
-  };
+  const calculateScore = (r = responses) => r.reduce((acc: number, x: any) => acc + x.puntos, 0);
 
   const handleContinue = () => {
-    const score = calculateScore();
-    onComplete(score, responses);
+    onComplete(calculateScore(), responses);
   };
 
-  const getOptionStyle = (option: 'A' | 'B'): React.CSSProperties => {
+  const getCardStyle = (option: 'A' | 'B'): React.CSSProperties => {
+    const base: React.CSSProperties = {
+      position: 'relative',
+      border: '3px solid',
+      borderRadius: 16,
+      padding: '14px 18px',
+      cursor: showFeedback ? 'default' : 'pointer',
+      transition: 'all 0.25s',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: 8,
+      textAlign: 'center',
+      minWidth: 160,
+      flex: 1,
+    };
     if (!showFeedback) {
       if (selectedOption === option) {
-        return { background: '#2167AE', color: '#fff', borderColor: '#2167AE', transform: 'scale(1.02)', boxShadow: '0 6px 24px rgba(33,103,174,0.4)' };
+        return { ...base, background: '#2167AE', color: '#fff', borderColor: '#2167AE', transform: 'scale(1.04)', boxShadow: '0 6px 24px rgba(33,103,174,0.5)' };
       }
-      return { background: '#fff', color: '#1E2D6B', borderColor: '#ddd' };
+      return { ...base, background: 'rgba(255,255,255,0.92)', color: '#1E2D6B', borderColor: 'rgba(255,255,255,0.5)' };
     }
     if (option === challenge.correcta) {
-      return { background: '#1ABC9C', color: '#fff', borderColor: '#1ABC9C' };
+      return { ...base, background: '#1ABC9C', color: '#fff', borderColor: '#1ABC9C' };
     }
-    if (selectedOption === option && option !== challenge.correcta) {
-      return { background: '#E74C3C', color: '#fff', borderColor: '#E74C3C' };
+    if (selectedOption === option) {
+      return { ...base, background: '#E74C3C', color: '#fff', borderColor: '#E74C3C' };
     }
-    return { background: '#f5f5f5', color: '#aaa', borderColor: '#ddd', opacity: 0.6 };
+    return { ...base, background: 'rgba(255,255,255,0.5)', color: '#aaa', borderColor: 'rgba(255,255,255,0.3)', opacity: 0.6 };
   };
 
   if (!svgContent) {
@@ -143,12 +175,13 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
 
   if (showFinalFeedback) {
     return (
-      <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', position: 'relative' }}>
         <div
-          dangerouslySetInnerHTML={{ __html: currentSvg }}
+          ref={svgContainerRef}
+          dangerouslySetInnerHTML={{ __html: svgContent }}
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
         />
-        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
           <div style={{ background: '#fff', borderRadius: 20, padding: 'clamp(20px,4vw,40px)', maxWidth: 560, width: '100%', boxShadow: '0 8px 40px rgba(0,0,0,0.4)', textAlign: 'center' }}>
             <h2 style={{ fontSize: 'clamp(20px,3vw,28px)', fontWeight: 800, color: '#1E2D6B', marginBottom: 8 }}>
               ¡Completaste el Reto de Respuesta Rápida!
@@ -202,137 +235,99 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
   }
 
   return (
-    <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
+    <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', position: 'relative' }}>
       <div
-        dangerouslySetInnerHTML={{ __html: currentSvg }}
+        ref={svgContainerRef}
+        dangerouslySetInnerHTML={{ __html: svgContent }}
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
       />
 
       <div
         style={{
           position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
+          bottom: '10%',
+          left: '50%',
+          transform: 'translateX(-50%)',
           zIndex: 20,
-          padding: '16px 16px 20px',
-          background: 'rgba(10, 20, 40, 0.78)',
-          backdropFilter: 'blur(6px)',
-          borderTop: '1px solid rgba(255,255,255,0.12)',
+          width: '90%',
+          maxWidth: 720,
         }}
       >
-        <div style={{ maxWidth: 800, margin: '0 auto' }}>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginBottom: 14 }}>
-            {challenges.map((_, index) => (
-              <div
-                key={index}
-                style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: 800,
-                  fontSize: 13,
-                  background: index < currentChallenge ? '#1ABC9C' : index === currentChallenge ? '#2167AE' : 'rgba(255,255,255,0.2)',
-                  color: '#fff',
-                  transform: index === currentChallenge ? 'scale(1.15)' : 'scale(1)',
-                  transition: 'all 0.2s',
-                  boxShadow: index === currentChallenge ? '0 0 12px rgba(33,103,174,0.6)' : 'none',
-                }}
-              >
-                {index + 1}
-              </div>
-            ))}
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
-            {(['A', 'B'] as const).map(option => (
-              <div
-                key={option}
-                onClick={() => handleSelectOption(option)}
-                style={{
-                  position: 'relative',
-                  border: '3px solid',
-                  borderRadius: 12,
-                  padding: '12px 16px',
-                  cursor: showFeedback ? 'default' : 'pointer',
-                  transition: 'all 0.25s',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 10,
-                  ...getOptionStyle(option),
-                }}
-              >
-                {showFeedback && option === challenge.correcta && (
-                  <div style={{ position: 'absolute', top: -10, right: -10, background: '#1ABC9C', color: '#fff', fontWeight: 800, fontSize: 11, borderRadius: 99, padding: '2px 8px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
-                    ¡Correcto!
-                  </div>
-                )}
-                {showFeedback && selectedOption === option && option !== challenge.correcta && (
-                  <div style={{ position: 'absolute', top: -10, right: -10, background: '#E74C3C', color: '#fff', fontWeight: 800, fontSize: 11, borderRadius: 99, padding: '2px 8px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
-                    Incorrecto
-                  </div>
-                )}
-                <div style={{ width: 30, height: 30, borderRadius: '50%', background: 'rgba(255,255,255,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 14, flexShrink: 0 }}>
-                  {option}
+        <div style={{ display: 'flex', gap: 14, marginBottom: 12 }}>
+          {(['A', 'B'] as const).map(option => (
+            <div
+              key={option}
+              onClick={() => handleSelectOption(option)}
+              style={getCardStyle(option)}
+            >
+              {showFeedback && option === challenge.correcta && (
+                <div style={{ position: 'absolute', top: -12, right: -12, background: '#1ABC9C', color: '#fff', fontWeight: 800, fontSize: 11, borderRadius: 99, padding: '3px 10px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
+                  ¡Correcto!
                 </div>
-                <p style={{ margin: 0, fontWeight: 600, fontSize: 'clamp(12px,1.4vw,14px)', lineHeight: 1.3 }}>
-                  {option === 'A' ? challenge.opcionA : challenge.opcionB}
-                </p>
+              )}
+              {showFeedback && selectedOption === option && option !== challenge.correcta && (
+                <div style={{ position: 'absolute', top: -12, right: -12, background: '#E74C3C', color: '#fff', fontWeight: 800, fontSize: 11, borderRadius: 99, padding: '3px 10px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
+                  Incorrecto
+                </div>
+              )}
+              <div style={{ fontSize: 40, lineHeight: 1 }}>
+                {option === 'A' ? challenge.emojiA : challenge.emojiB}
               </div>
-            ))}
-          </div>
-
-          {showFeedback && (
-            <div style={{ background: 'rgba(33,103,174,0.9)', borderRadius: 10, padding: '10px 16px', marginBottom: 12 }}>
-              <p style={{ margin: 0, color: '#fff', fontSize: 'clamp(12px,1.4vw,14px)', fontWeight: 600, lineHeight: 1.5 }}>
-                <strong>{selectedOption === challenge.correcta ? '¡Muy bien! ' : 'Aprende de esto: '}</strong>
-                {challenge.mensaje}
-              </p>
+              <div style={{ fontWeight: 700, fontSize: 13, lineHeight: 1.3, maxWidth: 200 }}>
+                {option === 'A' ? challenge.opcionA : challenge.opcionB}
+              </div>
             </div>
-          )}
-
-          {!showFeedback ? (
-            <button
-              onClick={handleConfirm}
-              disabled={!selectedOption}
-              style={{
-                width: '100%',
-                padding: '12px 0',
-                background: selectedOption ? '#2167AE' : 'rgba(255,255,255,0.15)',
-                color: selectedOption ? '#fff' : 'rgba(255,255,255,0.4)',
-                fontWeight: 800,
-                fontSize: 'clamp(13px,1.6vw,16px)',
-                borderRadius: 10,
-                border: 'none',
-                cursor: selectedOption ? 'pointer' : 'not-allowed',
-                transition: 'all 0.2s',
-              }}
-            >
-              Confirmar respuesta
-            </button>
-          ) : (
-            <button
-              onClick={handleNext}
-              style={{
-                width: '100%',
-                padding: '12px 0',
-                background: '#1ABC9C',
-                color: '#fff',
-                fontWeight: 800,
-                fontSize: 'clamp(13px,1.6vw,16px)',
-                borderRadius: 10,
-                border: 'none',
-                cursor: 'pointer',
-                boxShadow: '0 4px 16px rgba(26,188,156,0.4)',
-              }}
-            >
-              {currentChallenge < challenges.length - 1 ? 'Siguiente reto' : 'Ver resultados'}
-            </button>
-          )}
+          ))}
         </div>
+
+        {showFeedback && (
+          <div style={{ background: 'rgba(10,20,40,0.85)', backdropFilter: 'blur(4px)', borderRadius: 12, padding: '10px 16px', marginBottom: 10 }}>
+            <p style={{ margin: 0, color: '#fff', fontSize: 'clamp(12px,1.4vw,14px)', fontWeight: 600, lineHeight: 1.5, textAlign: 'center' }}>
+              <strong>{selectedOption === challenge.correcta ? '¡Muy bien! ' : 'Aprende de esto: '}</strong>
+              {challenge.mensaje}
+            </p>
+          </div>
+        )}
+
+        {!showFeedback ? (
+          <button
+            onClick={handleConfirm}
+            disabled={!selectedOption}
+            style={{
+              width: '100%',
+              padding: '13px 0',
+              background: selectedOption ? '#2167AE' : 'rgba(255,255,255,0.25)',
+              color: selectedOption ? '#fff' : 'rgba(255,255,255,0.5)',
+              fontWeight: 800,
+              fontSize: 'clamp(13px,1.6vw,16px)',
+              borderRadius: 12,
+              border: 'none',
+              cursor: selectedOption ? 'pointer' : 'not-allowed',
+              transition: 'all 0.2s',
+              backdropFilter: 'blur(4px)',
+            }}
+          >
+            Confirmar respuesta
+          </button>
+        ) : (
+          <button
+            onClick={handleNext}
+            style={{
+              width: '100%',
+              padding: '13px 0',
+              background: '#1ABC9C',
+              color: '#fff',
+              fontWeight: 800,
+              fontSize: 'clamp(13px,1.6vw,16px)',
+              borderRadius: 12,
+              border: 'none',
+              cursor: 'pointer',
+              boxShadow: '0 4px 16px rgba(26,188,156,0.4)',
+            }}
+          >
+            {currentChallenge < challenges.length - 1 ? 'Siguiente reto' : 'Ver resultados'}
+          </button>
+        )}
       </div>
     </div>
   );
