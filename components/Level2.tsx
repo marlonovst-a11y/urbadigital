@@ -22,6 +22,17 @@ const HAZARD_LABELS: Record<HazardId, string> = {
   casabaja: 'Vivienda en zona baja',
 };
 
+const PELIGROS: { id: HazardId; left: string; top: string; width: string; height: string }[] = [
+  { id: 'cables',     left: '25%', top: '10%', width: '20%', height: '25%' },
+  { id: 'vidrios',    left: '10%', top: '20%', width: '15%', height: '20%' },
+  { id: 'olla',       left: '60%', top: '15%', width: '15%', height: '20%' },
+  { id: 'basura',     left: '25%', top: '55%', width: '15%', height: '20%' },
+  { id: 'roedor',     left: '28%', top: '60%', width: '10%', height: '15%' },
+  { id: 'pisomojado', left: '38%', top: '60%', width: '20%', height: '20%' },
+  { id: 'calleinund', left: '55%', top: '65%', width: '25%', height: '20%' },
+  { id: 'casabaja',   left: '55%', top: '40%', width: '30%', height: '30%' },
+];
+
 const TIMER_SECONDS = 25;
 
 export default function Level2({ participantId, nickname, onComplete }: Level2Props) {
@@ -30,7 +41,6 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
   const [finished, setFinished] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [svgContent, setSvgContent] = useState<string>('');
-  const svgContainerRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
@@ -63,81 +73,14 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
     }
   }, [found]);
 
-  const foundRef = useRef<Set<HazardId>>(new Set());
-  const finishedRef = useRef(false);
-
-  useEffect(() => { foundRef.current = found; }, [found]);
-  useEffect(() => { finishedRef.current = finished; }, [finished]);
-
   const handleFindHazard = (id: HazardId) => {
-    if (foundRef.current.has(id) || finishedRef.current) return;
-
-    const container = svgContainerRef.current;
-    if (container) {
-      const el = container.querySelector('#' + id) as SVGGElement | null;
-      if (el) {
-        Array.from(el.querySelectorAll('*')).forEach((child: Element) => {
-          const c = child as SVGElement;
-          c.setAttribute('stroke', '#F9D030');
-          c.setAttribute('stroke-width', '4');
-        });
-        el.setAttribute('stroke', '#F9D030');
-        el.setAttribute('stroke-width', '4');
-        el.style.filter = 'drop-shadow(0 0 12px #F9D030)';
-        el.style.cursor = 'default';
-      }
-    }
-
+    if (found.has(id) || finished) return;
     setFound(prev => {
       const next = new Set(prev);
       next.add(id);
       return next;
     });
   };
-
-  const handleFindHazardRef = useRef(handleFindHazard);
-  useEffect(() => { handleFindHazardRef.current = handleFindHazard; });
-
-  useEffect(() => {
-    if (!svgContent || !svgContainerRef.current) return;
-
-    const container = svgContainerRef.current;
-
-    const svgEl = container.querySelector('svg');
-    if (svgEl) {
-      svgEl.style.pointerEvents = 'all';
-    }
-
-    HAZARD_IDS.forEach(id => {
-      const elements = container.querySelectorAll('#' + id + ', [id="' + id + '"]');
-      elements.forEach(el => {
-        el.setAttribute('pointer-events', 'all');
-        (el as HTMLElement).style.cursor = 'pointer';
-
-        const clone = el.cloneNode(true) as Element;
-        clone.setAttribute('pointer-events', 'all');
-        (clone as HTMLElement).style.cursor = 'pointer';
-        (clone as HTMLElement).style.transition = 'filter 0.2s';
-
-        clone.addEventListener('mouseenter', () => {
-          if (!foundRef.current.has(id) && !finishedRef.current) {
-            (clone as HTMLElement).style.filter = 'brightness(1.3) drop-shadow(0 0 8px rgba(249,208,48,0.7))';
-          }
-        });
-        clone.addEventListener('mouseleave', () => {
-          if (!foundRef.current.has(id)) {
-            (clone as HTMLElement).style.filter = '';
-          }
-        });
-        clone.addEventListener('click', (e) => {
-          e.stopPropagation();
-          handleFindHazardRef.current(id);
-        });
-
-        el.parentNode?.replaceChild(clone, el);
-      });
-    });
-  }, [svgContent]);
 
   const calculateScore = () => {
     const count = found.size;
@@ -164,7 +107,6 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden', background: '#1a2a4a' }}>
       <div
-        ref={svgContainerRef}
         dangerouslySetInnerHTML={{ __html: svgContent }}
         style={{
           position: 'absolute',
@@ -174,8 +116,42 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          pointerEvents: 'none',
         }}
       />
+
+      {PELIGROS.map(p => (
+        <div
+          key={p.id}
+          onClick={() => handleFindHazard(p.id)}
+          style={{
+            position: 'absolute',
+            left: p.left,
+            top: p.top,
+            width: p.width,
+            height: p.height,
+            zIndex: 10,
+            cursor: found.has(p.id) || finished ? 'default' : 'pointer',
+            border: found.has(p.id) ? '3px solid #F9D030' : '2px solid transparent',
+            borderRadius: 8,
+            background: found.has(p.id) ? 'rgba(249,208,48,0.15)' : 'transparent',
+            boxShadow: found.has(p.id) ? '0 0 16px rgba(249,208,48,0.5)' : 'none',
+            transition: 'border 0.2s, background 0.2s, box-shadow 0.2s',
+          }}
+          onMouseEnter={e => {
+            if (!found.has(p.id) && !finished) {
+              (e.currentTarget as HTMLDivElement).style.border = '2px solid rgba(249,208,48,0.5)';
+              (e.currentTarget as HTMLDivElement).style.background = 'rgba(249,208,48,0.08)';
+            }
+          }}
+          onMouseLeave={e => {
+            if (!found.has(p.id)) {
+              (e.currentTarget as HTMLDivElement).style.border = '2px solid transparent';
+              (e.currentTarget as HTMLDivElement).style.background = 'transparent';
+            }
+          }}
+        />
+      ))}
 
       <div
         style={{
