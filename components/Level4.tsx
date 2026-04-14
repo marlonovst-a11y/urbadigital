@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Header from './Header';
 
 interface Level4Props {
   participantId: string;
@@ -62,6 +61,7 @@ const challenges: Challenge[] = [
 ];
 
 export default function Level4({ participantId, nickname, onComplete }: Level4Props) {
+  const [svgContent, setSvgContent] = useState<string>('');
   const [currentChallenge, setCurrentChallenge] = useState(0);
   const [selectedOption, setSelectedOption] = useState<'A' | 'B' | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
@@ -70,6 +70,16 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
 
   const challenge = challenges[currentChallenge];
 
+  useEffect(() => {
+    fetch('/nivel4.svg')
+      .then(r => r.text())
+      .then(text => setSvgContent(text));
+  }, []);
+
+  const currentSvg = svgContent
+    ? svgContent.replace('TEXTO_ACCION', challenge.pregunta)
+    : '';
+
   const handleSelectOption = (option: 'A' | 'B') => {
     if (showFeedback) return;
     setSelectedOption(option);
@@ -77,7 +87,6 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
 
   const handleConfirm = () => {
     if (!selectedOption) return;
-
     const isCorrect = selectedOption === challenge.correcta;
     const response = {
       reto: challenge.pregunta,
@@ -85,7 +94,6 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
       correcta: isCorrect,
       puntos: isCorrect ? 4 : 0
     };
-
     setResponses([...responses, response]);
     setShowFeedback(true);
   };
@@ -109,239 +117,223 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
     onComplete(score, responses);
   };
 
-  const getOptionClass = (option: 'A' | 'B') => {
+  const getOptionStyle = (option: 'A' | 'B'): React.CSSProperties => {
     if (!showFeedback) {
-      return selectedOption === option
-        ? 'border-[#2167AE] bg-[#2167AE] text-white shadow-lg scale-105'
-        : 'border-gray-300 bg-white text-gray-800 hover:border-[#2167AE] hover:shadow-md';
+      if (selectedOption === option) {
+        return { background: '#2167AE', color: '#fff', borderColor: '#2167AE', transform: 'scale(1.02)', boxShadow: '0 6px 24px rgba(33,103,174,0.4)' };
+      }
+      return { background: '#fff', color: '#1E2D6B', borderColor: '#ddd' };
     }
-
     if (option === challenge.correcta) {
-      return 'border-[#1ABC9C] bg-[#1ABC9C] text-white';
+      return { background: '#1ABC9C', color: '#fff', borderColor: '#1ABC9C' };
     }
-
     if (selectedOption === option && option !== challenge.correcta) {
-      return 'border-[#E74C3C] bg-[#E74C3C] text-white';
+      return { background: '#E74C3C', color: '#fff', borderColor: '#E74C3C' };
     }
-
-    return 'border-gray-300 bg-gray-100 text-gray-400 opacity-60';
+    return { background: '#f5f5f5', color: '#aaa', borderColor: '#ddd', opacity: 0.6 };
   };
 
-  const getBadge = (option: 'A' | 'B') => {
-    if (!showFeedback) return null;
+  if (!svgContent) {
+    return (
+      <div style={{ width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fc854a' }}>
+        <div style={{ color: '#fff', fontSize: 20, fontWeight: 700 }}>Cargando...</div>
+      </div>
+    );
+  }
 
-    if (option === challenge.correcta) {
-      return (
-        <div className="absolute -top-3 -right-3 bg-[#1ABC9C] text-white font-bold px-3 py-1 rounded-full text-sm shadow-lg">
-          ¡Correcto!
+  if (showFinalFeedback) {
+    return (
+      <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
+        <div
+          dangerouslySetInnerHTML={{ __html: currentSvg }}
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
+        />
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+          <div style={{ background: '#fff', borderRadius: 20, padding: 'clamp(20px,4vw,40px)', maxWidth: 560, width: '100%', boxShadow: '0 8px 40px rgba(0,0,0,0.4)', textAlign: 'center' }}>
+            <h2 style={{ fontSize: 'clamp(20px,3vw,28px)', fontWeight: 800, color: '#1E2D6B', marginBottom: 8 }}>
+              ¡Completaste el Reto de Respuesta Rápida!
+            </h2>
+            <div style={{ display: 'inline-block', background: '#2167AE', color: '#fff', fontWeight: 800, fontSize: 'clamp(16px,2.5vw,22px)', borderRadius: 12, padding: '8px 24px', marginBottom: 16 }}>
+              {calculateScore()} de 20 puntos
+            </div>
+            <p style={{ color: '#444', fontSize: 'clamp(12px,1.6vw,15px)', lineHeight: 1.6, marginBottom: 20 }}>
+              Cada decisión responsable con el ambiente suma. Reducir el consumo, ahorrar agua, usar transporte sostenible, reciclar y consumir conscientemente son acciones que protegen nuestro planeta y reducen los riesgos climáticos.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20 }}>
+              {responses.map((response, index) => (
+                <div
+                  key={index}
+                  style={{
+                    padding: '10px 14px',
+                    borderRadius: 10,
+                    border: `2px solid ${response.correcta ? '#1ABC9C' : '#E74C3C'}`,
+                    background: response.correcta ? '#f0fdf9' : '#fff5f5',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 12,
+                    textAlign: 'left',
+                  }}
+                >
+                  <div style={{ width: 28, height: 28, borderRadius: '50%', background: response.correcta ? '#1ABC9C' : '#E74C3C', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {response.correcta ? (
+                      <svg width="16" height="16" viewBox="0 0 20 20" fill="white"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                    ) : (
+                      <svg width="16" height="16" viewBox="0 0 20 20" fill="white"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
+                    )}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontWeight: 600, color: '#1E2D6B', fontSize: 13, margin: 0 }}>{response.reto}</p>
+                    <p style={{ fontSize: 12, color: '#666', margin: 0 }}>Tu respuesta: <strong>{response.opcion_elegida}</strong></p>
+                  </div>
+                  <div style={{ fontWeight: 800, color: '#1E2D6B', fontSize: 15 }}>{response.puntos} pts</div>
+                </div>
+              ))}
+            </div>
+            <button
+              onClick={handleContinue}
+              style={{ width: '100%', padding: '14px 0', background: '#1ABC9C', color: '#fff', fontWeight: 800, fontSize: 'clamp(14px,2vw,18px)', borderRadius: 12, border: 'none', cursor: 'pointer', boxShadow: '0 4px 16px rgba(26,188,156,0.4)' }}
+            >
+              Continuar al Mapa
+            </button>
+          </div>
         </div>
-      );
-    }
-
-    if (selectedOption === option && option !== challenge.correcta) {
-      return (
-        <div className="absolute -top-3 -right-3 bg-[#E74C3C] text-white font-bold px-3 py-1 rounded-full text-sm shadow-lg">
-          Incorrecto
-        </div>
-      );
-    }
-
-    return null;
-  };
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#ECEEEF] relative overflow-hidden">
-      <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-[#A8C8E8] opacity-40" />
-      <div className="absolute bottom-20 right-10 w-40 h-40 rounded-full bg-[#4A90D9] opacity-30" />
-      <div className="absolute top-1/2 left-5 w-20 h-20 bg-[#2167AE] opacity-20" style={{ borderRadius: '50% 50% 0 0' }} />
+    <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
+      <div
+        dangerouslySetInnerHTML={{ __html: currentSvg }}
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
+      />
 
-      <Header />
-
-      <main className="pt-24 flex-1 px-4 pb-8 relative z-10">
-        <div className="max-w-5xl mx-auto">
-          {!showFinalFeedback ? (
-            <div className="bg-white rounded-lg shadow-lg p-8">
-              <div className="flex items-start gap-6 mb-6">
-                <img src="/abuelo.svg" alt="Don Manuel" style={{ height: '150px' }} className="shadow-md" />
-                <div className="flex-1">
-                  <h1 className="text-3xl font-bold text-[#1E2D6B] mb-2">
-                    Nivel 4: Reto de Respuesta Rápida
-                  </h1>
-                  <div className="bg-[#A8C8E8] rounded-lg px-4 py-3 inline-block">
-                    <p className="text-[#1E2D6B] font-semibold">
-                      Decisiones Responsables con el Ambiente
-                    </p>
-                  </div>
-                </div>
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 20,
+          padding: '16px 16px 20px',
+          background: 'rgba(10, 20, 40, 0.78)',
+          backdropFilter: 'blur(6px)',
+          borderTop: '1px solid rgba(255,255,255,0.12)',
+        }}
+      >
+        <div style={{ maxWidth: 800, margin: '0 auto' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginBottom: 14 }}>
+            {challenges.map((_, index) => (
+              <div
+                key={index}
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 800,
+                  fontSize: 13,
+                  background: index < currentChallenge ? '#1ABC9C' : index === currentChallenge ? '#2167AE' : 'rgba(255,255,255,0.2)',
+                  color: '#fff',
+                  transform: index === currentChallenge ? 'scale(1.15)' : 'scale(1)',
+                  transition: 'all 0.2s',
+                  boxShadow: index === currentChallenge ? '0 0 12px rgba(33,103,174,0.6)' : 'none',
+                }}
+              >
+                {index + 1}
               </div>
+            ))}
+          </div>
 
-              <div className="flex justify-center gap-2 mb-8">
-                {challenges.map((_, index) => (
-                  <div
-                    key={index}
-                    className={`w-12 h-12 rounded-full flex items-center justify-center font-bold transition-all ${
-                      index < currentChallenge
-                        ? 'bg-[#1ABC9C] text-white'
-                        : index === currentChallenge
-                        ? 'bg-[#2167AE] text-white scale-110'
-                        : 'bg-gray-300 text-gray-600'
-                    }`}
-                  >
-                    {index + 1}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
+            {(['A', 'B'] as const).map(option => (
+              <div
+                key={option}
+                onClick={() => handleSelectOption(option)}
+                style={{
+                  position: 'relative',
+                  border: '3px solid',
+                  borderRadius: 12,
+                  padding: '12px 16px',
+                  cursor: showFeedback ? 'default' : 'pointer',
+                  transition: 'all 0.25s',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  ...getOptionStyle(option),
+                }}
+              >
+                {showFeedback && option === challenge.correcta && (
+                  <div style={{ position: 'absolute', top: -10, right: -10, background: '#1ABC9C', color: '#fff', fontWeight: 800, fontSize: 11, borderRadius: 99, padding: '2px 8px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
+                    ¡Correcto!
                   </div>
-                ))}
-              </div>
-
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold text-[#1E2D6B] text-center mb-6">
-                  {challenge.pregunta}
-                </h2>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div
-                    onClick={() => handleSelectOption('A')}
-                    className={`relative border-4 rounded-lg p-6 cursor-pointer transition-all duration-300 ${getOptionClass('A')}`}
-                  >
-                    {getBadge('A')}
-                    <div className="aspect-video bg-gradient-to-br from-[#A8C8E8] to-[#4A90D9] rounded-lg mb-4 flex items-center justify-center">
-                      <div className="text-white text-6xl">
-                        {challenge.id === 1 && '💡'}
-                        {challenge.id === 2 && '🚰'}
-                        {challenge.id === 3 && '🚶'}
-                        {challenge.id === 4 && '♻️'}
-                        {challenge.id === 5 && '🛒'}
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-full bg-[#2167AE] text-white font-bold flex items-center justify-center flex-shrink-0">
-                        A
-                      </div>
-                      <p className="font-semibold text-lg">{challenge.opcionA}</p>
-                    </div>
+                )}
+                {showFeedback && selectedOption === option && option !== challenge.correcta && (
+                  <div style={{ position: 'absolute', top: -10, right: -10, background: '#E74C3C', color: '#fff', fontWeight: 800, fontSize: 11, borderRadius: 99, padding: '2px 8px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
+                    Incorrecto
                   </div>
-
-                  <div
-                    onClick={() => handleSelectOption('B')}
-                    className={`relative border-4 rounded-lg p-6 cursor-pointer transition-all duration-300 ${getOptionClass('B')}`}
-                  >
-                    {getBadge('B')}
-                    <div className="aspect-video bg-gradient-to-br from-gray-400 to-gray-600 rounded-lg mb-4 flex items-center justify-center">
-                      <div className="text-white text-6xl">
-                        {challenge.id === 1 && '💡'}
-                        {challenge.id === 2 && '🚰'}
-                        {challenge.id === 3 && '🚗'}
-                        {challenge.id === 4 && '🗑️'}
-                        {challenge.id === 5 && '🛍️'}
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-full bg-[#2167AE] text-white font-bold flex items-center justify-center flex-shrink-0">
-                        B
-                      </div>
-                      <p className="font-semibold text-lg">{challenge.opcionB}</p>
-                    </div>
-                  </div>
+                )}
+                <div style={{ width: 30, height: 30, borderRadius: '50%', background: 'rgba(255,255,255,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 14, flexShrink: 0 }}>
+                  {option}
                 </div>
-              </div>
-
-              {showFeedback && (
-                <div className="bg-[#2167AE] text-white rounded-lg p-6 mb-6">
-                  <h3 className="font-bold text-xl mb-3">
-                    {selectedOption === challenge.correcta ? '¡Muy bien!' : 'Aprende de esto'}
-                  </h3>
-                  <p className="text-lg leading-relaxed">{challenge.mensaje}</p>
-                </div>
-              )}
-
-              {!showFeedback ? (
-                <button
-                  onClick={handleConfirm}
-                  disabled={!selectedOption}
-                  className={`w-full py-3 font-bold rounded-lg transition-colors text-lg ${
-                    selectedOption
-                      ? 'bg-[#2167AE] text-white hover:bg-[#1E2D6B]'
-                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  }`}
-                >
-                  Confirmar respuesta
-                </button>
-              ) : (
-                <button
-                  onClick={handleNext}
-                  className="w-full py-3 bg-[#1ABC9C] text-white font-bold rounded-lg hover:bg-[#27AE60] transition-colors text-lg"
-                >
-                  {currentChallenge < challenges.length - 1 ? 'Siguiente reto' : 'Ver resultados'}
-                </button>
-              )}
-            </div>
-          ) : (
-            <div className="bg-white rounded-lg shadow-lg p-8">
-              <div className="flex items-start gap-6 mb-6">
-                <img src="/abuelo.svg" alt="Don Manuel" style={{ height: '150px' }} className="shadow-md" />
-                <div className="flex-1">
-                  <h1 className="text-3xl font-bold text-[#1E2D6B] mb-2">
-                    ¡Completaste el Reto de Respuesta Rápida!
-                  </h1>
-                </div>
-              </div>
-
-              <div className="bg-[#2167AE] text-white rounded-lg p-6 mb-6">
-                <h3 className="font-bold text-xl mb-3">
-                  Obtuviste {calculateScore()} de 20 puntos
-                </h3>
-                <p className="text-lg leading-relaxed">
-                  Cada decisión responsable con el ambiente suma. Reducir el consumo, ahorrar agua, usar transporte sostenible, reciclar y consumir conscientemente son acciones que protegen nuestro planeta y reducen los riesgos climáticos. Tus elecciones de hoy construyen un futuro más seguro para todos.
+                <p style={{ margin: 0, fontWeight: 600, fontSize: 'clamp(12px,1.4vw,14px)', lineHeight: 1.3 }}>
+                  {option === 'A' ? challenge.opcionA : challenge.opcionB}
                 </p>
               </div>
+            ))}
+          </div>
 
-              <div className="space-y-4 mb-6">
-                {responses.map((response, index) => (
-                  <div
-                    key={index}
-                    className={`p-4 rounded-lg border-2 ${
-                      response.correcta
-                        ? 'bg-green-50 border-[#1ABC9C]'
-                        : 'bg-red-50 border-[#E74C3C]'
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                        response.correcta ? 'bg-[#1ABC9C]' : 'bg-[#E74C3C]'
-                      }`}>
-                        {response.correcta ? (
-                          <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                        ) : (
-                          <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                          </svg>
-                        )}
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-semibold text-[#1E2D6B]">{response.reto}</p>
-                        <p className="text-sm text-gray-600">
-                          Tu respuesta: <span className="font-semibold">{response.opcion_elegida}</span>
-                        </p>
-                      </div>
-                      <div className="text-lg font-bold text-[#1E2D6B]">
-                        {response.puntos} pts
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <button
-                onClick={handleContinue}
-                className="w-full py-3 bg-[#1ABC9C] text-white font-bold rounded-lg hover:bg-[#27AE60] transition-colors text-lg"
-              >
-                Continuar al Mapa
-              </button>
+          {showFeedback && (
+            <div style={{ background: 'rgba(33,103,174,0.9)', borderRadius: 10, padding: '10px 16px', marginBottom: 12 }}>
+              <p style={{ margin: 0, color: '#fff', fontSize: 'clamp(12px,1.4vw,14px)', fontWeight: 600, lineHeight: 1.5 }}>
+                <strong>{selectedOption === challenge.correcta ? '¡Muy bien! ' : 'Aprende de esto: '}</strong>
+                {challenge.mensaje}
+              </p>
             </div>
           )}
+
+          {!showFeedback ? (
+            <button
+              onClick={handleConfirm}
+              disabled={!selectedOption}
+              style={{
+                width: '100%',
+                padding: '12px 0',
+                background: selectedOption ? '#2167AE' : 'rgba(255,255,255,0.15)',
+                color: selectedOption ? '#fff' : 'rgba(255,255,255,0.4)',
+                fontWeight: 800,
+                fontSize: 'clamp(13px,1.6vw,16px)',
+                borderRadius: 10,
+                border: 'none',
+                cursor: selectedOption ? 'pointer' : 'not-allowed',
+                transition: 'all 0.2s',
+              }}
+            >
+              Confirmar respuesta
+            </button>
+          ) : (
+            <button
+              onClick={handleNext}
+              style={{
+                width: '100%',
+                padding: '12px 0',
+                background: '#1ABC9C',
+                color: '#fff',
+                fontWeight: 800,
+                fontSize: 'clamp(13px,1.6vw,16px)',
+                borderRadius: 10,
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 4px 16px rgba(26,188,156,0.4)',
+              }}
+            >
+              {currentChallenge < challenges.length - 1 ? 'Siguiente reto' : 'Ver resultados'}
+            </button>
+          )}
         </div>
-      </main>
+      </div>
     </div>
   );
 }
