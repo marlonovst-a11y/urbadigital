@@ -89,7 +89,7 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
       <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ position: 'relative', width: '100%', height: '100%' }}>
           <img
-            src="/nivel2.svg"
+            src="/nivel2_cuadrado.svg"
             alt="nivel 2"
             style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
           />
