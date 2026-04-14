@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 
 interface Level4Props {
   participantId: string;
@@ -72,6 +72,14 @@ const challenges: Challenge[] = [
   }
 ];
 
+const SVGBackground = memo(({ svgContent }: { svgContent: string }) => (
+  <div
+    dangerouslySetInnerHTML={{ __html: svgContent }}
+    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}
+  />
+));
+SVGBackground.displayName = 'SVGBackground';
+
 export default function Level4({ participantId, nickname, onComplete }: Level4Props) {
   const [svgContent, setSvgContent] = useState<string>('');
   const [currentChallenge, setCurrentChallenge] = useState(0);
@@ -79,26 +87,31 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
   const [showFeedback, setShowFeedback] = useState(false);
   const [responses, setResponses] = useState<any[]>([]);
   const [showFinalFeedback, setShowFinalFeedback] = useState(false);
-  const svgContainerRef = useRef<HTMLDivElement>(null);
 
   const challenge = challenges[currentChallenge];
 
   useEffect(() => {
     fetch('/nivel4.svg')
       .then(r => r.text())
-      .then(text => setSvgContent(text));
+      .then(text => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(text, 'image/svg+xml');
+        const svgEl = doc.querySelector('svg');
+        if (svgEl) {
+          svgEl.setAttribute('width', '100%');
+          svgEl.setAttribute('height', '100%');
+          svgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+        }
+        const serializer = new XMLSerializer();
+        setSvgContent(serializer.serializeToString(doc));
+      });
   }, []);
 
   useEffect(() => {
-    if (!svgContainerRef.current || !svgContent) return;
-    const svgEl = svgContainerRef.current.querySelector('svg');
-    if (!svgEl) return;
-    svgEl.setAttribute('width', '100%');
-    svgEl.setAttribute('height', '100%');
-    svgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    const bocadillo = svgContainerRef.current.querySelector('#bocadillo text');
+    if (!svgContent) return;
+    const bocadillo = document.querySelector('#bocadillo text');
     if (bocadillo) bocadillo.textContent = challenges[currentChallenge].pregunta;
-  }, [svgContent, currentChallenge]);
+  }, [currentChallenge, svgContent]);
 
   const handleSelectOption = (option: 'A' | 'B') => {
     if (showFeedback) return;
@@ -167,7 +180,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
 
   if (!svgContent) {
     return (
-      <div style={{ width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fc854a' }}>
+      <div style={{ width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fc854a', paddingTop: 0, marginTop: 0 }}>
         <div style={{ color: '#fff', fontSize: 20, fontWeight: 700 }}>Cargando...</div>
       </div>
     );
@@ -175,12 +188,8 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
 
   if (showFinalFeedback) {
     return (
-      <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', position: 'relative' }}>
-        <div
-          ref={svgContainerRef}
-          dangerouslySetInnerHTML={{ __html: svgContent }}
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
-        />
+      <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', position: 'relative', paddingTop: 0, marginTop: 0 }}>
+        <SVGBackground svgContent={svgContent} />
         <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
           <div style={{ background: '#fff', borderRadius: 20, padding: 'clamp(20px,4vw,40px)', maxWidth: 560, width: '100%', boxShadow: '0 8px 40px rgba(0,0,0,0.4)', textAlign: 'center' }}>
             <h2 style={{ fontSize: 'clamp(20px,3vw,28px)', fontWeight: 800, color: '#1E2D6B', marginBottom: 8 }}>
@@ -235,12 +244,8 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
   }
 
   return (
-    <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', position: 'relative' }}>
-      <div
-        ref={svgContainerRef}
-        dangerouslySetInnerHTML={{ __html: svgContent }}
-        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}
-      />
+    <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', position: 'relative', paddingTop: 0, marginTop: 0 }}>
+      <SVGBackground svgContent={svgContent} />
 
       <div style={{ position: 'relative', zIndex: 1, width: '100%', height: '100%', pointerEvents: 'none' }}>
 
@@ -355,7 +360,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
                 justifyContent: 'center',
                 fontWeight: 800,
                 fontSize: 14,
-                color: '#fff',
+                color: index === currentChallenge ? '#1E2D6B' : '#fff',
                 background: index < currentChallenge ? '#2ECC71' : index === currentChallenge ? '#F9D030' : '#9B8B3A',
                 transform: index === currentChallenge ? 'scale(1.2)' : 'scale(1)',
                 transition: 'all 0.2s',
