@@ -11,13 +11,14 @@ interface Level2Props {
 const TIMER_SECONDS = 25;
 
 const peligros = [
-  { id: 'tomacorriente', label: 'Toma corriente',    x: 1315, y: 283, w: 72,  h: 79  },
-  { id: 'fuga_gas',      label: 'Fuga de gas',       x: 1346, y: 311, w: 51,  h: 46  },
-  { id: 'basura',        label: 'Basura',             x: 616,  y: 648, w: 145, h: 110 },
-  { id: 'roedor',        label: 'Roedor',             x: 505,  y: 759, w: 92,  h: 110 },
-  { id: 'pisomojado',    label: 'Piso mojado',        x: 1112, y: 763, w: 218, h: 55  },
-  { id: 'calleinund',    label: 'Calle inundada',     x: 750,  y: 838, w: 421, h: 102 },
-  { id: 'casabaja',      label: 'Casa baja',          x: 840,  y: 578, w: 230, h: 230 },
+  { id: 'cables',      label: 'Cables sueltos o rotos',          x: 1080, y: 149, w: 51,  h: 97  },
+  { id: 'vidrios',     label: 'Ventanas con vidrios rotos',       x: 465,  y: 327, w: 51,  h: 46  },
+  { id: 'olla',        label: 'Olla encendida sin supervisión',   x: 1346, y: 311, w: 51,  h: 46  },
+  { id: 'basura',      label: 'Basura acumulada',                 x: 616,  y: 648, w: 145, h: 110 },
+  { id: 'roedor',      label: 'Roedor',                          x: 505,  y: 759, w: 92,  h: 110 },
+  { id: 'pisomojado',  label: 'Piso mojado',                     x: 1112, y: 763, w: 218, h: 55  },
+  { id: 'calleinund',  label: 'Calle inundada',                  x: 750,  y: 838, w: 421, h: 102 },
+  { id: 'casabaja',    label: 'Casa baja en riesgo',             x: 840,  y: 578, w: 230, h: 230 },
 ];
 
 type HazardId = typeof peligros[number]['id'];
