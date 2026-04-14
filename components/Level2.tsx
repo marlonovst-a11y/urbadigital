@@ -11,14 +11,14 @@ interface Level2Props {
 const TIMER_SECONDS = 25;
 
 const peligros = [
-  { id: 'cables',     label: 'Cables eléctricos expuestos',    left: '33%',  top: '22%', width: '35%', height: '6%'  },
-  { id: 'vidrios',    label: 'Ventana con vidrios rotos',       left: '16%',  top: '36%', width: '6%',  height: '10%' },
-  { id: 'olla',       label: 'Olla sin supervisión',            left: '70%',  top: '32%', width: '6%',  height: '8%'  },
-  { id: 'basura',     label: 'Basura tapando alcantarillas',    left: '33%',  top: '55%', width: '6%',  height: '8%'  },
-  { id: 'roedor',     label: 'Roedor desplazado por agua',      left: '27%',  top: '60%', width: '6%',  height: '8%'  },
-  { id: 'pisomojado', label: 'Piso mojado',                     left: '55%',  top: '55%', width: '8%',  height: '8%'  },
-  { id: 'calleinund', label: 'Calles inundadas',                left: '44%',  top: '60%', width: '16%', height: '8%'  },
-  { id: 'casabaja',   label: 'Vivienda en zona baja',           left: '62%',  top: '48%', width: '14%', height: '16%' },
+  { id: 'cables',     label: 'Cables eléctricos expuestos',    left: '33%',  top: '17%', width: '35%', height: '5%'  },
+  { id: 'vidrios',    label: 'Ventana con vidrios rotos',       left: '15%',  top: '30%', width: '6%',  height: '8%'  },
+  { id: 'olla',       label: 'Olla sin supervisión',            left: '72%',  top: '22%', width: '5%',  height: '7%'  },
+  { id: 'basura',     label: 'Basura tapando alcantarillas',    left: '29%',  top: '58%', width: '8%',  height: '8%'  },
+  { id: 'roedor',     label: 'Roedor desplazado por agua',      left: '24%',  top: '62%', width: '6%',  height: '7%'  },
+  { id: 'pisomojado', label: 'Piso mojado',                     left: '56%',  top: '62%', width: '10%', height: '7%'  },
+  { id: 'calleinund', label: 'Calles inundadas',                left: '38%',  top: '65%', width: '20%', height: '8%'  },
+  { id: 'casabaja',   label: 'Vivienda en zona baja',           left: '13%',  top: '22%', width: '12%', height: '18%' },
 ];
 
 type HazardId = typeof peligros[number]['id'];
