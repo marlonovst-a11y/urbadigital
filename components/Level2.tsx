@@ -11,14 +11,14 @@ interface Level2Props {
 const TIMER_SECONDS = 25;
 
 const peligros = [
-  { id: 'cables',     label: 'Cables eléctricos expuestos',    left: '51.7%', top: '33.0%', width: '10%', height: '8%' },
-  { id: 'vidrios',    label: 'Ventana con vidrios rotos',       left: '22.7%', top: '38.5%', width: '6%',  height: '8%' },
-  { id: 'olla',       label: 'Olla sin supervisión',            left: '68.3%', top: '38.1%', width: '6%',  height: '8%' },
-  { id: 'basura',     label: 'Basura tapando alcantarillas',    left: '31.9%', top: '52.1%', width: '6%',  height: '8%' },
-  { id: 'roedor',     label: 'Roedor desplazado por agua',      left: '25.3%', top: '56.5%', width: '6%',  height: '8%' },
-  { id: 'pisomojado', label: 'Piso mojado',                     left: '60.0%', top: '55.1%', width: '8%',  height: '8%' },
-  { id: 'calleinund', label: 'Calles inundadas',                left: '47.7%', top: '58.7%', width: '10%', height: '8%' },
-  { id: 'casabaja',   label: 'Vivienda en zona baja',           left: '46.1%', top: '52.9%', width: '8%',  height: '8%' },
+  { id: 'cables',     label: 'Cables eléctricos expuestos',    left: '33%',  top: '22%', width: '35%', height: '6%'  },
+  { id: 'vidrios',    label: 'Ventana con vidrios rotos',       left: '16%',  top: '36%', width: '6%',  height: '10%' },
+  { id: 'olla',       label: 'Olla sin supervisión',            left: '70%',  top: '32%', width: '6%',  height: '8%'  },
+  { id: 'basura',     label: 'Basura tapando alcantarillas',    left: '33%',  top: '55%', width: '6%',  height: '8%'  },
+  { id: 'roedor',     label: 'Roedor desplazado por agua',      left: '27%',  top: '60%', width: '6%',  height: '8%'  },
+  { id: 'pisomojado', label: 'Piso mojado',                     left: '55%',  top: '55%', width: '8%',  height: '8%'  },
+  { id: 'calleinund', label: 'Calles inundadas',                left: '44%',  top: '60%', width: '16%', height: '8%'  },
+  { id: 'casabaja',   label: 'Vivienda en zona baja',           left: '62%',  top: '48%', width: '14%', height: '16%' },
 ];
 
 type HazardId = typeof peligros[number]['id'];
