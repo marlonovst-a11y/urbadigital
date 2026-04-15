@@ -52,11 +52,7 @@ export default function FinalScore({ participantId, nickname, totalScore, levelS
 
       <main className="flex-1 px-3 md:px-4 pb-8">
         <div className="max-w-3xl mx-auto pt-[440px] md:pt-[460px]">
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-5 md:mb-8 text-center" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.5)' }}>
-              Tu Puntaje Final
-            </h1>
-
-            <div className="flex flex-col items-center mb-5 md:mb-8">
+<div className="flex flex-col items-center mb-5 md:mb-8">
               <div className="w-36 h-36 md:w-48 md:h-48 rounded-full bg-[#2167AE] flex items-center justify-center shadow-xl mb-4">
                 <div className="text-center">
                   <div className="text-5xl md:text-6xl font-bold text-white">{totalScore}</div>
