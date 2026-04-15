@@ -89,7 +89,9 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden', background: '#1a2a4a' }}>
       <Header />
-      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+
+      {/* Imagen SVG — empieza debajo del Header (48px) y termina antes de la barra de peligros (100px) */}
+      <div style={{ position: 'absolute', top: 48, left: 0, right: 0, bottom: 100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ position: 'relative', width: '100%', height: '100%' }}>
           <img
             src="/nivel2_cuadrado.svg"
@@ -121,10 +123,11 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
         </div>
       </div>
 
+      {/* Timer — debajo del Header */}
       <div
         style={{
           position: 'absolute',
-          top: 12,
+          top: 54,
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 20,
@@ -157,6 +160,7 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
         </div>
       </div>
 
+      {/* Barra de peligros — parte inferior */}
       <div
         style={{
           position: 'absolute',
@@ -166,18 +170,18 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
           zIndex: 20,
           background: 'rgba(10, 20, 40, 0.82)',
           backdropFilter: 'blur(6px)',
-          padding: '10px 16px 12px',
+          padding: '6px 12px 8px',
           borderTop: '1px solid rgba(255,255,255,0.1)',
           pointerEvents: 'none',
         }}
       >
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 16px', maxWidth: 900, margin: '0 auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 16px', maxWidth: 900, margin: '0 auto' }}>
           {peligros.map(p => (
             <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <div
                 style={{
-                  width: 22,
-                  height: 22,
+                  width: 20,
+                  height: 20,
                   borderRadius: '50%',
                   background: found.has(p.id) ? '#F9D030' : 'rgba(255,255,255,0.15)',
                   border: '2px solid rgba(255,255,255,0.4)',
@@ -187,7 +191,7 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
                   justifyContent: 'center',
                   boxShadow: found.has(p.id) ? '0 0 8px #F9D030' : 'none',
                   transition: 'all 0.3s',
-                  fontSize: 13,
+                  fontSize: 11,
                   fontWeight: 800,
                   color: found.has(p.id) ? '#333' : 'transparent',
                 }}
@@ -197,7 +201,7 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
               <span
                 style={{
                   color: found.has(p.id) ? '#F9D030' : 'rgba(255,255,255,0.75)',
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: found.has(p.id) ? 700 : 400,
                   textShadow: '0 1px 3px rgba(0,0,0,0.8)',
                   lineHeight: 1.3,
@@ -211,6 +215,7 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
         </div>
       </div>
 
+      {/* Modal de resultados */}
       {showModal && (
         <div
           style={{
