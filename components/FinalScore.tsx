@@ -51,7 +51,7 @@ export default function FinalScore({ participantId, nickname, totalScore, levelS
     <div className="min-h-screen flex flex-col" style={{ backgroundImage: 'url(/puntaje_final.png)', backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh' }}>
 
       <main className="flex-1 px-3 md:px-4 pb-8">
-        <div className="max-w-3xl mx-auto pt-[340px] md:pt-[360px]">
+        <div className="max-w-3xl mx-auto pt-[440px] md:pt-[460px]">
             <h1 className="text-2xl md:text-3xl font-bold text-white mb-5 md:mb-8 text-center" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.5)' }}>
               Tu Puntaje Final
             </h1>
