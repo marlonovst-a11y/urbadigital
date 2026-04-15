@@ -21,9 +21,7 @@ export default function Closing({ onPlayAgain, totalScore }: ClosingProps) {
       className="flex flex-col relative overflow-hidden"
       style={{ backgroundImage: 'url(/fin.png)', backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh' }}
     >
-      <main className="flex-1 flex flex-col items-center justify-start px-4 py-0 relative z-10">
-        <img src="/personajes.svg" alt="Familia completa" className="w-64 md:w-[420px] mt-16 md:mt-24" />
-
+      <main className="flex-1 flex flex-col items-center justify-end px-4 py-0 pb-16 md:pb-20 relative z-10">
         <h1
           className="text-3xl md:text-5xl font-bold text-white mb-4 md:mb-6 text-center"
           style={{ fontFamily: 'DM Serif Display, Georgia, serif', textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}
