@@ -14,11 +14,11 @@ interface LevelMapProps {
 }
 
 const levelPositions = [
-  { left: '14%', top: '55%' },
-  { left: '31%', top: '55%' },
-  { left: '48%', top: '55%' },
-  { left: '65%', top: '55%' },
-  { left: '82%', top: '55%' },
+  { left: '14%', top: '58%' },
+  { left: '31%', top: '58%' },
+  { left: '48%', top: '58%' },
+  { left: '65%', top: '58%' },
+  { left: '82%', top: '58%' },
 ];
 
 export default function LevelMap({ totalScore, nickname, participantId, completedLevels, onStartLevel, onGoToEvaluation }: LevelMapProps) {
@@ -107,8 +107,8 @@ export default function LevelMap({ totalScore, nickname, participantId, complete
               left: pos.left,
               top: pos.top,
               transform: 'translate(-50%, -50%)',
-              width: 'clamp(70px, 9vw, 120px)',
-              height: 'clamp(70px, 9vw, 120px)',
+              width: 'clamp(90px, 11vw, 140px)',
+              height: 'clamp(90px, 11vw, 140px)',
               borderRadius: '50%',
               background: 'transparent',
               border: 'none',
