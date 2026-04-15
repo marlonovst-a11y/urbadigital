@@ -37,17 +37,17 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
             <div className="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-[#1ABC9C] text-white font-bold rounded-full mb-3 md:mb-4 text-sm md:text-base">
               +10 puntos al completar
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white drop-shadow mb-2">
+            <h1 className="text-2xl md:text-3xl font-bold text-white drop-shadow mb-2" style={{ background: 'rgba(0,0,0,0.2)', borderRadius: '6px', padding: '4px 10px', display: 'inline-block' }}>
               Evaluación Final
             </h1>
-            <p className="text-white drop-shadow text-sm md:text-base" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.4)' }}>
+            <p className="text-white drop-shadow text-sm md:text-base" style={{ background: 'rgba(0,0,0,0.2)', borderRadius: '6px', padding: '4px 10px', display: 'inline-block' }}>
               Responde estas tres preguntas para desbloquear tus 10 puntos finales.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             <div>
-              <h3 className="font-bold text-white drop-shadow mb-3 md:mb-4 text-sm md:text-base" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.5)' }}>
+              <h3 className="font-bold text-white drop-shadow mb-3 md:mb-4 text-sm md:text-base" style={{ background: 'rgba(0,0,0,0.25)', borderRadius: '8px', padding: '8px 12px', color: 'white' }}>
                 1. ¿Has aprendido algo nuevo de estos consejos, contenidos y materiales?
               </h3>
               <div className="space-y-2 md:space-y-3">
@@ -75,7 +75,7 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
             </div>
 
             <div>
-              <h3 className="font-bold text-white drop-shadow mb-3 md:mb-4 text-sm md:text-base" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.5)' }}>
+              <h3 className="font-bold text-white drop-shadow mb-3 md:mb-4 text-sm md:text-base" style={{ background: 'rgba(0,0,0,0.25)', borderRadius: '8px', padding: '8px 12px', color: 'white' }}>
                 2. ¿Fue útil la información/contenido que revisaste en la plataforma?
               </h3>
               <div className="space-y-2 md:space-y-3">
@@ -103,7 +103,7 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
             </div>
 
             <div className="md:col-span-2">
-              <h3 className="font-bold text-white drop-shadow mb-3 md:mb-4 text-sm md:text-base" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.5)' }}>
+              <h3 className="font-bold text-white drop-shadow mb-3 md:mb-4 text-sm md:text-base" style={{ background: 'rgba(0,0,0,0.25)', borderRadius: '8px', padding: '8px 12px', color: 'white' }}>
                 3. ¿Piensas aplicar estos consejos?
               </h3>
               <div className="space-y-2 md:space-y-3">
