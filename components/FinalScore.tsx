@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Header from './Header';
 import Ranking from './Ranking';
 import { Facebook, MessageCircle, Linkedin, Trophy } from 'lucide-react';
 
@@ -49,13 +48,11 @@ export default function FinalScore({ participantId, nickname, totalScore, levelS
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#ECEEEF]">
-      <Header />
+    <div className="min-h-screen flex flex-col" style={{ backgroundImage: 'url(/puntaje_final.png)', backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh' }}>
 
-      <main className="pt-14 md:pt-24 flex-1 px-3 md:px-4 pb-8">
-        <div className="max-w-3xl mx-auto">
-          <div className="bg-white rounded-lg shadow-lg p-4 md:p-8">
-            <h1 className="text-2xl md:text-3xl font-bold text-[#1E2D6B] mb-5 md:mb-8 text-center">
+      <main className="flex-1 px-3 md:px-4 pb-8">
+        <div className="max-w-3xl mx-auto pt-[340px] md:pt-[360px]">
+            <h1 className="text-2xl md:text-3xl font-bold text-white mb-5 md:mb-8 text-center" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.5)' }}>
               Tu Puntaje Final
             </h1>
 
@@ -66,21 +63,21 @@ export default function FinalScore({ participantId, nickname, totalScore, levelS
                   <div className="text-white text-base md:text-lg">/100</div>
                 </div>
               </div>
-              <p className="text-lg md:text-2xl font-bold text-[#1E2D6B] text-center">
+              <p className="text-lg md:text-2xl font-bold text-white text-center" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.5)' }}>
                 {getMessage(totalScore)}
               </p>
             </div>
 
-            <div className="bg-[#ECEEEF] rounded-lg p-4 md:p-6 mb-4 md:mb-6">
-              <h3 className="font-bold text-[#1E2D6B] mb-3 md:mb-4 text-sm md:text-base">Desglose por nivel</h3>
+            <div className="bg-white/15 rounded-lg p-4 md:p-6 mb-4 md:mb-6">
+              <h3 className="font-bold text-white mb-3 md:mb-4 text-sm md:text-base">Desglose por nivel</h3>
               <table className="w-full text-xs md:text-sm">
                 <thead>
                   <tr className="border-b-2 border-gray-300">
-                    <th className="text-left py-2 text-[#1E2D6B]">Nivel</th>
-                    <th className="text-right py-2 text-[#1E2D6B]">Puntos</th>
+                    <th className="text-left py-2 text-white">Nivel</th>
+                    <th className="text-right py-2 text-white">Puntos</th>
                   </tr>
                 </thead>
-                <tbody className="text-gray-700">
+                <tbody className="text-white">
                   <tr className="border-b border-gray-200">
                     <td className="py-1.5 md:py-2">N1: Trivia de Prevención</td>
                     <td className="text-right font-semibold">{levelScores.level1}/20</td>
@@ -106,8 +103,8 @@ export default function FinalScore({ participantId, nickname, totalScore, levelS
                     <td className="text-right font-semibold">{levelScores.evaluation}/10</td>
                   </tr>
                   <tr>
-                    <td className="py-1.5 md:py-2 font-bold text-[#1E2D6B]">Total</td>
-                    <td className="text-right font-bold text-[#1E2D6B] text-sm md:text-lg">{totalScore}/100</td>
+                    <td className="py-1.5 md:py-2 font-bold text-white">Total</td>
+                    <td className="text-right font-bold text-white text-sm md:text-lg">{totalScore}/100</td>
                   </tr>
                 </tbody>
               </table>
@@ -154,7 +151,6 @@ export default function FinalScore({ participantId, nickname, totalScore, levelS
             >
               Finalizar
             </button>
-          </div>
         </div>
       </main>
 
