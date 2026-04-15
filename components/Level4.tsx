@@ -106,18 +106,20 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
   useEffect(() => {
     fetch('/nivel_4.svg')
       .then(r => r.text())
-      .then(text => {
-        setSvgContent(text);
-        requestAnimationFrame(() => {
-          const svgEl = containerRef.current?.querySelector('svg');
-          if (!svgEl) return;
-          svgEl.setAttribute('width', '100%');
-          svgEl.setAttribute('height', '100%');
-          svgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-          svgEl.style.display = 'block';
-        });
-      });
+      .then(text => setSvgContent(text));
   }, []);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const svgEl = containerRef.current.querySelector('svg');
+    if (!svgEl) return;
+    svgEl.setAttribute('width', '100%');
+    svgEl.setAttribute('height', '100%');
+    svgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    svgEl.style.display = 'block';
+    svgEl.style.width = '100%';
+    svgEl.style.height = '100%';
+  }, [svgContent, selectedOption, showFeedback, currentChallenge]);
 
   useEffect(() => {
     if (!svgContent || !containerRef.current) return;
