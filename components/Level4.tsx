@@ -15,6 +15,8 @@ interface Challenge {
   opcionB: string;
   emojiA: string;
   emojiB: string;
+  imagenA: string;
+  imagenB: string;
   correcta: 'A' | 'B';
   mensaje: string;
 }
@@ -27,6 +29,8 @@ const challenges: Challenge[] = [
     opcionB: 'Casa con luces encendidas de día',
     emojiA: '💡',
     emojiB: '🏠',
+    imagenA: '/r1a.png',
+    imagenB: '/r1b.png',
     correcta: 'A',
     mensaje: 'Reducir el consumo de energía disminuye las emisiones de gases contaminantes.'
   },
@@ -37,6 +41,8 @@ const challenges: Challenge[] = [
     opcionB: 'Persona cerrando la llave',
     emojiA: '🚿',
     emojiB: '🤲',
+    imagenA: '/r2a.png',
+    imagenB: '/r2b.png',
     correcta: 'B',
     mensaje: 'Ahorrar agua es clave frente a sequías.'
   },
@@ -47,6 +53,8 @@ const challenges: Challenge[] = [
     opcionB: 'Auto emitiendo humo',
     emojiA: '🚲',
     emojiB: '🚗',
+    imagenA: '/r3a.png',
+    imagenB: '/r3b.png',
     correcta: 'A',
     mensaje: 'El transporte sostenible reduce la contaminación del aire.'
   },
@@ -57,6 +65,8 @@ const challenges: Challenge[] = [
     opcionB: 'Separación de residuos y reciclaje',
     emojiA: '🗑️',
     emojiB: '♻️',
+    imagenA: '/r4a.png',
+    imagenB: '/r4b.png',
     correcta: 'B',
     mensaje: 'La mala gestión de residuos agrava la contaminación ambiental.'
   },
@@ -67,6 +77,8 @@ const challenges: Challenge[] = [
     opcionB: 'Consumo excesivo y desechables',
     emojiA: '🛍️',
     emojiB: '🛒',
+    imagenA: '/r5a.png',
+    imagenB: '/r5b.png',
     correcta: 'A',
     mensaje: 'Consumir solo lo necesario reduce la presión sobre el planeta.'
   }
@@ -91,7 +103,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
   const challenge = challenges[currentChallenge];
 
   useEffect(() => {
-    fetch('/nivel4.svg')
+    fetch('/nivel_4.svg')
       .then(r => r.text())
       .then(text => {
         const parser = new DOMParser();
@@ -109,8 +121,10 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
 
   useEffect(() => {
     if (!svgContent) return;
-    const bocadillo = document.querySelector('#bocadillo text');
-    if (bocadillo) bocadillo.textContent = challenges[currentChallenge].pregunta;
+    requestAnimationFrame(() => {
+      const bocadillo = document.querySelector('#bocadillo text');
+      if (bocadillo) bocadillo.textContent = challenges[currentChallenge].pregunta;
+    });
   }, [currentChallenge, svgContent]);
 
   const handleSelectOption = (option: 'A' | 'B') => {
@@ -277,9 +291,11 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
                     Incorrecto
                   </div>
                 )}
-                <div style={{ fontSize: 38, lineHeight: 1 }}>
-                  {option === 'A' ? challenge.emojiA : challenge.emojiB}
-                </div>
+                <img
+                  src={option === 'A' ? challenge.imagenA : challenge.imagenB}
+                  alt={option === 'A' ? challenge.opcionA : challenge.opcionB}
+                  style={{ width: '100%', maxWidth: 180, height: 140, objectFit: 'contain', borderRadius: 8 }}
+                />
                 <div style={{ fontWeight: 700, fontSize: 13, lineHeight: 1.3, maxWidth: 200 }}>
                   {option === 'A' ? challenge.opcionA : challenge.opcionB}
                 </div>
@@ -337,40 +353,6 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
           )}
         </div>
 
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '5%',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            display: 'flex',
-            gap: 10,
-            pointerEvents: 'all',
-          }}
-        >
-          {challenges.map((_, index) => (
-            <div
-              key={index}
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 800,
-                fontSize: 14,
-                color: index === currentChallenge ? '#1E2D6B' : '#fff',
-                background: index < currentChallenge ? '#2ECC71' : index === currentChallenge ? '#F9D030' : '#9B8B3A',
-                transform: index === currentChallenge ? 'scale(1.2)' : 'scale(1)',
-                transition: 'all 0.2s',
-                boxShadow: index === currentChallenge ? '0 0 12px rgba(249,208,48,0.7)' : 'none',
-              }}
-            >
-              {index + 1}
-            </div>
-          ))}
-        </div>
 
       </div>
     </div>
