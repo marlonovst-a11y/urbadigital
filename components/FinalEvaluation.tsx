@@ -34,12 +34,6 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
       <main className="flex-1 px-3 md:px-4 py-8 flex items-start justify-center">
         <div className="max-w-2xl w-full mx-auto pt-[440px] md:pt-[460px]">
           <div className="mb-4 md:mb-6">
-            <div className="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-[#1ABC9C] text-white font-bold rounded-full mb-3 md:mb-4 text-sm md:text-base">
-              +10 puntos al completar
-            </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white drop-shadow mb-2" style={{ background: 'rgba(0,0,0,0.2)', borderRadius: '6px', padding: '4px 10px', display: 'inline-block' }}>
-              Evaluación Final
-            </h1>
             <p className="text-white drop-shadow text-sm md:text-base" style={{ background: 'rgba(0,0,0,0.2)', borderRadius: '6px', padding: '4px 10px', display: 'inline-block' }}>
               Responde estas tres preguntas para desbloquear tus 10 puntos finales.
             </p>
