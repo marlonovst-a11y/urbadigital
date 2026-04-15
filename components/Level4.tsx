@@ -105,24 +105,13 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
   useEffect(() => {
     fetch('/nivel_4.svg')
       .then(r => r.text())
-      .then(text => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(text, 'image/svg+xml');
-        const svgEl = doc.querySelector('svg');
-        if (svgEl) {
-          svgEl.setAttribute('width', '100%');
-          svgEl.setAttribute('height', '100%');
-          svgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-        }
-        const serializer = new XMLSerializer();
-        setSvgContent(serializer.serializeToString(doc));
-      });
+      .then(text => setSvgContent(text));
   }, []);
 
   const processedSvg = svgContent
     ? svgContent.replace(
-        /TEXTO_ACCION/g,
-        challenges[currentChallenge].pregunta
+        /<text[^>]*cls-73[^>]*>[\s\S]*?<\/text>/,
+        `<text style="font-size:42px;font-family:sans-serif;fill:#1E2D6B;font-weight:bold;" x="960" y="194" text-anchor="middle">${challenges[currentChallenge].pregunta}</text>`
       )
     : '';
 
