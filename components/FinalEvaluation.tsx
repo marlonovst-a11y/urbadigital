@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Header from './Header';
 
 interface FinalEvaluationProps {
   participantId: string;
@@ -23,12 +22,18 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
   const isComplete = answer1 && answer2 && answer3;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#ECEEEF]">
-      <Header />
-
-      <main className="pt-14 md:pt-24 flex-1 px-3 md:px-4 pb-8">
-        <div className="max-w-3xl mx-auto">
-          <div className="bg-white rounded-lg shadow-lg p-4 md:p-8">
+    <div
+      className="min-h-screen flex flex-col"
+      style={{
+        backgroundImage: 'url(/evaluacion.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        minHeight: '100vh',
+      }}
+    >
+      <main className="flex-1 px-3 md:px-4 py-8 flex items-center justify-center">
+        <div className="max-w-3xl w-full mx-auto">
+          <div className="bg-white/90 rounded-lg shadow-lg p-4 md:p-8">
             <div className="mb-4 md:mb-6">
               <div className="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-[#1ABC9C] text-white font-bold rounded-full mb-3 md:mb-4 text-sm md:text-base">
                 +10 puntos al completar
