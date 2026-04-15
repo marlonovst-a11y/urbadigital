@@ -119,21 +119,12 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
       });
   }, []);
 
-  useEffect(() => {
-    if (!svgContent) return;
-    const observer = new MutationObserver(() => {
-      const bocadillo = document.querySelector('#bocadillo text');
-      if (bocadillo) {
-        bocadillo.textContent = challenges[currentChallenge].pregunta;
-        (bocadillo as SVGTextElement).style.fontSize = '48px';
-        (bocadillo as SVGTextElement).style.fontFamily = 'Zurich_Light_Condensed_BT, sans-serif';
-        (bocadillo as SVGTextElement).style.fill = '#1E2D6B';
-        observer.disconnect();
-      }
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
-    return () => observer.disconnect();
-  }, [currentChallenge, svgContent]);
+  const processedSvg = svgContent
+    ? svgContent.replace(
+        /(<text[^>]*class="cls-73"[^>]*>)[^<]*/,
+        `$1${challenges[currentChallenge].pregunta}`
+      )
+    : '';
 
   const handleSelectOption = (option: 'A' | 'B') => {
     if (showFeedback) return;
@@ -189,7 +180,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
       if (selectedOption === option) {
         return { ...base, background: 'rgba(33,103,174,0.85)', color: '#fff', borderColor: '#2167AE', transform: 'scale(1.04)', boxShadow: '0 6px 24px rgba(33,103,174,0.5)' };
       }
-      return { ...base, background: 'rgba(255,255,255,0.15)', color: '#fff', borderColor: 'rgba(255,255,255,0.5)' };
+      return { ...base, background: 'rgba(255,255,255,0.40)', color: '#1E2D6B', borderColor: 'rgba(255,255,255,0.5)' };
     }
     if (option === challenge.correcta) {
       return { ...base, background: '#1ABC9C', color: '#fff', borderColor: '#1ABC9C' };
@@ -211,7 +202,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
   if (showFinalFeedback) {
     return (
       <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', position: 'relative', paddingTop: 0, marginTop: 0 }}>
-        <SVGBackground svgContent={svgContent} />
+        <SVGBackground svgContent={processedSvg} />
         <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
           <div style={{ background: '#fff', borderRadius: 20, padding: 'clamp(20px,4vw,40px)', maxWidth: 560, width: '100%', boxShadow: '0 8px 40px rgba(0,0,0,0.4)', textAlign: 'center' }}>
             <h2 style={{ fontSize: 'clamp(20px,3vw,28px)', fontWeight: 800, color: '#1E2D6B', marginBottom: 8 }}>
@@ -267,7 +258,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
 
   return (
     <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', position: 'relative', paddingTop: 0, marginTop: 0 }}>
-      <SVGBackground svgContent={svgContent} />
+      <SVGBackground svgContent={processedSvg} />
 
       <div style={{ position: 'relative', zIndex: 1, width: '100%', height: '100%', pointerEvents: 'none' }}>
 
@@ -328,7 +319,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
                 width: '100%',
                 padding: '12px 0',
                 background: selectedOption ? '#2167AE' : 'rgba(30,45,107,0.75)',
-                color: selectedOption ? '#fff' : 'rgba(255,255,255,0.6)',
+                color: selectedOption ? '#fff' : 'rgba(255,255,255,0.5)',
                 fontWeight: 800,
                 fontSize: 'clamp(13px,1.6vw,16px)',
                 borderRadius: 12,
