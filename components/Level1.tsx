@@ -62,13 +62,6 @@ const questions = [
   }
 ];
 
-const NAV_CENTERS = [
-  { cx: 32.6, cy: 90.4 },
-  { cx: 41.3, cy: 90.4 },
-  { cx: 50.0, cy: 90.4 },
-  { cx: 58.7, cy: 90.4 },
-  { cx: 67.4, cy: 90.4 },
-];
 
 export default function Level1({ participantId, nickname, onComplete }: Level1Props) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -189,7 +182,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
         <div className="relative w-full" style={{ maxHeight: 'calc(100vh - 48px)' }}>
           <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
             <img
-              src="/nivel1.svg"
+              src="/nivel_1.svg"
               alt="Nivel 1"
               className="absolute inset-0 w-full h-full"
               style={{ objectFit: 'contain', objectPosition: 'center' }}
@@ -202,17 +195,17 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
               <div
                 className="absolute flex items-center justify-center text-center px-4"
                 style={{
-                  left: '26%',
-                  top: '9%',
-                  width: '48%',
-                  height: '22%',
+                  left: '26.4%',
+                  top: '8.7%',
+                  width: '56.4%',
+                  height: '22.6%',
                 }}
               >
                 <p
                   className="text-[#1E2D6B] leading-snug"
                   style={{
                     fontFamily: "'Zurich_Light_Condensed_BT', 'ZurichCondensed', sans-serif",
-                    fontSize: 'clamp(0.85rem, 1.6vw, 1.6rem)',
+                    fontSize: 'clamp(0.75rem, 1.3vw, 1.35rem)',
                     fontWeight: 400,
                   }}
                 >
@@ -243,10 +236,10 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
                 onClick={() => handleAnswer('A', question.options[0].correct)}
                 className="absolute flex items-center justify-center text-center"
                 style={{
-                  left: '23.5%',
-                  top: '37%',
-                  width: '36.5%',
-                  height: '7.5%',
+                  left: '18.2%',
+                  top: '36.8%',
+                  width: '35.7%',
+                  height: '7.1%',
                   cursor: selectedAnswer === null ? 'pointer' : 'default',
                   background: 'transparent',
                   border: 'none',
@@ -256,7 +249,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
                   className="px-6 leading-tight"
                   style={{
                     fontFamily: "'Zurich_Light_Condensed_BT', 'ZurichCondensed', sans-serif",
-                    fontSize: 'clamp(0.6rem, 1.1vw, 1.1rem)',
+                    fontSize: 'clamp(0.55rem, 1vw, 1rem)',
                     fontWeight: 300,
                     color: optionFeedback.A === 'correct' ? '#0a7c2e' : optionFeedback.A === 'wrong' ? '#c0392b' : '#1E2D6B',
                   }}
@@ -270,10 +263,10 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
                 onClick={() => handleAnswer('B', question.options[1].correct)}
                 className="absolute flex items-center justify-center text-center"
                 style={{
-                  left: '65%',
-                  top: '37%',
-                  width: '30.2%',
-                  height: '7.5%',
+                  left: '60.6%',
+                  top: '36.8%',
+                  width: '35.7%',
+                  height: '7.1%',
                   cursor: selectedAnswer === null ? 'pointer' : 'default',
                   background: 'transparent',
                   border: 'none',
@@ -283,7 +276,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
                   className="px-6 leading-tight"
                   style={{
                     fontFamily: "'Zurich_Light_Condensed_BT', 'ZurichCondensed', sans-serif",
-                    fontSize: 'clamp(0.6rem, 1.1vw, 1.1rem)',
+                    fontSize: 'clamp(0.55rem, 1vw, 1rem)',
                     fontWeight: 300,
                     color: optionFeedback.B === 'correct' ? '#0a7c2e' : optionFeedback.B === 'wrong' ? '#c0392b' : '#1E2D6B',
                   }}
@@ -298,9 +291,9 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
                 className="absolute flex items-center justify-center text-center"
                 style={{
                   left: '33.9%',
-                  top: '48.5%',
+                  top: '48%',
                   width: '43.2%',
-                  height: '7.2%',
+                  height: '7.3%',
                   cursor: selectedAnswer === null ? 'pointer' : 'default',
                   background: 'transparent',
                   border: 'none',
@@ -310,7 +303,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
                   className="px-6 leading-tight"
                   style={{
                     fontFamily: "'Zurich_Light_Condensed_BT', 'ZurichCondensed', sans-serif",
-                    fontSize: 'clamp(0.6rem, 1.1vw, 1.1rem)',
+                    fontSize: 'clamp(0.55rem, 1vw, 1rem)',
                     fontWeight: 300,
                     color: optionFeedback.C === 'correct' ? '#0a7c2e' : optionFeedback.C === 'wrong' ? '#c0392b' : '#1E2D6B',
                   }}
@@ -319,24 +312,6 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
                 </span>
               </button>
 
-              {NAV_CENTERS.map((nav, idx) => (
-                <div
-                  key={idx}
-                  className="absolute flex items-center justify-center"
-                  style={{
-                    left: `${nav.cx}%`,
-                    top: `${nav.cy}%`,
-                    transform: 'translate(-50%, -50%)',
-                    fontFamily: "'Zurich_Light_Condensed_BT', 'ZurichCondensed', sans-serif",
-                    fontSize: 'clamp(1.0rem, 2.2vw, 2.0rem)',
-                    fontWeight: idx === currentQuestion ? 'bold' : 'normal',
-                    color: '#1E2D6B',
-                    opacity: idx > currentQuestion ? 0.45 : 1,
-                  }}
-                >
-                  {idx + 1}
-                </div>
-              ))}
             </div>
           </div>
         </div>
