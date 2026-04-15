@@ -3,6 +3,17 @@
 import { useState, useEffect, useRef } from 'react';
 import Header from './Header';
 
+function useInlineSvg(url: string) {
+  const [svgContent, setSvgContent] = useState<string | null>(null);
+  useEffect(() => {
+    fetch(url)
+      .then(r => r.text())
+      .then(setSvgContent)
+      .catch(() => setSvgContent(null));
+  }, [url]);
+  return svgContent;
+}
+
 interface Level1Props {
   participantId: string;
   nickname: string;
@@ -64,6 +75,7 @@ const questions = [
 
 
 export default function Level1({ participantId, nickname, onComplete }: Level1Props) {
+  const svgContent = useInlineSvg('/nivel_1.svg');
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [timeLeft, setTimeLeft] = useState(20);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -181,12 +193,20 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
       <main className="pt-12 md:pt-16 flex-1 flex items-center justify-center relative overflow-hidden">
         <div className="relative w-full" style={{ maxHeight: 'calc(100vh - 48px)' }}>
           <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-            <img
-              src="/nivel_1.svg"
-              alt="Nivel 1"
-              className="absolute inset-0 w-full h-full"
-              style={{ objectFit: 'contain', objectPosition: 'center' }}
-            />
+            {svgContent ? (
+              <div
+                className="absolute inset-0 w-full h-full nivel1-svg-wrapper"
+                dangerouslySetInnerHTML={{ __html: svgContent }}
+                style={{ lineHeight: 0 }}
+              />
+            ) : (
+              <img
+                src="/nivel_1.svg"
+                alt="Nivel 1"
+                className="absolute inset-0 w-full h-full"
+                style={{ objectFit: 'contain', objectPosition: 'center' }}
+              />
+            )}
 
             <div
               className="absolute inset-0"

@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+.nivel1-svg-wrapper > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#bocadillo text.cls-59,
+#bocadillo text.cls-58,
+#opcion-a text.cls-59,
+#opcion-b text.cls-59,
+#opcion-c text.cls-59 {
+  display: none;
+}
+
 @font-face {
   font-family: 'Zurich_Light_Condensed_BT';
   src: url('/fonts/Zurich_Light_Condensed_BT.ttf') format('truetype');
