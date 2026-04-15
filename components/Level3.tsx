@@ -297,8 +297,8 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
     return () => window.removeEventListener('resize', handleResize);
   }, [positionElementsAfterPaint]);
 
-  const handleAnswer = useCallback((category: 'ANTES' | 'DURANTE' | 'DESPUÉS') => {
-    if (answeredRef.current || answerStateRef.current !== 'idle') return;
+ const handleAnswer = useCallback((category: 'ANTES' | 'DURANTE' | 'DESPUÉS') => {
+    if (answeredRef.current) return;
     answeredRef.current = true;
     answerStateRef.current = 'correct';
 
