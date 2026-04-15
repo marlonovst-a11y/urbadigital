@@ -106,7 +106,17 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
   useEffect(() => {
     fetch('/nivel_4.svg')
       .then(r => r.text())
-      .then(text => setSvgContent(text));
+      .then(text => {
+        setSvgContent(text);
+        requestAnimationFrame(() => {
+          const svgEl = containerRef.current?.querySelector('svg');
+          if (!svgEl) return;
+          svgEl.setAttribute('width', '100%');
+          svgEl.setAttribute('height', '100%');
+          svgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+          svgEl.style.display = 'block';
+        });
+      });
   }, []);
 
   useEffect(() => {
@@ -117,17 +127,18 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
       const textEl = svgEl.querySelector('#bocadillo text') as SVGTextElement | null;
       if (!textEl) return;
       while (textEl.firstChild) textEl.removeChild(textEl.firstChild);
-      textEl.setAttribute('x', '960');
-      textEl.setAttribute('text-anchor', 'middle');
-      textEl.setAttribute('dominant-baseline', 'middle');
       textEl.removeAttribute('transform');
+      textEl.setAttribute('x', '960');
+      textEl.setAttribute('y', '194');
+      textEl.setAttribute('text-anchor', 'middle');
+      textEl.setAttribute('dominant-baseline', 'auto');
       textEl.style.fontSize = '42px';
       textEl.style.fontFamily = 'Zurich_Light_Condensed_BT, sans-serif';
       textEl.style.fill = '#1E2D6B';
       textEl.style.fontWeight = 'bold';
       textEl.textContent = challenges[currentChallenge].pregunta;
     });
-  }, [currentChallenge, svgContent]);
+  }, [currentChallenge, svgContent, selectedOption, showFeedback]);
 
   const handleSelectOption = (option: 'A' | 'B') => {
     if (showFeedback) return;
@@ -264,7 +275,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
       <div
         ref={containerRef}
         dangerouslySetInnerHTML={{ __html: svgContent }}
-        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}
+        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, overflow: 'hidden', lineHeight: 0 }}
       />
 
       <div style={{ position: 'relative', zIndex: 1, width: '100%', height: '100%', pointerEvents: 'none' }}>
