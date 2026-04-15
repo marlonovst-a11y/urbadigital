@@ -121,18 +121,18 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
 
   useEffect(() => {
     if (!svgContent) return;
-    const tryUpdate = (attempts = 0) => {
+    const observer = new MutationObserver(() => {
       const bocadillo = document.querySelector('#bocadillo text');
       if (bocadillo) {
         bocadillo.textContent = challenges[currentChallenge].pregunta;
         (bocadillo as SVGTextElement).style.fontSize = '48px';
         (bocadillo as SVGTextElement).style.fontFamily = 'Zurich_Light_Condensed_BT, sans-serif';
         (bocadillo as SVGTextElement).style.fill = '#1E2D6B';
-      } else if (attempts < 20) {
-        setTimeout(() => tryUpdate(attempts + 1), 150);
+        observer.disconnect();
       }
-    };
-    setTimeout(() => tryUpdate(), 200);
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
   }, [currentChallenge, svgContent]);
 
   const handleSelectOption = (option: 'A' | 'B') => {
@@ -274,7 +274,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
         <div
           style={{
             position: 'absolute',
-            top: '45%',
+            top: '38%',
             left: '50%',
             transform: 'translateX(-50%)',
             width: '88%',
@@ -327,8 +327,8 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
               style={{
                 width: '100%',
                 padding: '12px 0',
-                background: selectedOption ? '#2167AE' : 'rgba(255,255,255,0.25)',
-                color: selectedOption ? '#fff' : 'rgba(255,255,255,0.5)',
+                background: selectedOption ? '#2167AE' : 'rgba(30,45,107,0.75)',
+                color: selectedOption ? '#fff' : 'rgba(255,255,255,0.6)',
                 fontWeight: 800,
                 fontSize: 'clamp(13px,1.6vw,16px)',
                 borderRadius: 12,
