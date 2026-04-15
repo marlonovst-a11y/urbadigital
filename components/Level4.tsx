@@ -125,11 +125,14 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
       const bocadillo = document.querySelector('#bocadillo text');
       if (bocadillo) {
         bocadillo.textContent = challenges[currentChallenge].pregunta;
-      } else if (attempts < 10) {
-        setTimeout(() => tryUpdate(attempts + 1), 100);
+        (bocadillo as SVGTextElement).style.fontSize = '48px';
+        (bocadillo as SVGTextElement).style.fontFamily = 'Zurich_Light_Condensed_BT, sans-serif';
+        (bocadillo as SVGTextElement).style.fill = '#1E2D6B';
+      } else if (attempts < 20) {
+        setTimeout(() => tryUpdate(attempts + 1), 150);
       }
     };
-    tryUpdate();
+    setTimeout(() => tryUpdate(), 200);
   }, [currentChallenge, svgContent]);
 
   const handleSelectOption = (option: 'A' | 'B') => {
@@ -184,9 +187,9 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
     };
     if (!showFeedback) {
       if (selectedOption === option) {
-        return { ...base, background: '#2167AE', color: '#fff', borderColor: '#2167AE', transform: 'scale(1.04)', boxShadow: '0 6px 24px rgba(33,103,174,0.5)' };
+        return { ...base, background: 'rgba(33,103,174,0.85)', color: '#fff', borderColor: '#2167AE', transform: 'scale(1.04)', boxShadow: '0 6px 24px rgba(33,103,174,0.5)' };
       }
-      return { ...base, background: 'rgba(255,255,255,0.92)', color: '#1E2D6B', borderColor: 'rgba(255,255,255,0.5)' };
+      return { ...base, background: 'rgba(255,255,255,0.15)', color: '#fff', borderColor: 'rgba(255,255,255,0.5)' };
     }
     if (option === challenge.correcta) {
       return { ...base, background: '#1ABC9C', color: '#fff', borderColor: '#1ABC9C' };
