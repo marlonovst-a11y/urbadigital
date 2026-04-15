@@ -121,10 +121,15 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
 
   useEffect(() => {
     if (!svgContent) return;
-    requestAnimationFrame(() => {
+    const tryUpdate = (attempts = 0) => {
       const bocadillo = document.querySelector('#bocadillo text');
-      if (bocadillo) bocadillo.textContent = challenges[currentChallenge].pregunta;
-    });
+      if (bocadillo) {
+        bocadillo.textContent = challenges[currentChallenge].pregunta;
+      } else if (attempts < 10) {
+        setTimeout(() => tryUpdate(attempts + 1), 100);
+      }
+    };
+    tryUpdate();
   }, [currentChallenge, svgContent]);
 
   const handleSelectOption = (option: 'A' | 'B') => {
@@ -294,7 +299,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
                 <img
                   src={option === 'A' ? challenge.imagenA : challenge.imagenB}
                   alt={option === 'A' ? challenge.opcionA : challenge.opcionB}
-                  style={{ width: '100%', maxWidth: 180, height: 140, objectFit: 'contain', borderRadius: 8 }}
+                  style={{ width: '100%', maxWidth: 225, height: 175, objectFit: 'contain', borderRadius: 8 }}
                 />
                 <div style={{ fontWeight: 700, fontSize: 13, lineHeight: 1.3, maxWidth: 200 }}>
                   {option === 'A' ? challenge.opcionA : challenge.opcionB}
