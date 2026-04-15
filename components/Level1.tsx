@@ -197,7 +197,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
 
             <div
               className="absolute inset-0"
-              style={{ fontFamily: "'ZurichCondensed', 'ZurichCondensed', sans-serif" }}
+              style={{ fontFamily: "'Zurich_Light_Condensed_BT', 'ZurichCondensed', sans-serif" }}
             >
               <div
                 className="absolute flex items-center justify-center text-center px-4"
@@ -211,7 +211,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
                 <p
                   className="text-[#1E2D6B] leading-snug"
                   style={{
-                    fontFamily: "'ZurichCondensed', sans-serif",
+                    fontFamily: "'Zurich_Light_Condensed_BT', 'ZurichCondensed', sans-serif",
                     fontSize: 'clamp(0.85rem, 1.6vw, 1.6rem)',
                     fontWeight: 400,
                   }}
@@ -255,7 +255,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
                 <span
                   className="px-6 leading-tight"
                   style={{
-                    fontFamily: "'ZurichCondensed', sans-serif",
+                    fontFamily: "'Zurich_Light_Condensed_BT', 'ZurichCondensed', sans-serif",
                     fontSize: 'clamp(0.6rem, 1.1vw, 1.1rem)',
                     fontWeight: 300,
                     color: optionFeedback.A === 'correct' ? '#0a7c2e' : optionFeedback.A === 'wrong' ? '#c0392b' : '#1E2D6B',
@@ -282,7 +282,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
                 <span
                   className="px-6 leading-tight"
                   style={{
-                    fontFamily: "'ZurichCondensed', sans-serif",
+                    fontFamily: "'Zurich_Light_Condensed_BT', 'ZurichCondensed', sans-serif",
                     fontSize: 'clamp(0.6rem, 1.1vw, 1.1rem)',
                     fontWeight: 300,
                     color: optionFeedback.B === 'correct' ? '#0a7c2e' : optionFeedback.B === 'wrong' ? '#c0392b' : '#1E2D6B',
@@ -309,7 +309,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
                 <span
                   className="px-6 leading-tight"
                   style={{
-                    fontFamily: "'ZurichCondensed', sans-serif",
+                    fontFamily: "'Zurich_Light_Condensed_BT', 'ZurichCondensed', sans-serif",
                     fontSize: 'clamp(0.6rem, 1.1vw, 1.1rem)',
                     fontWeight: 300,
                     color: optionFeedback.C === 'correct' ? '#0a7c2e' : optionFeedback.C === 'wrong' ? '#c0392b' : '#1E2D6B',
@@ -327,7 +327,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
                     left: `${nav.cx}%`,
                     top: `${nav.cy}%`,
                     transform: 'translate(-50%, -50%)',
-                    fontFamily: "'RobotRadicals', sans-serif",
+                    fontFamily: "'Zurich_Light_Condensed_BT', 'ZurichCondensed', sans-serif",
                     fontSize: 'clamp(1.0rem, 2.2vw, 2.0rem)',
                     fontWeight: idx === currentQuestion ? 'bold' : 'normal',
                     color: '#1E2D6B',
@@ -346,7 +346,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
             <div className="bg-white rounded-2xl shadow-2xl p-5 md:p-8 max-w-2xl w-full">
               <p
                 className="text-base md:text-xl text-[#1E2D6B] leading-relaxed mb-4 md:mb-6 text-center"
-                style={{ fontFamily: "'ZurichCondensed', sans-serif" }}
+                style={{ fontFamily: "'Zurich_Light_Condensed_BT', 'ZurichCondensed', sans-serif" }}
               >
                 {question.message}
               </p>
