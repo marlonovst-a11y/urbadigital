@@ -32,7 +32,7 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
       }}
     >
       <main className="flex-1 px-3 md:px-4 py-8 flex items-start justify-center">
-        <div className="max-w-3xl w-full mx-auto pt-8 md:pt-12">
+        <div className="max-w-2xl w-full ml-auto mr-8 md:mr-16 pt-48 md:pt-52">
           <div className="mb-4 md:mb-6">
             <div className="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-[#1ABC9C] text-white font-bold rounded-full mb-3 md:mb-4 text-sm md:text-base">
               +10 puntos al completar
