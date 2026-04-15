@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, memo } from 'react';
+import Header from './Header';
 
 interface Level4Props {
   participantId: string;
@@ -274,6 +275,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
 
   return (
     <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', position: 'relative', paddingTop: 0, marginTop: 0 }}>
+      <Header />
       <div
         ref={containerRef}
         dangerouslySetInnerHTML={{ __html: svgContent }}

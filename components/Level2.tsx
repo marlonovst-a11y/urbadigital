@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Header from './Header';
 
 interface Level2Props {
   participantId: string;
@@ -87,6 +88,7 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
 
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden', background: '#1a2a4a' }}>
+      <Header />
       <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ position: 'relative', width: '100%', height: '100%' }}>
           <img

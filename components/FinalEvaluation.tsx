@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Header from './Header';
 
 interface FinalEvaluationProps {
   participantId: string;
@@ -31,6 +32,7 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
         minHeight: '100vh',
       }}
     >
+      <Header />
       <main className="flex-1 px-3 md:px-4 py-8 flex items-start justify-center">
         <div className="max-w-2xl w-full mx-auto pt-[440px] md:pt-[460px]">
           <div className="mb-4 md:mb-6">

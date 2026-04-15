@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Ranking from './Ranking';
+import Header from './Header';
 import { Trophy, CircleCheck as CheckCircle } from 'lucide-react';
 
 interface LevelMapProps {
@@ -45,6 +46,7 @@ export default function LevelMap({ totalScore, nickname, participantId, complete
         overflow: 'hidden',
       }}
     >
+      <Header />
       <div
         style={{
           position: 'absolute',

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Ranking from './Ranking';
+import Header from './Header';
 import { Facebook, MessageCircle, Linkedin, Trophy } from 'lucide-react';
 
 interface FinalScoreProps {
@@ -49,7 +50,7 @@ export default function FinalScore({ participantId, nickname, totalScore, levelS
 
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundImage: 'url(/puntaje_final.png)', backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh' }}>
-
+      <Header />
       <main className="flex-1 px-3 md:px-4 pb-8">
         <div className="max-w-3xl mx-auto pt-[440px] md:pt-[460px]">
 <div className="flex flex-col items-center mb-5 md:mb-8">
