@@ -57,7 +57,7 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
                     className={`block p-3 md:p-4 rounded-lg border-2 cursor-pointer transition-all ${
                       answer1 === option
                         ? 'bg-[#2167AE] border-[#2167AE] text-white'
-                        : 'bg-white/85 border-white/60 text-gray-800 hover:border-[#2167AE]'
+                        : 'bg-white/15 border-white/40 text-white hover:border-[#2167AE]'
                     }`}
                   >
                     <input
@@ -85,7 +85,7 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
                     className={`block p-3 md:p-4 rounded-lg border-2 cursor-pointer transition-all ${
                       answer2 === option
                         ? 'bg-[#2167AE] border-[#2167AE] text-white'
-                        : 'bg-white/85 border-white/60 text-gray-800 hover:border-[#2167AE]'
+                        : 'bg-white/15 border-white/40 text-white hover:border-[#2167AE]'
                     }`}
                   >
                     <input
@@ -113,7 +113,7 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
                     className={`block p-3 md:p-4 rounded-lg border-2 cursor-pointer transition-all ${
                       answer3 === option
                         ? 'bg-[#2167AE] border-[#2167AE] text-white'
-                        : 'bg-white/85 border-white/60 text-gray-800 hover:border-[#2167AE]'
+                        : 'bg-white/15 border-white/40 text-white hover:border-[#2167AE]'
                     }`}
                   >
                     <input
