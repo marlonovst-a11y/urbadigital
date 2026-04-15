@@ -86,8 +86,8 @@ export default function Ranking({ isOpen, onClose, participantId }: RankingProps
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
-        <div className="bg-gradient-to-r from-[#2167AE] to-[#1E2D6B] p-6 relative">
+      <div className="rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden" style={{ background: 'linear-gradient(135deg, #1E2D6B 0%, #2167AE 50%, #3d9fd3 100%)' }}>
+        <div className="p-6 relative" style={{ background: 'rgba(0,0,0,0.25)', backdropFilter: 'blur(8px)' }}>
           <button
             onClick={onClose}
             className="absolute top-4 right-4 text-white hover:bg-white/20 rounded-full p-2 transition-colors"
@@ -106,7 +106,7 @@ export default function Ranking({ isOpen, onClose, participantId }: RankingProps
           </p>
         </div>
 
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-180px)]">
+        <div className="p-6 overflow-y-auto max-h-[calc(90vh-180px)]" style={{ background: 'rgba(255,255,255,0.05)' }}>
           {loading ? (
             <div className="text-center py-12">
               <div className="inline-block w-12 h-12 border-4 border-[#2167AE] border-t-transparent rounded-full animate-spin"></div>
@@ -115,7 +115,7 @@ export default function Ranking({ isOpen, onClose, participantId }: RankingProps
           ) : (
             <>
               {usingDemo && (
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4 text-sm text-yellow-800">
+                <div className="bg-white/20 border border-white/40 rounded-lg p-3 mb-4 text-sm text-white">
                   Mostrando datos de ejemplo. Sé el primero en completar la aplicación.
                 </div>
               )}
@@ -130,17 +130,17 @@ export default function Ranking({ isOpen, onClose, participantId }: RankingProps
                       key={entry.id}
                       className={`flex items-center gap-4 p-4 rounded-lg transition-all ${
                         position <= 3
-                          ? getMedalColor(position)
+                          ? `${getMedalColor(position)} shadow-lg`
                           : isCurrentUser
                           ? 'bg-[#A8C8E8] border-2 border-[#2167AE]'
-                          : 'bg-gray-50 hover:bg-gray-100'
+                          : 'bg-white/15 hover:bg-white/25 text-white'
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-[80px]">
                         {getMedalIcon(position)}
                         <span
                           className={`text-2xl font-bold ${
-                            position <= 3 ? 'text-white' : 'text-[#2167AE]'
+                            position <= 3 ? 'text-white' : 'text-white'
                           }`}
                         >
                           {position}
@@ -150,7 +150,7 @@ export default function Ranking({ isOpen, onClose, participantId }: RankingProps
                       <div className="flex-1">
                         <p
                           className={`font-bold text-lg ${
-                            position <= 3 ? 'text-white' : 'text-gray-900'
+                            position <= 3 ? 'text-white' : 'text-white'
                           }`}
                         >
                           {entry.nickname}
@@ -162,7 +162,7 @@ export default function Ranking({ isOpen, onClose, participantId }: RankingProps
 
                       <div
                         className={`text-right ${
-                          position <= 3 ? 'text-white' : 'text-[#2167AE]'
+                          position <= 3 ? 'text-white' : 'text-white'
                         }`}
                       >
                         <p className="text-2xl font-bold">{entry.puntaje_total}</p>
@@ -200,7 +200,7 @@ export default function Ranking({ isOpen, onClose, participantId }: RankingProps
           )}
         </div>
 
-        <div className="bg-gray-50 px-6 py-4 border-t">
+        <div className="px-6 py-4" style={{ background: 'rgba(0,0,0,0.25)', backdropFilter: 'blur(8px)' }}>
           <button
             onClick={onClose}
             className="w-full bg-[#2167AE] text-white font-bold py-3 rounded-lg hover:bg-[#1E2D6B] transition-colors"
