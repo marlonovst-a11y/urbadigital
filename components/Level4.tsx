@@ -121,8 +121,8 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
 
   const processedSvg = svgContent
     ? svgContent.replace(
-        /(<text[^>]*class="cls-73"[^>]*>)[^<]*/,
-        `$1${challenges[currentChallenge].pregunta}`
+        /TEXTO_ACCION/g,
+        challenges[currentChallenge].pregunta
       )
     : '';
 
@@ -293,7 +293,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
                 <img
                   src={option === 'A' ? challenge.imagenA : challenge.imagenB}
                   alt={option === 'A' ? challenge.opcionA : challenge.opcionB}
-                  style={{ width: '100%', maxWidth: 225, height: 175, objectFit: 'contain', borderRadius: 8 }}
+                  style={{ width: '100%', maxWidth: 280, height: 220, objectFit: 'contain', borderRadius: 8 }}
                 />
                 <div style={{ fontWeight: 700, fontSize: 13, lineHeight: 1.3, maxWidth: 200 }}>
                   {option === 'A' ? challenge.opcionA : challenge.opcionB}
