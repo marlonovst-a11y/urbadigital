@@ -67,17 +67,17 @@ export default function Ranking({ isOpen, onClose, participantId }: RankingProps
   };
 
   const getMedalIcon = (position: number) => {
-    if (position === 1) return <Trophy className="w-6 h-6 text-yellow-500" fill="currentColor" />;
-    if (position === 2) return <Medal className="w-6 h-6 text-gray-400" fill="currentColor" />;
-    if (position === 3) return <Award className="w-6 h-6 text-amber-600" fill="currentColor" />;
+    if (position === 1) return <Trophy className="w-6 h-6 text-white" fill="currentColor" />;
+    if (position === 2) return <Medal className="w-6 h-6 text-white/80" fill="currentColor" />;
+    if (position === 3) return <Award className="w-6 h-6 text-white/60" fill="currentColor" />;
     return null;
   };
 
   const getMedalColor = (position: number) => {
-    if (position === 1) return 'bg-gradient-to-r from-yellow-400 to-yellow-600 text-white';
-    if (position === 2) return 'bg-gradient-to-r from-gray-300 to-gray-500 text-white';
-    if (position === 3) return 'bg-gradient-to-r from-amber-500 to-amber-700 text-white';
-    return 'bg-white';
+    if (position === 1) return 'bg-white/30 border-2 border-white/60 text-white';
+    if (position === 2) return 'bg-white/20 border-2 border-white/40 text-white';
+    if (position === 3) return 'bg-white/15 border-2 border-white/30 text-white';
+    return 'bg-white/10';
   };
 
   if (!isOpen) return null;
