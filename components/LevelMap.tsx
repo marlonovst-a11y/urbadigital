@@ -150,6 +150,7 @@ export default function LevelMap({ totalScore, nickname, participantId, complete
                   fontSize: 'clamp(22px, 3vw, 40px)',
                   lineHeight: 1,
                   textShadow: isLocked ? '0 1px 3px rgba(0,0,0,0.3)' : 'none',
+                  fontFamily: 'RobotRadicals, sans-serif',
                 }}>
                   {num}
                 </span>
@@ -177,7 +178,7 @@ export default function LevelMap({ totalScore, nickname, participantId, complete
               <span style={{
                 color: 'white',
                 fontWeight: 700,
-                fontSize: 'clamp(11px, 1.3vw, 14px)',
+                fontSize: 'clamp(22px, 2.6vw, 28px)',
                 textAlign: 'center',
                 maxWidth: 'clamp(70px, 9vw, 120px)',
                 lineHeight: 1.3,
