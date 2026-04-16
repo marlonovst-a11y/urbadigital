@@ -209,20 +209,42 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
 
   if (isFinished) {
     return (
-      <div className="min-h-screen flex flex-col bg-[#2167AE] relative overflow-hidden">
+      <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel1_1.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Header />
-        <main className="pt-14 md:pt-24 flex-1 flex items-center justify-center px-4">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">{calculateTotalScore()} puntos</h1>
-            <p className="text-lg md:text-2xl text-white mb-8">¡Excelente trabajo, {nickname}!</p>
-            <button
-              onClick={() => onComplete(calculateTotalScore(), responses)}
-              className="bg-white text-[#2167AE] font-bold py-3 md:py-4 px-6 md:px-8 rounded-lg hover:bg-gray-100 transition-colors text-base md:text-lg min-h-[44px]"
-            >
-              Continuar al Nivel 2
-            </button>
+        <div style={{ background: 'white', borderRadius: 20, padding: 'clamp(20px,4vw,40px)', maxWidth: 560, width: '90%', boxShadow: '0 8px 40px rgba(0,0,0,0.4)', textAlign: 'center', marginTop: 48 }}>
+          <div style={{ fontSize: 56, marginBottom: 8 }}>
+            {calculateTotalScore() >= 15 ? '🏆' : calculateTotalScore() >= 8 ? '👍' : '💪'}
           </div>
-        </main>
+          <h2 style={{ color: '#1E2D6B', fontWeight: 800, fontSize: 'clamp(20px,3vw,28px)', marginBottom: 8 }}>
+            ¡Nivel 1 completado!
+          </h2>
+          <div style={{ display: 'inline-block', background: '#2167AE', color: 'white', fontWeight: 800, fontSize: 'clamp(16px,2.5vw,22px)', borderRadius: 12, padding: '8px 24px', marginBottom: 16 }}>
+            {calculateTotalScore()} puntos
+          </div>
+          <div style={{ display: 'flex', gap: 12, marginBottom: 20, justifyContent: 'center' }}>
+            <div style={{ background: '#E8F8F2', borderRadius: 12, padding: '10px 20px', textAlign: 'center' }}>
+              <p style={{ fontWeight: 800, color: '#1ABC9C', fontSize: 24, margin: 0 }}>{responses.filter(r => r.correcta).length}/5</p>
+              <p style={{ color: '#666', fontSize: 12, margin: 0 }}>Correctas</p>
+            </div>
+            <div style={{ background: '#FEF0F0', borderRadius: 12, padding: '10px 20px', textAlign: 'center' }}>
+              <p style={{ fontWeight: 800, color: '#E74C3C', fontSize: 24, margin: 0 }}>{responses.filter(r => !r.correcta).length}/5</p>
+              <p style={{ color: '#666', fontSize: 12, margin: 0 }}>Incorrectas</p>
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20, textAlign: 'left' }}>
+            {questions.map((q, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', borderRadius: 10, background: responses[i]?.correcta ? '#E8F8F2' : '#FEF0F0', border: `2px solid ${responses[i]?.correcta ? '#1ABC9C' : '#E74C3C'}` }}>
+                <div style={{ width: 28, height: 28, borderRadius: '50%', background: responses[i]?.correcta ? '#1ABC9C' : '#E74C3C', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 800, fontSize: 16, flexShrink: 0 }}>
+                  {responses[i]?.correcta ? '✓' : '✗'}
+                </div>
+                <p style={{ margin: 0, fontSize: 12, color: '#1E2D6B', fontWeight: 600, lineHeight: 1.3 }}>{q.question}</p>
+              </div>
+            ))}
+          </div>
+          <button onClick={() => onComplete(calculateTotalScore(), responses)} style={{ width: '100%', padding: '14px 0', background: '#1ABC9C', color: 'white', fontWeight: 800, fontSize: 'clamp(14px,2vw,18px)', borderRadius: 12, border: 'none', cursor: 'pointer', boxShadow: '0 4px 16px rgba(26,188,156,0.4)' }}>
+            Continuar al Nivel 2 →
+          </button>
+        </div>
       </div>
     );
   }
@@ -299,8 +321,8 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
 
       <div style={{ position: 'absolute', bottom: '7%', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 24, zIndex: 20, width: 'clamp(300px, 55vw, 700px)', justifyContent: 'center' }}>
         {questions.map((_, idx) => (
-          <div key={idx} style={{ width: 76, height: 76, borderRadius: '50%', background: idx < currentQuestion ? '#1ABC9C' : idx === currentQuestion ? '#F9D030' : 'rgba(255,255,255,0.3)', border: '3px solid white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 42, color: idx === currentQuestion ? '#1E2D6B' : 'white', fontFamily: 'RobotRadicals, sans-serif', transition: 'all 0.3s', transform: idx === currentQuestion ? 'scale(1.2)' : 'scale(1)' }}>
-            {idx < currentQuestion ? '✓' : idx + 1}
+          <div key={idx} style={{ width: 76, height: 76, borderRadius: '50%', background: idx < currentQuestion ? (responses[idx]?.correcta ? '#1ABC9C' : '#E74C3C') : idx === currentQuestion ? '#F9D030' : 'rgba(255,255,255,0.3)', border: '3px solid white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 42, color: idx === currentQuestion ? '#1E2D6B' : 'white', fontFamily: 'RobotRadicals, sans-serif', transition: 'all 0.3s', transform: idx === currentQuestion ? 'scale(1.2)' : 'scale(1)' }}>
+            {idx < currentQuestion ? (responses[idx]?.correcta ? '✓' : '✗') : idx + 1}
           </div>
         ))}
       </div>
