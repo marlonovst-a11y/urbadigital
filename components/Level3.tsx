@@ -203,7 +203,7 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
         </div>
       </div>
 
-      <div style={{ position: 'absolute', top: '26%', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 'clamp(12px, 3vw, 32px)', zIndex: 20 }}>
+      <div style={{ position: 'absolute', top: '30%', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 'clamp(12px, 3vw, 32px)', zIndex: 20 }}>
         {(['ANTES', 'DURANTE', 'DESPUÉS'] as const).map((cat) => {
           const isSelected = selectedCategory === cat;
           const isCorrect = answerState !== 'idle' && currentAction.categoria === cat;
@@ -211,13 +211,13 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
           return (
             <button key={cat} onClick={() => handleAnswer(cat)} disabled={answerState !== 'idle'}
               style={{
-                padding: 'clamp(4px, 0.6vw, 8px) clamp(6px, 0.8vw, 12px)',
+                padding: 'clamp(6px, 0.8vw, 10px) clamp(10px, 1.2vw, 18px)',
                 borderRadius: 12,
                 border: '4px solid #5C3A1E',
                 background: isCorrect ? '#1ABC9C' : isWrong ? '#E74C3C' : '#F9D030',
                 color: isCorrect || isWrong ? 'white' : '#5C3A1E',
                 fontWeight: 900,
-                fontSize: 'clamp(16px, 2vw, 28px)',
+                fontSize: 'clamp(20px, 2.5vw, 34px)',
                 fontFamily: 'RobotRadicals, sans-serif',
                 cursor: answerState === 'idle' ? 'pointer' : 'default',
                 boxShadow: '0 6px 20px rgba(0,0,0,0.3)',
