@@ -37,7 +37,7 @@ export default function Level5({ participantId, nickname, onComplete }: Level5Pr
   const [inputValue, setInputValue] = useState('');
   const [showFeedback, setShowFeedback] = useState(false);
   const [showInstructions, setShowInstructions] = useState(true);
-  const [expandedSection, setExpandedSection] = useState<'horizontal' | 'vertical' | null>(null);
+
 
   const ROWS = 11;
   const COLS = 12;
@@ -223,48 +223,33 @@ export default function Level5({ participantId, nickname, onComplete }: Level5Pr
             </div>
           )}
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', background: 'rgba(10,20,40,0.88)', backdropFilter: 'blur(8px)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', background: 'rgba(10,20,40,0.88)', backdropFilter: 'blur(8px)', maxHeight: 200, overflow: 'hidden' }}>
 
-            <div>
-              <button onClick={() => setExpandedSection(expandedSection === 'horizontal' ? null : 'horizontal')}
-                style={{ width: '100%', padding: '8px 16px', background: 'transparent', border: 'none', borderRight: '1px solid rgba(255,255,255,0.2)', color: 'white', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span>📖 Horizontales</span>
-                <span>{expandedSection === 'horizontal' ? '▲' : '▼'}</span>
-              </button>
-              {expandedSection === 'horizontal' && (
-                <div style={{ maxHeight: 160, overflowY: 'auto', padding: '4px 12px 8px' }}>
-                  {wordStates.filter(w => w.direction === 'horizontal').map(word => (
-                    <div key={word.id} onClick={() => { if (!word.completed && !word.revealed) { setSelectedWord(word); setInputValue(''); } }}
-                      style={{ padding: '6px 10px', marginBottom: 4, borderRadius: 8, cursor: 'pointer', background: word.completed || word.revealed ? 'rgba(26,188,156,0.3)' : selectedWord?.id === word.id ? 'rgba(249,208,48,0.3)' : 'rgba(255,255,255,0.08)', border: `1px solid ${word.completed || word.revealed ? '#1ABC9C' : selectedWord?.id === word.id ? '#F9D030' : 'rgba(255,255,255,0.2)'}` }}>
-                      <p style={{ margin: 0, color: 'white', fontSize: 12 }}>
-                        <span style={{ fontWeight: 800, color: '#F9D030' }}>{word.number}. </span>{word.clue}
-                        {word.attempts > 0 && !word.completed && !word.revealed && <span style={{ color: '#E74C3C', fontSize: 10, marginLeft: 6 }}>({word.attempts}/3)</span>}
-                      </p>
-                    </div>
-                  ))}
+            {/* Horizontales */}
+            <div style={{ borderRight: '1px solid rgba(255,255,255,0.2)', padding: '8px 12px', overflowY: 'auto' }}>
+              <p style={{ margin: '0 0 6px', color: '#F9D030', fontWeight: 800, fontSize: 13 }}>📖 Horizontales</p>
+              {wordStates.filter(w => w.direction === 'horizontal').map(word => (
+                <div key={word.id} onClick={() => { if (!word.completed && !word.revealed) { setSelectedWord(word); setInputValue(''); } }}
+                  style={{ padding: '5px 8px', marginBottom: 4, borderRadius: 8, cursor: 'pointer', background: word.completed || word.revealed ? 'rgba(26,188,156,0.3)' : selectedWord?.id === word.id ? 'rgba(249,208,48,0.3)' : 'rgba(255,255,255,0.08)', border: `1px solid ${word.completed || word.revealed ? '#1ABC9C' : selectedWord?.id === word.id ? '#F9D030' : 'rgba(255,255,255,0.2)'}` }}>
+                  <p style={{ margin: 0, color: 'white', fontSize: 12 }}>
+                    <span style={{ fontWeight: 800, color: '#F9D030' }}>{word.number}. </span>{word.clue}
+                    {word.attempts > 0 && !word.completed && !word.revealed && <span style={{ color: '#E74C3C', fontSize: 10, marginLeft: 6 }}>({word.attempts}/3)</span>}
+                  </p>
                 </div>
-              )}
+              ))}
             </div>
-
-            <div>
-              <button onClick={() => setExpandedSection(expandedSection === 'vertical' ? null : 'vertical')}
-                style={{ width: '100%', padding: '8px 16px', background: 'transparent', border: 'none', color: 'white', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span>📖 Verticales</span>
-                <span>{expandedSection === 'vertical' ? '▲' : '▼'}</span>
-              </button>
-              {expandedSection === 'vertical' && (
-                <div style={{ maxHeight: 160, overflowY: 'auto', padding: '4px 12px 8px' }}>
-                  {wordStates.filter(w => w.direction === 'vertical').map(word => (
-                    <div key={word.id} onClick={() => { if (!word.completed && !word.revealed) { setSelectedWord(word); setInputValue(''); } }}
-                      style={{ padding: '6px 10px', marginBottom: 4, borderRadius: 8, cursor: 'pointer', background: word.completed || word.revealed ? 'rgba(26,188,156,0.3)' : selectedWord?.id === word.id ? 'rgba(249,208,48,0.3)' : 'rgba(255,255,255,0.08)', border: `1px solid ${word.completed || word.revealed ? '#1ABC9C' : selectedWord?.id === word.id ? '#F9D030' : 'rgba(255,255,255,0.2)'}` }}>
-                      <p style={{ margin: 0, color: 'white', fontSize: 12 }}>
-                        <span style={{ fontWeight: 800, color: '#F9D030' }}>{word.number}. </span>{word.clue}
-                        {word.attempts > 0 && !word.completed && !word.revealed && <span style={{ color: '#E74C3C', fontSize: 10, marginLeft: 6 }}>({word.attempts}/3)</span>}
-                      </p>
-                    </div>
-                  ))}
+            {/* Verticales */}
+            <div style={{ padding: '8px 12px', overflowY: 'auto' }}>
+              <p style={{ margin: '0 0 6px', color: '#F9D030', fontWeight: 800, fontSize: 13 }}>📖 Verticales</p>
+              {wordStates.filter(w => w.direction === 'vertical').map(word => (
+                <div key={word.id} onClick={() => { if (!word.completed && !word.revealed) { setSelectedWord(word); setInputValue(''); } }}
+                  style={{ padding: '5px 8px', marginBottom: 4, borderRadius: 8, cursor: 'pointer', background: word.completed || word.revealed ? 'rgba(26,188,156,0.3)' : selectedWord?.id === word.id ? 'rgba(249,208,48,0.3)' : 'rgba(255,255,255,0.08)', border: `1px solid ${word.completed || word.revealed ? '#1ABC9C' : selectedWord?.id === word.id ? '#F9D030' : 'rgba(255,255,255,0.2)'}` }}>
+                  <p style={{ margin: 0, color: 'white', fontSize: 12 }}>
+                    <span style={{ fontWeight: 800, color: '#F9D030' }}>{word.number}. </span>{word.clue}
+                    {word.attempts > 0 && !word.completed && !word.revealed && <span style={{ color: '#E74C3C', fontSize: 10, marginLeft: 6 }}>({word.attempts}/3)</span>}
+                  </p>
                 </div>
-              )}
+              ))}
             </div>
 
           </div>
