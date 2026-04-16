@@ -203,7 +203,7 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
         </div>
       </div>
 
-      <div style={{ position: 'absolute', top: '42%', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 'clamp(12px, 3vw, 32px)', zIndex: 20 }}>
+      <div style={{ position: 'absolute', top: '32%', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 'clamp(12px, 3vw, 32px)', zIndex: 20 }}>
         {(['ANTES', 'DURANTE', 'DESPUÉS'] as const).map((cat) => {
           const isSelected = selectedCategory === cat;
           const isCorrect = answerState !== 'idle' && currentAction.categoria === cat;
