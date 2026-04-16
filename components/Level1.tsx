@@ -253,7 +253,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
           const feedback = optionFeedback[label];
           return (
             <div key={label} style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{ width: 64, height: 64, borderRadius: '50%', background: '#F9D030', border: '4px solid #1E2D6B', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 34, color: '#1E2D6B', flexShrink: 0, fontFamily: 'RobotRadicals, sans-serif', boxShadow: '0 3px 10px rgba(0,0,0,0.3)' }}>
+              <div style={{ width: 64, height: 64, borderRadius: '50%', background: '#F9D030', border: '4px solid #1E2D6B', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 48, color: '#1E2D6B', flexShrink: 0, fontFamily: 'RobotRadicals, sans-serif', boxShadow: '0 3px 10px rgba(0,0,0,0.3)' }}>
                 {label}
               </div>
               <button disabled={selectedAnswer !== null} onClick={() => handleAnswer(label, opt.correct)}
@@ -271,7 +271,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
           const feedback = optionFeedback['C'];
           return (
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{ width: 64, height: 64, borderRadius: '50%', background: '#F9D030', border: '4px solid #1E2D6B', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 34, color: '#1E2D6B', flexShrink: 0, fontFamily: 'RobotRadicals, sans-serif', boxShadow: '0 3px 10px rgba(0,0,0,0.3)' }}>
+              <div style={{ width: 64, height: 64, borderRadius: '50%', background: '#F9D030', border: '4px solid #1E2D6B', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 48, color: '#1E2D6B', flexShrink: 0, fontFamily: 'RobotRadicals, sans-serif', boxShadow: '0 3px 10px rgba(0,0,0,0.3)' }}>
                 C
               </div>
               <button disabled={selectedAnswer !== null} onClick={() => handleAnswer('C', opt.correct)}
