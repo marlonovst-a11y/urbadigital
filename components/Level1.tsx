@@ -230,7 +230,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
     <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel1.1.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
       <Header />
 
-      <div style={{ position: 'absolute', top: '24%', left: '50%', transform: 'translateX(-50%)', zIndex: 20 }}>
+      <div style={{ position: 'absolute', bottom: '18%', left: '50%', transform: 'translateX(-50%)', zIndex: 20 }}>
         <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'white', border: `5px solid ${timeLeft <= 5 ? '#E74C3C' : timeLeft <= 10 ? '#F39C12' : '#1ABC9C'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(0,0,0,0.3)', flexDirection: 'column' }}>
           <span style={{ fontWeight: 900, fontSize: 22, color: timeLeft <= 5 ? '#E74C3C' : timeLeft <= 10 ? '#F39C12' : '#1E2D6B', lineHeight: 1 }}>{timeLeft}</span>
           <span style={{ fontSize: 9, color: '#888', fontWeight: 600 }}>seg</span>
