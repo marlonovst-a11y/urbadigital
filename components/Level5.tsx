@@ -174,8 +174,8 @@ export default function Level5({ participantId, nickname, onComplete }: Level5Pr
       <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel5_fondo.png.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
         <Header />
 
-        <div style={{ position: 'absolute', top: '8%', left: '50%', transform: 'translateX(-50%)', zIndex: 10 }}>
-          <div style={{ background: 'rgba(30,45,107,0.85)', padding: 12, borderRadius: 12, backdropFilter: 'blur(4px)' }}>
+        <div style={{ position: 'absolute', top: '15%', left: '50%', transform: 'translateX(-50%)', zIndex: 10 }}>
+          <div style={{ background: 'rgba(66,115,174,0.40)', padding: 12, borderRadius: 12, backdropFilter: 'blur(4px)' }}>
             <div style={{ display: 'grid', gap: 3, gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))` }}>
               {grid.map((row, i) =>
                 row.map((cell, j) => {
