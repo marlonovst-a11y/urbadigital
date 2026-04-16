@@ -151,7 +151,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
       setShowMessage(false);
     } else {
       setShowMessage(false);
-      setTimeout(() => setIsFinished(true), 2000);
+      setIsFinished(true);
     }
   };
 
@@ -337,9 +337,9 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
                 Siguiente pregunta →
               </button>
             ) : (
-              <p style={{ color: '#1ABC9C', fontWeight: 700, fontSize: 16, margin: 0 }}>
-                ⏳ Cargando resultados...
-              </p>
+              <button onClick={handleNext} style={{ width: '100%', padding: '14px 0', background: '#1ABC9C', color: 'white', fontWeight: 800, fontSize: 'clamp(14px,1.8vw,18px)', borderRadius: 12, border: 'none', cursor: 'pointer' }}>
+                Ver mis resultados 🏆
+              </button>
             )}
           </div>
         </div>
