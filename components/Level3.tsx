@@ -197,7 +197,7 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
         <div style={{ background: 'white', borderRadius: 16, padding: '20px 28px', border: '3px solid #1E2D6B', boxShadow: '0 4px 20px rgba(0,0,0,0.2)', position: 'relative', textAlign: 'center' }}>
           <div style={{ position: 'absolute', bottom: -16, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '14px solid transparent', borderRight: '14px solid transparent', borderTop: '16px solid #1E2D6B' }} />
           <div style={{ position: 'absolute', bottom: -12, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '11px solid transparent', borderRight: '11px solid transparent', borderTop: '13px solid white' }} />
-          <p style={{ margin: 0, color: '#1E2D6B', fontWeight: 700, fontSize: 'clamp(16px, 2vw, 26px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', lineHeight: 1.3 }}>
+          <p style={{ margin: 0, color: '#1E2D6B', fontWeight: 700, fontSize: 'clamp(22px, 3vw, 40px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', lineHeight: 1.3 }}>
             {currentAction.accion}
           </p>
         </div>
@@ -217,7 +217,7 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
                 background: isCorrect ? '#1ABC9C' : isWrong ? '#E74C3C' : '#F9D030',
                 color: isCorrect || isWrong ? 'white' : '#5C3A1E',
                 fontWeight: 900,
-                fontSize: 'clamp(18px, 2.5vw, 32px)',
+                fontSize: 'clamp(24px, 3.5vw, 44px)',
                 fontFamily: 'RobotRadicals, sans-serif',
                 cursor: answerState === 'idle' ? 'pointer' : 'default',
                 boxShadow: '0 6px 20px rgba(0,0,0,0.3)',
