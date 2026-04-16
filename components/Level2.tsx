@@ -25,6 +25,7 @@ const peligros = [
 type HazardId = typeof peligros[number]['id'];
 
 export default function Level2({ participantId, nickname, onComplete }: Level2Props) {
+  const [showInstructions, setShowInstructions] = useState(true);
   const [timeLeft, setTimeLeft] = useState(TIMER_SECONDS);
   const [found, setFound] = useState<Set<HazardId>>(new Set());
   const [finished, setFinished] = useState(false);
@@ -86,6 +87,57 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
   const timerPercent = (timeLeft / TIMER_SECONDS) * 100;
   const timerColor = timeLeft > 15 ? '#1ABC9C' : timeLeft > 8 ? '#F39C12' : '#E74C3C';
 
+  if (showInstructions) {
+    return (
+      <div style={{
+        width: '100vw', height: '100vh',
+        backgroundImage: 'url(/nivel2_instruccion.png)',
+        backgroundSize: 'cover', backgroundPosition: 'center',
+        position: 'relative', overflow: 'hidden'
+      }}>
+        <Header />
+        <div style={{
+          position: 'absolute', top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)',
+          display: 'flex', alignItems: 'center', gap: 24
+        }}>
+          <img src="/sofia_nivel2.png" style={{ width: 'clamp(120px, 15vw, 200px)' }} />
+          <div style={{
+            background: 'white', borderRadius: 16, padding: '20px 28px',
+            maxWidth: 420, border: '3px solid #2167AE',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.2)', position: 'relative'
+          }}>
+            <div style={{ position: 'absolute', left: -14, top: '50%', transform: 'translateY(-50%)',
+              width: 0, height: 0, borderTop: '12px solid transparent',
+              borderBottom: '12px solid transparent', borderRight: '14px solid #2167AE' }} />
+            <div style={{ position: 'absolute', left: -10, top: '50%', transform: 'translateY(-50%)',
+              width: 0, height: 0, borderTop: '10px solid transparent',
+              borderBottom: '10px solid transparent', borderRight: '12px solid white' }} />
+            <p style={{ margin: '0 0 8px', fontWeight: 800, color: '#1E2D6B',
+              fontSize: 'clamp(14px, 1.6vw, 18px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif' }}>
+              ¡Nivel 2 — Identifica el Riesgo!
+            </p>
+            <p style={{ margin: '0 0 16px', color: '#444', fontSize: 'clamp(12px, 1.3vw, 15px)', lineHeight: 1.5 }}>
+              Sofía te guiará. Tienes <strong>25 segundos</strong> para encontrar los <strong>8 peligros</strong> escondidos en la escena. ¡Haz clic sobre cada peligro que encuentres!
+            </p>
+            <button
+              onClick={() => setShowInstructions(false)}
+              style={{
+                width: '100%', padding: '12px 0',
+                background: '#1ABC9C', color: 'white',
+                fontWeight: 800, fontSize: 'clamp(14px, 1.5vw, 17px)',
+                borderRadius: 50, border: 'none', cursor: 'pointer',
+                boxShadow: '0 4px 12px rgba(26,188,156,0.4)'
+              }}
+            >
+              ¡Comenzar! 🔍
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden', background: '#1a2a4a' }}>
       <Header />
@@ -127,7 +179,7 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
       <div
         style={{
           position: 'absolute',
-          top: 54,
+          top: 58,
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 20,
@@ -155,7 +207,7 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
             {timeLeft}s
           </span>
         </div>
-        <div style={{ background: 'rgba(255,255,255,0.92)', borderRadius: 20, padding: '4px 16px', fontWeight: 700, fontSize: 13, color: '#1E2D6B', boxShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>
+        <div style={{ background: 'rgba(255,255,255,0.92)', borderRadius: 20, padding: '4px 16px', fontWeight: 700, fontSize: 13, color: '#1E2D6B', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', marginTop: 4 }}>
           {found.size} de {peligros.length} peligros encontrados
         </div>
       </div>
