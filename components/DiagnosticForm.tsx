@@ -215,16 +215,17 @@ export default function DiagnosticForm({ onComplete }: DiagnosticFormProps) {
               onClick={handleNext}
               disabled={!currentValue}
               style={{
-                background: currentValue ? '#1ABC9C' : 'rgba(255,255,255,0.3)',
-                color: currentValue ? 'white' : 'rgba(255,255,255,0.5)',
-                border: 'none',
-                borderRadius: 50,
-                padding: '14px 32px',
-                fontWeight: 700,
+                background: '#1E2D6B',
+                color: 'white',
+                fontWeight: 800,
                 fontSize: 16,
+                borderRadius: 50,
+                padding: '14px 48px',
+                border: '3px solid white',
                 cursor: currentValue ? 'pointer' : 'not-allowed',
-                transition: 'all 0.2s ease',
-                boxShadow: currentValue ? '0 4px 14px rgba(26,188,156,0.4)' : 'none',
+                opacity: currentValue ? 1 : 0.5,
+                boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+                letterSpacing: '0.03em',
               }}
             >
               {isLast ? '¡Comenzar! 🎮' : 'Siguiente →'}
