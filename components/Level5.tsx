@@ -36,6 +36,8 @@ export default function Level5({ participantId, nickname, onComplete }: Level5Pr
   const [selectedWord, setSelectedWord] = useState<Word | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [showFeedback, setShowFeedback] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(true);
+  const [expandedSection, setExpandedSection] = useState<'horizontal' | 'vertical' | null>(null);
 
   const ROWS = 11;
   const COLS = 12;
@@ -145,251 +147,185 @@ export default function Level5({ participantId, nickname, onComplete }: Level5Pr
   const grid = getGridCells();
   const completedCount = wordStates.filter(w => w.completed || w.revealed).length;
 
-  return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundImage: 'url(/nivel5.png)', backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh' }}>
-      <Header />
-
-      <main className="pt-14 flex-1 flex items-center justify-center px-2" style={{ height: 'calc(100vh - 56px)', overflow: 'hidden' }}>
-        <div className="w-full max-w-7xl flex items-end justify-center gap-2" style={{ height: '100%' }}>
-
-          <div className="hidden md:flex flex-col items-center justify-end pb-0 flex-shrink-0" style={{ width: '140px', height: '100%' }}>
-            <img src="/roberto.png" alt="Roberto" style={{ width: '130px', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))' }} />
+  if (showInstructions) {
+    return (
+      <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel5_instruccion.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
+        <Header />
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20, maxWidth: 500, width: '90%' }}>
+          <img src="/personajes_instrucciones.png" style={{ width: '100%', maxWidth: 400 }} />
+          <div style={{ background: 'white', borderRadius: 16, padding: '20px 28px', border: '3px solid #2167AE', boxShadow: '0 4px 20px rgba(0,0,0,0.2)', textAlign: 'center' }}>
+            <p style={{ margin: '0 0 8px', fontWeight: 800, color: '#1E2D6B', fontSize: 'clamp(14px, 1.6vw, 18px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif' }}>
+              ¡Nivel 5 — Crucigrama de Multiamenazas!
+            </p>
+            <p style={{ margin: '0 0 16px', color: '#444', fontSize: 'clamp(12px, 1.3vw, 15px)', lineHeight: 1.5 }}>
+              Lee las pistas de <strong>Horizontales</strong> y <strong>Verticales</strong>, escribe la palabra correcta y presiona Verificar. Tienes <strong>3 intentos</strong> por palabra — si fallas todos, la respuesta se revelará automáticamente.
+            </p>
+            <button onClick={() => setShowInstructions(false)} style={{ width: '100%', padding: '12px 0', background: '#1ABC9C', color: 'white', fontWeight: 800, fontSize: 'clamp(14px, 1.5vw, 17px)', borderRadius: 50, border: 'none', cursor: 'pointer', boxShadow: '0 4px 12px rgba(26,188,156,0.4)' }}>
+              ¡Comenzar! 🧩
+            </button>
           </div>
+        </div>
+      </div>
+    );
+  }
 
-          <div className="flex-1 flex flex-col gap-2 overflow-hidden" style={{ maxHeight: '100%' }}>
+  if (!showFeedback) {
+    return (
+      <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel5_fondo.png.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
+        <Header />
 
-            <div className="flex items-center justify-between flex-wrap gap-2 flex-shrink-0">
-              <div>
-                <h1 className="text-lg md:text-3xl font-bold text-white drop-shadow-md leading-tight">
-                  Nivel 5: Crucigrama
-                </h1>
-                <p className="text-white/90 text-xs md:text-sm mt-0.5">
-                  Identifica diferentes amenazas
-                </p>
-              </div>
-              <div className="bg-[#2167AE] text-white rounded-lg px-3 py-1.5 md:px-4 md:py-2 shadow">
-                <p className="font-semibold text-xs md:text-sm">Progreso: {completedCount} / 6 palabras</p>
-              </div>
+        <div style={{ position: 'absolute', top: '8%', left: '50%', transform: 'translateX(-50%)', zIndex: 10 }}>
+          <div style={{ background: 'rgba(30,45,107,0.85)', padding: 12, borderRadius: 12, backdropFilter: 'blur(4px)' }}>
+            <div style={{ display: 'grid', gap: 3, gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))` }}>
+              {grid.map((row, i) =>
+                row.map((cell, j) => {
+                  if (!cell.filled) return <div key={`${i}-${j}`} style={{ width: 'clamp(22px, 2.5vw, 36px)', height: 'clamp(22px, 2.5vw, 36px)', background: 'transparent' }} />;
+                  const isSelected = selectedWord && cell.wordIds.includes(selectedWord.id);
+                  return (
+                    <div key={`${i}-${j}`}
+                      onClick={() => {
+                        const word = wordStates.find(w => cell.wordIds.includes(w.id) && !w.completed && !w.revealed);
+                        if (word) { setSelectedWord(word); setInputValue(''); }
+                      }}
+                      style={{ width: 'clamp(22px, 2.5vw, 36px)', height: 'clamp(22px, 2.5vw, 36px)', background: cell.correct ? '#D4F5E0' : cell.revealed ? '#DCE9F8' : isSelected ? '#FFF9E6' : 'white', border: `2px solid ${cell.correct ? '#1ABC9C' : cell.revealed ? '#2167AE' : isSelected ? '#F39C12' : '#2167AE'}`, borderRadius: 3, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', position: 'relative', transition: 'all 0.2s' }}>
+                      {cell.number && <span style={{ position: 'absolute', top: 1, left: 2, fontSize: 'clamp(5px, 0.6vw, 8px)', fontWeight: 800, color: '#2167AE' }}>{cell.number}</span>}
+                      {(cell.correct || cell.revealed) && <span style={{ fontSize: 'clamp(10px, 1.2vw, 16px)', fontWeight: 800, color: '#1E2D6B', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif' }}>{cell.letter}</span>}
+                    </div>
+                  );
+                })
+              )}
             </div>
+          </div>
+        </div>
 
-            {!showFeedback && (
-              <div className="flex flex-col md:flex-row gap-4 md:gap-5 items-start overflow-hidden" style={{ flex: 1, minHeight: 0 }}>
-                <div className="overflow-x-auto flex-shrink-0">
-                  <div className="inline-block bg-[#1E2D6B] p-2 md:p-4 rounded-xl shadow-xl">
-                    <div className="grid gap-0.5 md:gap-1" style={{
-                      gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))`
-                    }}>
-                      {grid.map((row, i) =>
-                        row.map((cell, j) => {
-                          if (!cell.filled) {
-                            return (
-                              <div
-                                key={`${i}-${j}`}
-                                className="w-6 h-6 md:w-8 md:h-8 bg-[#1E2D6B] opacity-13"
-                              />
-                            );
-                          }
+        <div style={{ position: 'absolute', top: '8%', right: '2%', zIndex: 10, background: 'rgba(33,103,174,0.85)', borderRadius: 12, padding: '6px 14px', color: 'white', fontWeight: 700, fontSize: 13, backdropFilter: 'blur(4px)' }}>
+          {completedCount} / 6 palabras
+        </div>
 
-                          const isSelected = selectedWord && cell.wordIds.includes(selectedWord.id);
-                          let bgClass = 'bg-white';
-                          let borderClass = 'border-[#2167AE]';
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 20 }}>
 
-                          if (cell.correct) {
-                            bgClass = 'bg-[#D4F5E0]';
-                            borderClass = 'border-[#1ABC9C]';
-                          } else if (cell.revealed) {
-                            bgClass = 'bg-[#DCE9F8]';
-                            borderClass = 'border-[#2167AE]';
-                          } else if (isSelected) {
-                            bgClass = 'bg-[#FFF9E6]';
-                          }
+          {selectedWord && !selectedWord.completed && !selectedWord.revealed && (
+            <div style={{ background: 'rgba(33,103,174,0.92)', backdropFilter: 'blur(8px)', padding: '10px 20px', display: 'flex', alignItems: 'center', gap: 12, justifyContent: 'center' }}>
+              <p style={{ margin: 0, color: 'white', fontWeight: 700, fontSize: 'clamp(12px, 1.4vw, 16px)', maxWidth: 400, textAlign: 'center' }}>
+                {selectedWord.clue}
+              </p>
+              <input
+                type="text" value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleVerify()}
+                placeholder="Escribe tu respuesta"
+                style={{ padding: '8px 16px', borderRadius: 50, border: '2px solid white', fontSize: 14, fontWeight: 600, textTransform: 'uppercase', width: 200, outline: 'none' }}
+                autoFocus
+              />
+              <button onClick={handleVerify} style={{ padding: '8px 20px', background: '#1ABC9C', color: 'white', fontWeight: 800, borderRadius: 50, border: 'none', cursor: 'pointer', fontSize: 14 }}>
+                Verificar ✓
+              </button>
+            </div>
+          )}
 
-                          return (
-                            <div
-                              key={`${i}-${j}`}
-                              className={`w-6 h-6 md:w-8 md:h-8 ${bgClass} border md:border-2 ${borderClass} rounded-sm flex items-center justify-center relative cursor-pointer transition-colors`}
-                              onClick={() => {
-                                const word = wordStates.find(w =>
-                                  cell.wordIds.includes(w.id) && !w.completed && !w.revealed
-                                );
-                                if (word) {
-                                  setSelectedWord(word);
-                                  setInputValue('');
-                                }
-                              }}
-                            >
-                              {cell.number && (
-                                <span className="absolute top-0 left-0.5 text-[5px] md:text-[7px] font-bold text-[#2167AE]">
-                                  {cell.number}
-                                </span>
-                              )}
-                              {(cell.correct || cell.revealed) && (
-                                <span className="text-[8px] md:text-xs font-bold text-[#1E2D6B]">
-                                  {cell.letter}
-                                </span>
-                              )}
-                            </div>
-                          );
-                        })
-                      )}
-                    </div>
-                  </div>
-                </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', background: 'rgba(10,20,40,0.88)', backdropFilter: 'blur(8px)' }}>
 
-                <div className="space-y-3 md:space-y-4 w-full md:flex-1 overflow-y-auto" style={{ maxHeight: '100%' }}>
-                  <div className="bg-white/75 backdrop-blur-sm rounded-xl shadow-lg p-3 md:p-4">
-                    <h3 className="font-bold text-[#1E2D6B] mb-2 md:mb-3 text-sm md:text-base">Horizontales</h3>
-                    <div className="space-y-1.5 md:space-y-2">
-                      {wordStates.filter(w => w.direction === 'horizontal').map(word => (
-                        <div
-                          key={word.id}
-                          onClick={() => {
-                            if (!word.completed && !word.revealed) {
-                              setSelectedWord(word);
-                              setInputValue('');
-                            }
-                          }}
-                          className={`p-2 md:p-3 rounded-lg cursor-pointer transition-all ${
-                            word.completed || word.revealed
-                              ? 'bg-[#EDFBF3] border-2 border-[#1ABC9C]'
-                              : selectedWord?.id === word.id
-                                ? 'bg-[#FFF9E6] border-2 border-[#F39C12]'
-                                : 'bg-white border-2 border-gray-200 hover:border-[#2167AE]'
-                          }`}
-                        >
-                          <p className="text-xs md:text-sm">
-                            <span className="font-bold text-[#2167AE]">{word.number}.</span> {word.clue}
-                          </p>
-                          {word.attempts > 0 && !word.completed && !word.revealed && (
-                            <p className="text-xs text-[#E74C3C] mt-1">
-                              Intentos: {word.attempts}/3
-                            </p>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="bg-white/75 backdrop-blur-sm rounded-xl shadow-lg p-3 md:p-4">
-                    <h3 className="font-bold text-[#1E2D6B] mb-2 md:mb-3 text-sm md:text-base">Verticales</h3>
-                    <div className="space-y-1.5 md:space-y-2">
-                      {wordStates.filter(w => w.direction === 'vertical').map(word => (
-                        <div
-                          key={word.id}
-                          onClick={() => {
-                            if (!word.completed && !word.revealed) {
-                              setSelectedWord(word);
-                              setInputValue('');
-                            }
-                          }}
-                          className={`p-2 md:p-3 rounded-lg cursor-pointer transition-all ${
-                            word.completed || word.revealed
-                              ? 'bg-[#EDFBF3] border-2 border-[#1ABC9C]'
-                              : selectedWord?.id === word.id
-                                ? 'bg-[#FFF9E6] border-2 border-[#F39C12]'
-                                : 'bg-white border-2 border-gray-200 hover:border-[#2167AE]'
-                          }`}
-                        >
-                          <p className="text-xs md:text-sm">
-                            <span className="font-bold text-[#2167AE]">{word.number}.</span> {word.clue}
-                          </p>
-                          {word.attempts > 0 && !word.completed && !word.revealed && (
-                            <p className="text-xs text-[#E74C3C] mt-1">
-                              Intentos: {word.attempts}/3
-                            </p>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {selectedWord && !selectedWord.completed && !selectedWord.revealed && (
-                    <div className="bg-[#1E2D6B]/90 backdrop-blur-sm rounded-xl shadow-lg p-3 md:p-4">
-                      <p className="text-white font-semibold mb-2 md:mb-3 text-sm md:text-base">
-                        {selectedWord.clue}
+            <div>
+              <button onClick={() => setExpandedSection(expandedSection === 'horizontal' ? null : 'horizontal')}
+                style={{ width: '100%', padding: '8px 16px', background: 'transparent', border: 'none', borderRight: '1px solid rgba(255,255,255,0.2)', color: 'white', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span>📖 Horizontales</span>
+                <span>{expandedSection === 'horizontal' ? '▲' : '▼'}</span>
+              </button>
+              {expandedSection === 'horizontal' && (
+                <div style={{ maxHeight: 160, overflowY: 'auto', padding: '4px 12px 8px' }}>
+                  {wordStates.filter(w => w.direction === 'horizontal').map(word => (
+                    <div key={word.id} onClick={() => { if (!word.completed && !word.revealed) { setSelectedWord(word); setInputValue(''); } }}
+                      style={{ padding: '6px 10px', marginBottom: 4, borderRadius: 8, cursor: 'pointer', background: word.completed || word.revealed ? 'rgba(26,188,156,0.3)' : selectedWord?.id === word.id ? 'rgba(249,208,48,0.3)' : 'rgba(255,255,255,0.08)', border: `1px solid ${word.completed || word.revealed ? '#1ABC9C' : selectedWord?.id === word.id ? '#F9D030' : 'rgba(255,255,255,0.2)'}` }}>
+                      <p style={{ margin: 0, color: 'white', fontSize: 12 }}>
+                        <span style={{ fontWeight: 800, color: '#F9D030' }}>{word.number}. </span>{word.clue}
+                        {word.attempts > 0 && !word.completed && !word.revealed && <span style={{ color: '#E74C3C', fontSize: 10, marginLeft: 6 }}>({word.attempts}/3)</span>}
                       </p>
-                      <input
-                        type="text"
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && handleVerify()}
-                        placeholder="Escribe tu respuesta"
-                        className="w-full px-3 py-2 rounded border-2 border-white mb-2 md:mb-3 uppercase text-sm min-h-[44px]"
-                        autoFocus
-                      />
-                      <button
-                        onClick={handleVerify}
-                        className="w-full py-2 bg-[#1ABC9C] text-white font-bold rounded-lg hover:bg-[#27AE60] transition-colors text-sm min-h-[44px]"
-                      >
-                        Verificar
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {showFeedback && (
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-4 md:p-8 overflow-y-auto" style={{ flex: 1, minHeight: 0 }}>
-                <div className="bg-[#2167AE] text-white rounded-lg p-4 md:p-6 mb-4 md:mb-6">
-                  <h3 className="font-bold text-base md:text-xl mb-2 md:mb-3">
-                    ¡Crucigrama completado!
-                  </h3>
-                  <p className="text-sm md:text-lg mb-1 md:mb-2">
-                    Puntaje obtenido: <span className="font-bold">{calculateScore()} puntos</span>
-                  </p>
-                  <p className="text-xs md:text-sm leading-relaxed">
-                    Conocer las diferentes amenazas te ayuda a prepararte mejor. Inundaciones, terremotos, incendios, ciberataques, deslaves y otros desastres requieren acciones específicas de prevención y respuesta.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mb-4 md:mb-6">
-                  {wordStates.map(word => (
-                    <div
-                      key={word.id}
-                      className="bg-[#ECEEEF] rounded-lg p-3 md:p-4"
-                    >
-                      <p className="font-bold text-[#1E2D6B] text-base md:text-lg mb-1">
-                        {word.word}
-                      </p>
-                      <p className="text-xs md:text-sm text-gray-700 mb-2">{word.clue}</p>
-                      <div className="flex items-center gap-2">
-                        {word.completed ? (
-                          <>
-                            <span className="text-xs bg-[#1ABC9C] text-white px-2 py-1 rounded">
-                              Correcto en {word.attempts} {word.attempts === 1 ? 'intento' : 'intentos'}
-                            </span>
-                            <span className="text-xs text-[#1ABC9C] font-bold">
-                              +{word.attempts === 1 ? 4 : word.attempts === 2 ? 2.5 : 0} pts
-                            </span>
-                          </>
-                        ) : (
-                          <span className="text-xs bg-[#4A90D9] text-white px-2 py-1 rounded">
-                            Revelada después de 3 intentos
-                          </span>
-                        )}
-                      </div>
                     </div>
                   ))}
                 </div>
+              )}
+            </div>
 
-                <button
-                  onClick={handleContinue}
-                  className="w-full py-3 bg-[#1ABC9C] text-white font-bold rounded-lg hover:bg-[#27AE60] transition-colors text-sm md:text-lg min-h-[44px]"
-                >
-                  Continuar al Mapa
-                </button>
-              </div>
-            )}
+            <div>
+              <button onClick={() => setExpandedSection(expandedSection === 'vertical' ? null : 'vertical')}
+                style={{ width: '100%', padding: '8px 16px', background: 'transparent', border: 'none', color: 'white', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span>📖 Verticales</span>
+                <span>{expandedSection === 'vertical' ? '▲' : '▼'}</span>
+              </button>
+              {expandedSection === 'vertical' && (
+                <div style={{ maxHeight: 160, overflowY: 'auto', padding: '4px 12px 8px' }}>
+                  {wordStates.filter(w => w.direction === 'vertical').map(word => (
+                    <div key={word.id} onClick={() => { if (!word.completed && !word.revealed) { setSelectedWord(word); setInputValue(''); } }}
+                      style={{ padding: '6px 10px', marginBottom: 4, borderRadius: 8, cursor: 'pointer', background: word.completed || word.revealed ? 'rgba(26,188,156,0.3)' : selectedWord?.id === word.id ? 'rgba(249,208,48,0.3)' : 'rgba(255,255,255,0.08)', border: `1px solid ${word.completed || word.revealed ? '#1ABC9C' : selectedWord?.id === word.id ? '#F9D030' : 'rgba(255,255,255,0.2)'}` }}>
+                      <p style={{ margin: 0, color: 'white', fontSize: 12 }}>
+                        <span style={{ fontWeight: 800, color: '#F9D030' }}>{word.number}. </span>{word.clue}
+                        {word.attempts > 0 && !word.completed && !word.revealed && <span style={{ color: '#E74C3C', fontSize: 10, marginLeft: 6 }}>({word.attempts}/3)</span>}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
 
           </div>
-
-          <div className="hidden md:flex flex-col items-center justify-end pb-0 flex-shrink-0" style={{ width: '140px', height: '100%' }}>
-            <img src="/sofia.png" alt="Sofía" style={{ width: '130px', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))' }} />
-          </div>
-
         </div>
-      </main>
+
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel5_fondo.png.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
+      <Header />
+      <div className="flex items-center justify-center" style={{ height: '100%', paddingTop: 56, paddingBottom: 24 }}>
+        <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-4 md:p-8 overflow-y-auto" style={{ maxWidth: 700, width: '92%', maxHeight: 'calc(100vh - 80px)' }}>
+          <div className="bg-[#2167AE] text-white rounded-lg p-4 md:p-6 mb-4 md:mb-6">
+            <h3 className="font-bold text-base md:text-xl mb-2 md:mb-3">
+              ¡Crucigrama completado!
+            </h3>
+            <p className="text-sm md:text-lg mb-1 md:mb-2">
+              Puntaje obtenido: <span className="font-bold">{calculateScore()} puntos</span>
+            </p>
+            <p className="text-xs md:text-sm leading-relaxed">
+              Conocer las diferentes amenazas te ayuda a prepararte mejor. Inundaciones, terremotos, incendios, ciberataques, deslaves y otros desastres requieren acciones específicas de prevención y respuesta.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mb-4 md:mb-6">
+            {wordStates.map(word => (
+              <div key={word.id} className="bg-[#ECEEEF] rounded-lg p-3 md:p-4">
+                <p className="font-bold text-[#1E2D6B] text-base md:text-lg mb-1">
+                  {word.word}
+                </p>
+                <p className="text-xs md:text-sm text-gray-700 mb-2">{word.clue}</p>
+                <div className="flex items-center gap-2">
+                  {word.completed ? (
+                    <>
+                      <span className="text-xs bg-[#1ABC9C] text-white px-2 py-1 rounded">
+                        Correcto en {word.attempts} {word.attempts === 1 ? 'intento' : 'intentos'}
+                      </span>
+                      <span className="text-xs text-[#1ABC9C] font-bold">
+                        +{word.attempts === 1 ? 4 : word.attempts === 2 ? 2.5 : 0} pts
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-xs bg-[#4A90D9] text-white px-2 py-1 rounded">
+                      Revelada después de 3 intentos
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <button
+            onClick={handleContinue}
+            className="w-full py-3 bg-[#1ABC9C] text-white font-bold rounded-lg hover:bg-[#27AE60] transition-colors text-sm md:text-lg min-h-[44px]"
+          >
+            Continuar al Mapa
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
