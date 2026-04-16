@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import Header from './Header';
 
 interface Level3Props {
@@ -37,8 +37,7 @@ interface Response {
 }
 
 export default function Level3({ participantId, nickname, onComplete }: Level3Props) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [svgContent, setSvgContent] = useState<string>('');
+  const [showInstructions, setShowInstructions] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answerState, setAnswerState] = useState<AnswerState>('idle');
   const [selectedCategory, setSelectedCategory] = useState<'ANTES' | 'DURANTE' | 'DESPUÉS' | null>(null);
@@ -48,256 +47,9 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
   const answeredRef = useRef(false);
   const answerStateRef = useRef<AnswerState>('idle');
 
-  useEffect(() => {
-    fetch('/nivel3.svg')
-      .then(r => r.text())
-      .then(text => setSvgContent(text));
-  }, []);
-
   const currentAction = actions[currentIndex];
 
-  const injectSvgStyles = useCallback((svgEl: Element) => {
-    const styleId = 'level3-dynamic-styles';
-    if (svgEl.querySelector(`#${styleId}`)) return;
-    const style = document.createElementNS('http://www.w3.org/2000/svg', 'style');
-    style.id = styleId;
-    style.textContent = `
-      [id^="btn-antes"], [id^="btn-durante"], [id^="btn-despues"] {
-        cursor: pointer;
-        transition: transform 0.1s ease;
-      }
-      [id^="btn-antes"]:active, [id^="btn-durante"]:active, [id^="btn-despues"]:active {
-        transform: scale(0.94);
-      }
-      [id^="nav-"] {
-        cursor: default;
-        pointer-events: none;
-      }
-    `;
-    svgEl.insertBefore(style, svgEl.firstChild);
-  }, []);
-
-  const positionElementsAfterPaint = useCallback(() => {
-    if (!containerRef.current) return;
-    const svgEl = containerRef.current.querySelector('svg');
-    if (!svgEl) return;
-
-    const svgRect = svgEl.getBoundingClientRect();
-    if (svgRect.width === 0) return;
-
-    const svgViewBox = svgEl.viewBox?.baseVal;
-    const scaleX = svgViewBox ? svgViewBox.width / svgRect.width : 1;
-    const scaleY = svgViewBox ? svgViewBox.height / svgRect.height : 1;
-
-    const bocadilloGroup = svgEl.querySelector('#bocadillo-2, [data-name="bocadillo"]') as SVGElement | null;
-    const textEl = svgEl.querySelector('#bocadillo text') as SVGTextElement | null;
-    if (bocadilloGroup && textEl) {
-      const paths = bocadilloGroup.querySelectorAll('path');
-      if (paths.length >= 2) {
-        const bubblePath = paths[1] as SVGElement;
-        const bubbleRect = bubblePath.getBoundingClientRect();
-        if (bubbleRect.width > 0 && bubbleRect.height > 0) {
-          const cx = (bubbleRect.left - svgRect.left + bubbleRect.width / 2) * scaleX;
-          const cy = (bubbleRect.top - svgRect.top + bubbleRect.height / 2) * scaleY;
-
-          textEl.removeAttribute('transform');
-          textEl.setAttribute('x', String(cx));
-          textEl.setAttribute('y', String(cy));
-          textEl.setAttribute('text-anchor', 'middle');
-          textEl.setAttribute('dominant-baseline', 'middle');
-
-          while (textEl.firstChild) textEl.removeChild(textEl.firstChild);
-          const text = currentAction?.accion || '';
-          const words = text.split(' ');
-          const maxCharsPerLine = 22;
-          const lines: string[] = [];
-          let current = '';
-          for (const word of words) {
-            if ((current + ' ' + word).trim().length > maxCharsPerLine && current) {
-              lines.push(current.trim());
-              current = word;
-            } else {
-              current = (current + ' ' + word).trim();
-            }
-          }
-          if (current) lines.push(current.trim());
-
-          const lineHeightVU = 44 * scaleY;
-          const totalH = lines.length * lineHeightVU;
-          const startY = cy - totalH / 2 + lineHeightVU / 2;
-
-          if (lines.length === 1) {
-            textEl.textContent = text;
-          } else {
-            lines.forEach((line, li) => {
-              const tspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-              tspan.setAttribute('x', String(cx));
-              tspan.setAttribute('y', String(startY + li * lineHeightVU));
-              tspan.textContent = line;
-              textEl.appendChild(tspan);
-            });
-          }
-        }
-      }
-    }
-
-    const allSvgTexts = svgEl.querySelectorAll('text') as NodeListOf<SVGTextElement>;
-    allSvgTexts.forEach(t => {
-      const content = t.textContent?.trim();
-      if (content === 'nav-1') t.textContent = '1';
-      else if (content === 'nav-2') t.textContent = '2';
-      else if (content === 'nav-3') t.textContent = '3';
-      else if (content === 'nav-4') t.textContent = '4';
-      else if (content === 'nav-5') t.textContent = '5';
-      else if (content === 'nav-6') t.textContent = '6';
-      else if (content === 'nav-7') t.textContent = '7';
-      else if (content === 'nav-8') t.textContent = '8';
-      else if (content === 'nav-9') t.textContent = '9';
-    });
-    allSvgTexts.forEach(t => {
-      const content = t.textContent?.trim();
-      if (['1','2','3','4','5','6','7','8','9'].includes(content || '')) {
-        const currentX = parseFloat(t.getAttribute('x') || '0');
-        t.setAttribute('x', String(currentX + 15));
-        t.setAttribute('text-anchor', 'middle');
-      }
-    });
-  }, [currentAction, currentIndex]);
-
-  const updateSvg = useCallback(() => {
-    if (!containerRef.current || !svgContent) return;
-    const svgEl = containerRef.current.querySelector('svg');
-    if (!svgEl) return;
-
-    injectSvgStyles(svgEl);
-
-    const bocadilloTextEl = svgEl.querySelector('#bocadillo text') as SVGTextElement | null;
-    if (bocadilloTextEl) {
-      bocadilloTextEl.style.fontFamily = 'ZurichCondensed, sans-serif';
-      bocadilloTextEl.style.fontSize = '52px';
-      bocadilloTextEl.style.fontWeight = 'bold';
-      bocadilloTextEl.style.fill = '#222';
-    }
-
-    const navIds = ['nav-1', 'nav-2', 'nav-3', 'nav-4', 'nav-5', 'nav-6', 'nav-7', 'nav-8', 'nav-9'];
-    navIds.forEach((navId, i) => {
-      const navGroups = svgEl.querySelectorAll(`[id="${navId}"]`) as NodeListOf<SVGElement>;
-      if (!navGroups.length) return;
-
-      navGroups.forEach(navGroup => {
-        navGroup.style.transform = '';
-
-        const paths = navGroup.querySelectorAll('path');
-        const textNode = navGroup.querySelector(':scope > text') as SVGTextElement | null;
-
-        if (i < currentIndex) {
-          paths.forEach(p => {
-            const fill = p.getAttribute('fill');
-            if (fill && fill !== 'none') {
-              p.setAttribute('fill', '#2ECC71');
-              p.removeAttribute('stroke');
-            }
-          });
-          if (textNode) {
-            textNode.style.fill = '#ffffff';
-            textNode.style.textShadow = '';
-          }
-        } else if (i === currentIndex) {
-          paths.forEach((p, pi) => {
-            const fill = p.getAttribute('fill');
-            if (fill && fill !== 'none') {
-              p.setAttribute('fill', '#F9D030');
-              if (pi === 0) {
-                p.setAttribute('stroke', '#ffffff');
-                p.setAttribute('stroke-width', '8');
-              }
-            }
-          });
-          if (textNode) {
-            textNode.style.fill = '#FFE000';
-            textNode.setAttribute('filter', 'drop-shadow(0 0 4px #000)');
-          }
-        } else {
-          paths.forEach(p => {
-            p.removeAttribute('stroke');
-            const cls = p.getAttribute('class');
-            if (cls === 'cls-74') p.setAttribute('fill', '#9B8B3A');
-            else if (cls === 'cls-75') p.setAttribute('fill', '#7a6e2e');
-            else if (cls === 'cls-76') p.setAttribute('fill', '#5c5222');
-            else if (cls === 'cls-77') p.setAttribute('fill', '#4a4219');
-            else if (cls === 'cls-48') p.setAttribute('fill', '#fff');
-            else {
-              const fill = p.getAttribute('fill');
-              if (fill && fill !== 'none') p.setAttribute('fill', '#9B8B3A');
-            }
-          });
-          if (textNode) {
-            textNode.style.fill = '#ffffff';
-            textNode.removeAttribute('filter');
-          }
-        }
-      });
-    });
-
-    const setButtonColor = (btnId: string, color: string) => {
-      const group = svgEl.querySelector(`#${btnId}`) as SVGElement | null;
-      if (!group) return;
-      group.style.transform = '';
-      group.querySelectorAll('rect, path').forEach(el => {
-        const fill = (el as SVGElement).getAttribute('fill');
-        if (fill && fill !== 'none' && !fill.startsWith('url')) {
-          (el as SVGElement).setAttribute('fill', color);
-        }
-      });
-    };
-
-    setButtonColor('btn-antes', '#ffe03c');
-    setButtonColor('btn-durante', '#ffe03c');
-    setButtonColor('btn-despues', '#ffe03c');
-
-    if (answerState !== 'idle' && selectedCategory) {
-      const correct = currentAction?.categoria;
-      const btnMap: Record<string, string> = {
-        'ANTES': 'btn-antes',
-        'DURANTE': 'btn-durante',
-        'DESPUÉS': 'btn-despues',
-      };
-
-      const selectedBtnId = btnMap[selectedCategory];
-      const correctBtnId = btnMap[correct];
-
-      if (answerState === 'correct') {
-        setButtonColor(selectedBtnId, '#2ECC71');
-      } else {
-        setButtonColor(selectedBtnId, '#E74C3C');
-        setButtonColor(correctBtnId, '#2ECC71');
-      }
-    }
-  }, [svgContent, currentIndex, currentAction, answerState, selectedCategory, injectSvgStyles]);
-
-  useEffect(() => {
-    updateSvg();
-    if (containerRef.current) {
-      const svgEl = containerRef.current.querySelector('svg');
-      if (svgEl) {
-        svgEl.style.width = '100%';
-        svgEl.style.height = '100%';
-        svgEl.style.maxHeight = '100%';
-        svgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-      }
-    }
-    requestAnimationFrame(() => {
-      positionElementsAfterPaint();
-    });
-  }, [updateSvg, positionElementsAfterPaint]);
-
-  useEffect(() => {
-    const handleResize = () => positionElementsAfterPaint();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [positionElementsAfterPaint]);
-
- const handleAnswer = useCallback((category: 'ANTES' | 'DURANTE' | 'DESPUÉS') => {
+  const handleAnswer = useCallback((category: 'ANTES' | 'DURANTE' | 'DESPUÉS') => {
     if (answeredRef.current) return;
     answeredRef.current = true;
     answerStateRef.current = 'correct';
@@ -333,25 +85,35 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
     }, 1500);
   }, [answerState, currentAction, currentIndex, responses]);
 
-  useEffect(() => {
-    if (!containerRef.current) return;
-    const wire = (id: string, category: 'ANTES' | 'DURANTE' | 'DESPUÉS') => {
-      const el = containerRef.current!.querySelector(`#${id}`) as SVGElement | null;
-      if (!el || !el.parentNode) return;
-      const newEl = el.cloneNode(true) as SVGElement;
-      el.parentNode.replaceChild(newEl, el);
-      newEl.onclick = () => handleAnswer(category);
-    };
-    wire('btn-antes', 'ANTES');
-    wire('btn-durante', 'DURANTE');
-    wire('btn-despues', 'DESPUÉS');
-  }, [handleAnswer, svgContent]);
-
   const handleContinue = () => {
     onComplete(totalScore, responses);
   };
 
   const correctCount = responses.filter(r => r.correcta).length;
+
+  if (showInstructions) {
+    return (
+      <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel3_instruccion.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
+        <Header />
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', display: 'flex', alignItems: 'center', gap: 24 }}>
+          <img src="/carmen_nivel3.png" style={{ width: 'clamp(120px, 15vw, 200px)' }} />
+          <div style={{ background: 'white', borderRadius: 16, padding: '20px 28px', maxWidth: 420, border: '3px solid #2167AE', boxShadow: '0 4px 20px rgba(0,0,0,0.2)', position: 'relative' }}>
+            <div style={{ position: 'absolute', left: -14, top: '50%', transform: 'translateY(-50%)', width: 0, height: 0, borderTop: '12px solid transparent', borderBottom: '12px solid transparent', borderRight: '14px solid #2167AE' }} />
+            <div style={{ position: 'absolute', left: -10, top: '50%', transform: 'translateY(-50%)', width: 0, height: 0, borderTop: '10px solid transparent', borderBottom: '10px solid transparent', borderRight: '12px solid white' }} />
+            <p style={{ margin: '0 0 8px', fontWeight: 800, color: '#1E2D6B', fontSize: 'clamp(14px, 1.6vw, 18px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif' }}>
+              ¡Nivel 3 — Arrastra y Decide!
+            </p>
+            <p style={{ margin: '0 0 16px', color: '#444', fontSize: 'clamp(12px, 1.3vw, 15px)', lineHeight: 1.5 }}>
+              Carmen te guiará. Lee cada acción y decide si corresponde a <strong>ANTES</strong>, <strong>DURANTE</strong> o <strong>DESPUÉS</strong> de un desastre. ¡Tienes 9 acciones para clasificar!
+            </p>
+            <button onClick={() => setShowInstructions(false)} style={{ width: '100%', padding: '12px 0', background: '#1ABC9C', color: 'white', fontWeight: 800, fontSize: 'clamp(14px, 1.5vw, 17px)', borderRadius: 50, border: 'none', cursor: 'pointer', boxShadow: '0 4px 12px rgba(26,188,156,0.4)' }}>
+              ¡Comenzar! 🎯
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (showFinalFeedback) {
     return (
@@ -428,38 +190,60 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
   }
 
   return (
-    <div className="flex flex-col bg-[#f95966]" style={{ height: '100vh', overflow: 'hidden' }}>
+    <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel3_fondo.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
       <Header />
-      <main className="flex-1 flex flex-col overflow-hidden" style={{ paddingTop: '48px' }}>
-        <div className="flex-1 relative overflow-hidden">
-          {svgContent && (
-            <div
-              ref={containerRef}
-              dangerouslySetInnerHTML={{ __html: svgContent }}
-              style={{ width: '100%', height: '100%', lineHeight: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            />
-          )}
-        </div>
 
-        {answerState !== 'idle' && (
-          <div
-            className="fixed left-0 right-0 flex justify-center z-50 pointer-events-none"
-            style={{ top: '15%' }}
-          >
-            <div
-              className={`mx-4 rounded-2xl px-6 py-3 text-white text-center font-bold text-base shadow-2xl transition-all duration-300 ${
-                answerState === 'correct' ? 'bg-[#27AE60]/90' : 'bg-[#E74C3C]/90'
-              }`}
-              style={{ backdropFilter: 'blur(4px)', maxWidth: '480px' }}
-            >
-              {answerState === 'correct'
-                ? `Correcto! "${currentAction?.accion}" es una acción de ${currentAction?.categoria}.`
-                : `Incorrecto. La respuesta correcta es ${currentAction?.categoria}.`
-              }
-            </div>
+      <div style={{ position: 'absolute', top: '12%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(300px, 55vw, 700px)', zIndex: 20 }}>
+        <div style={{ background: 'white', borderRadius: 16, padding: '20px 28px', border: '3px solid #1E2D6B', boxShadow: '0 4px 20px rgba(0,0,0,0.2)', position: 'relative', textAlign: 'center' }}>
+          <div style={{ position: 'absolute', bottom: -16, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '14px solid transparent', borderRight: '14px solid transparent', borderTop: '16px solid #1E2D6B' }} />
+          <div style={{ position: 'absolute', bottom: -12, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '11px solid transparent', borderRight: '11px solid transparent', borderTop: '13px solid white' }} />
+          <p style={{ margin: 0, color: '#1E2D6B', fontWeight: 700, fontSize: 'clamp(16px, 2vw, 26px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', lineHeight: 1.3 }}>
+            {currentAction.accion}
+          </p>
+        </div>
+      </div>
+
+      <div style={{ position: 'absolute', top: '42%', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 'clamp(12px, 3vw, 32px)', zIndex: 20 }}>
+        {(['ANTES', 'DURANTE', 'DESPUÉS'] as const).map((cat) => {
+          const isSelected = selectedCategory === cat;
+          const isCorrect = answerState !== 'idle' && currentAction.categoria === cat;
+          const isWrong = answerState !== 'idle' && selectedCategory === cat && !isCorrect;
+          return (
+            <button key={cat} onClick={() => handleAnswer(cat)} disabled={answerState !== 'idle'}
+              style={{
+                padding: 'clamp(12px, 2vw, 20px) clamp(24px, 4vw, 48px)',
+                borderRadius: 12,
+                border: '4px solid #1E2D6B',
+                background: isCorrect ? '#1ABC9C' : isWrong ? '#E74C3C' : '#F9D030',
+                color: isCorrect || isWrong ? 'white' : '#1E2D6B',
+                fontWeight: 900,
+                fontSize: 'clamp(18px, 2.5vw, 32px)',
+                fontFamily: 'UniversCondensedBold, sans-serif',
+                cursor: answerState === 'idle' ? 'pointer' : 'default',
+                boxShadow: '0 6px 20px rgba(0,0,0,0.3)',
+                transition: 'all 0.2s',
+                transform: isSelected ? 'scale(1.08)' : 'scale(1)',
+                letterSpacing: '0.05em',
+              }}>
+              {cat}
+            </button>
+          );
+        })}
+      </div>
+
+      {answerState !== 'idle' && (
+        <div style={{ position: 'absolute', top: '60%', left: '50%', transform: 'translateX(-50%)', zIndex: 30, background: answerState === 'correct' ? 'rgba(26,188,156,0.95)' : 'rgba(231,76,60,0.95)', borderRadius: 16, padding: '12px 28px', color: 'white', fontWeight: 700, fontSize: 'clamp(13px, 1.5vw, 18px)', textAlign: 'center', backdropFilter: 'blur(4px)', boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
+          {answerState === 'correct' ? `✅ ¡Correcto! "${currentAction.accion}" es una acción de ${currentAction.categoria}.` : `❌ Incorrecto. La respuesta correcta es ${currentAction.categoria}.`}
+        </div>
+      )}
+
+      <div style={{ position: 'absolute', bottom: '5%', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 16, zIndex: 20 }}>
+        {actions.map((_, idx) => (
+          <div key={idx} style={{ width: 56, height: 56, borderRadius: '50%', background: idx < currentIndex ? (responses[idx]?.correcta ? '#1ABC9C' : '#E74C3C') : idx === currentIndex ? '#F9D030' : 'rgba(255,255,255,0.3)', border: '3px solid white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 22, color: idx === currentIndex ? '#1E2D6B' : 'white', fontFamily: 'RobotRadicals, sans-serif', transition: 'all 0.3s', transform: idx === currentIndex ? 'scale(1.2)' : 'scale(1)', boxShadow: idx === currentIndex ? '0 0 16px rgba(249,208,48,0.7)' : 'none' }}>
+            {idx < currentIndex ? (responses[idx]?.correcta ? '✓' : '✗') : idx + 1}
           </div>
-        )}
-      </main>
+        ))}
+      </div>
     </div>
   );
 }
