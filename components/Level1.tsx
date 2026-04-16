@@ -230,11 +230,11 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
     <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel1.1.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
       <Header />
 
-      <div style={{ position: 'absolute', top: 56, left: '50%', transform: 'translateX(-50%)', width: 'clamp(280px, 60vw, 600px)', zIndex: 20 }}>
-        <div style={{ height: 8, background: 'rgba(255,255,255,0.3)', borderRadius: 99, overflow: 'hidden' }}>
-          <div style={{ height: '100%', width: `${(timeLeft / 20) * 100}%`, background: timeLeft <= 5 ? '#E74C3C' : '#F9D030', borderRadius: 99, transition: 'width 1s linear' }} />
+      <div style={{ position: 'absolute', top: '38%', left: '50%', transform: 'translateX(-50%)', zIndex: 20 }}>
+        <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'white', border: `5px solid ${timeLeft <= 5 ? '#E74C3C' : timeLeft <= 10 ? '#F39C12' : '#1ABC9C'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(0,0,0,0.3)', flexDirection: 'column' }}>
+          <span style={{ fontWeight: 900, fontSize: 22, color: timeLeft <= 5 ? '#E74C3C' : timeLeft <= 10 ? '#F39C12' : '#1E2D6B', lineHeight: 1 }}>{timeLeft}</span>
+          <span style={{ fontSize: 9, color: '#888', fontWeight: 600 }}>seg</span>
         </div>
-        <div style={{ textAlign: 'right', color: timeLeft <= 5 ? '#E74C3C' : '#F9D030', fontWeight: 800, fontSize: 16, marginTop: 4, textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}>{timeLeft}s</div>
       </div>
 
       <div style={{ position: 'absolute', top: '12%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(300px, 55vw, 700px)', zIndex: 20 }}>
@@ -247,37 +247,45 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
         </div>
       </div>
 
-      <div style={{ position: 'absolute', top: '42%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(300px, 70vw, 900px)', display: 'flex', gap: 16, zIndex: 20 }}>
+      <div style={{ position: 'absolute', top: '44%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(300px, 70vw, 900px)', display: 'flex', gap: 16, zIndex: 20 }}>
         {['A', 'B'].map((label, idx) => {
           const opt = question.options[idx];
           const feedback = optionFeedback[label];
           return (
-            <button key={label} disabled={selectedAnswer !== null} onClick={() => handleAnswer(label, opt.correct)}
-              style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 12, background: feedback === 'correct' ? '#1ABC9C' : feedback === 'wrong' ? '#E74C3C' : 'rgba(255,255,255,0.92)', border: '3px solid', borderColor: feedback === 'correct' ? '#1ABC9C' : feedback === 'wrong' ? '#E74C3C' : '#1E2D6B', borderRadius: 50, padding: '10px 20px', cursor: selectedAnswer === null ? 'pointer' : 'default', transition: 'all 0.3s' }}>
-              <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#F9D030', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 18, color: '#1E2D6B', flexShrink: 0, fontFamily: 'RobotRadicals, sans-serif' }}>{label}</div>
-              <span style={{ color: feedback ? 'white' : '#1E2D6B', fontWeight: 600, fontSize: 'clamp(12px, 1.3vw, 16px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', textAlign: 'left' }}>{opt.text}</span>
-            </button>
+            <div key={label} style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ width: 52, height: 52, borderRadius: '50%', background: '#F9D030', border: '4px solid #1E2D6B', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 26, color: '#1E2D6B', flexShrink: 0, fontFamily: 'RobotRadicals, sans-serif', boxShadow: '0 3px 10px rgba(0,0,0,0.3)' }}>
+                {label}
+              </div>
+              <button disabled={selectedAnswer !== null} onClick={() => handleAnswer(label, opt.correct)}
+                style={{ flex: 1, display: 'flex', alignItems: 'center', background: feedback === 'correct' ? '#1ABC9C' : feedback === 'wrong' ? '#E74C3C' : 'rgba(255,255,255,0.92)', border: '3px solid', borderColor: feedback === 'correct' ? '#1ABC9C' : feedback === 'wrong' ? '#E74C3C' : '#1E2D6B', borderRadius: 50, padding: '10px 20px', cursor: selectedAnswer === null ? 'pointer' : 'default', transition: 'all 0.3s' }}>
+                <span style={{ color: feedback ? 'white' : '#1E2D6B', fontWeight: 600, fontSize: 'clamp(15px, 1.8vw, 22px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', textAlign: 'left' }}>{opt.text}</span>
+              </button>
+            </div>
           );
         })}
       </div>
 
-      <div style={{ position: 'absolute', top: '56%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(300px, 50vw, 650px)', zIndex: 20 }}>
+      <div style={{ position: 'absolute', top: '60%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(300px, 50vw, 650px)', zIndex: 20 }}>
         {(() => {
           const opt = question.options[2];
           const feedback = optionFeedback['C'];
           return (
-            <button disabled={selectedAnswer !== null} onClick={() => handleAnswer('C', opt.correct)}
-              style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, background: feedback === 'correct' ? '#1ABC9C' : feedback === 'wrong' ? '#E74C3C' : 'rgba(255,255,255,0.92)', border: '3px solid', borderColor: feedback === 'correct' ? '#1ABC9C' : feedback === 'wrong' ? '#E74C3C' : '#1E2D6B', borderRadius: 50, padding: '10px 20px', cursor: selectedAnswer === null ? 'pointer' : 'default', transition: 'all 0.3s' }}>
-              <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#F9D030', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 18, color: '#1E2D6B', flexShrink: 0, fontFamily: 'RobotRadicals, sans-serif' }}>C</div>
-              <span style={{ color: feedback ? 'white' : '#1E2D6B', fontWeight: 600, fontSize: 'clamp(12px, 1.3vw, 16px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', textAlign: 'left' }}>{opt.text}</span>
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ width: 52, height: 52, borderRadius: '50%', background: '#F9D030', border: '4px solid #1E2D6B', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 26, color: '#1E2D6B', flexShrink: 0, fontFamily: 'RobotRadicals, sans-serif', boxShadow: '0 3px 10px rgba(0,0,0,0.3)' }}>
+                C
+              </div>
+              <button disabled={selectedAnswer !== null} onClick={() => handleAnswer('C', opt.correct)}
+                style={{ flex: 1, display: 'flex', alignItems: 'center', background: feedback === 'correct' ? '#1ABC9C' : feedback === 'wrong' ? '#E74C3C' : 'rgba(255,255,255,0.92)', border: '3px solid', borderColor: feedback === 'correct' ? '#1ABC9C' : feedback === 'wrong' ? '#E74C3C' : '#1E2D6B', borderRadius: 50, padding: '10px 20px', cursor: selectedAnswer === null ? 'pointer' : 'default', transition: 'all 0.3s' }}>
+                <span style={{ color: feedback ? 'white' : '#1E2D6B', fontWeight: 600, fontSize: 'clamp(15px, 1.8vw, 22px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', textAlign: 'left' }}>{opt.text}</span>
+              </button>
+            </div>
           );
         })()}
       </div>
 
-      <div style={{ position: 'absolute', bottom: '6%', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 12, zIndex: 20 }}>
+      <div style={{ position: 'absolute', bottom: '4%', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 24, zIndex: 20 }}>
         {questions.map((_, idx) => (
-          <div key={idx} style={{ width: 44, height: 44, borderRadius: '50%', background: idx < currentQuestion ? '#1ABC9C' : idx === currentQuestion ? '#F9D030' : 'rgba(255,255,255,0.3)', border: '3px solid white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 18, color: idx === currentQuestion ? '#1E2D6B' : 'white', fontFamily: 'RobotRadicals, sans-serif', transition: 'all 0.3s', transform: idx === currentQuestion ? 'scale(1.2)' : 'scale(1)' }}>
+          <div key={idx} style={{ width: 64, height: 64, borderRadius: '50%', background: idx < currentQuestion ? '#1ABC9C' : idx === currentQuestion ? '#F9D030' : 'rgba(255,255,255,0.3)', border: '3px solid white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 26, color: idx === currentQuestion ? '#1E2D6B' : 'white', fontFamily: 'RobotRadicals, sans-serif', transition: 'all 0.3s', transform: idx === currentQuestion ? 'scale(1.2)' : 'scale(1)' }}>
             {idx < currentQuestion ? '✓' : idx + 1}
           </div>
         ))}
