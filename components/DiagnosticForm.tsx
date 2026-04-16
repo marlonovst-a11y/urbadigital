@@ -16,47 +16,37 @@ const ageOptions = ['16-18 años', '19-26 años', '27-35 años', '35 años en ad
 const genderOptions = ['Masculino', 'Femenino', 'Otro'];
 const occupationOptions = ['Estudiante', 'Desempleado', 'Funcionario Público', 'Empleado del sector privado', 'Otro'];
 
-const steps = [
-  {
-    field: 'edad' as keyof DiagnosticData,
-    question: '¿Cuál es tu edad?',
-    options: ageOptions,
-    label: 'Tu edad',
-    character: '/carmen.png',
-  },
-  {
-    field: 'genero' as keyof DiagnosticData,
-    question: '¿Cuál es tu género?',
-    options: genderOptions,
-    label: 'Tu género',
-    character: '/roberto.png',
-  },
-  {
-    field: 'ocupacion' as keyof DiagnosticData,
-    question: '¿Cuál es tu ocupación?',
-    options: occupationOptions,
-    label: 'Tu ocupación',
-    character: '/manuel.png',
-  },
+const backgrounds = [
+  'url(/fondo_preguntas.png)',
+  'url(/fondo_2.png)',
+  'url(/fondo_3.png)',
 ];
 
+const characters = ['/carmen.png', '/roberto.png', '/manuel.png'];
+
 const stepLabels = ['Tu edad', 'Tu género', 'Tu ocupación'];
+
+const questions = ['¿Cuál es tu edad?', '¿Cuál es tu género?', '¿Cuál es tu ocupación?'];
+
+const optionsByStep = [ageOptions, genderOptions, occupationOptions];
+
+const fields: (keyof DiagnosticData)[] = ['edad', 'genero', 'ocupacion'];
 
 export default function DiagnosticForm({ onComplete }: DiagnosticFormProps) {
   const [step, setStep] = useState(0);
   const [data, setData] = useState<DiagnosticData>({
     edad: '',
     genero: '',
-    ocupacion: ''
+    ocupacion: '',
   });
 
   const handleSelect = (field: keyof DiagnosticData, value: string) => {
     setData(prev => ({ ...prev, [field]: value }));
   };
 
-  const currentStep = steps[step];
-  const currentValue = data[currentStep.field];
-  const isLast = step === steps.length - 1;
+  const currentField = fields[step];
+  const currentValue = data[currentField];
+  const isLast = step === 2;
 
   const handleNext = () => {
     if (!currentValue) return;
@@ -71,8 +61,8 @@ export default function DiagnosticForm({ onComplete }: DiagnosticFormProps) {
     <div
       style={{
         width: '100vw',
-        height: '100vh',
-        backgroundImage: 'url(/fondo_preguntas.png)',
+        minHeight: '100vh',
+        backgroundImage: backgrounds[step],
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -80,14 +70,15 @@ export default function DiagnosticForm({ onComplete }: DiagnosticFormProps) {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '24px 16px',
+        padding: '32px 16px',
         boxSizing: 'border-box',
+        transition: 'background-image 0.4s ease',
       }}
     >
-      <div style={{ width: '100%', maxWidth: 520 }}>
+      <div style={{ width: '100%', maxWidth: 560 }}>
 
         {/* Progress bar */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0, marginBottom: 32 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 32 }}>
           {stepLabels.map((label, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
@@ -95,15 +86,13 @@ export default function DiagnosticForm({ onComplete }: DiagnosticFormProps) {
                   width: 44,
                   height: 44,
                   borderRadius: '50%',
-                  background: i < step ? '#1ABC9C' : i === step ? '#2167AE' : 'white',
-                  color: i <= step ? 'white' : '#aaa',
+                  background: i < step ? '#1ABC9C' : i === step ? '#2167AE' : 'rgba(255,255,255,0.6)',
+                  color: i <= step ? 'white' : '#666',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontWeight: 800,
                   fontSize: 18,
-                  border: '3px solid',
-                  borderColor: i <= step ? 'transparent' : '#ddd',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
                   transition: 'all 0.3s ease',
                 }}>
@@ -113,6 +102,7 @@ export default function DiagnosticForm({ onComplete }: DiagnosticFormProps) {
                   fontSize: 11,
                   color: i === step ? 'white' : 'rgba(255,255,255,0.6)',
                   fontWeight: i === step ? 700 : 400,
+                  whiteSpace: 'nowrap',
                 }}>
                   {label}
                 </span>
@@ -131,110 +121,115 @@ export default function DiagnosticForm({ onComplete }: DiagnosticFormProps) {
           ))}
         </div>
 
-        {/* Character + question bubble */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
-          <img
-            src={currentStep.character}
-            alt="personaje"
-            style={{
-              width: 80,
-              height: 80,
-              borderRadius: '50%',
-              objectFit: 'cover',
-              flexShrink: 0,
-              boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
-            }}
-          />
-          <div style={{ position: 'relative' }}>
-            <div style={{
-              position: 'absolute',
-              left: -10,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              width: 0,
-              height: 0,
-              borderTop: '8px solid transparent',
-              borderBottom: '8px solid transparent',
-              borderRight: '10px solid white',
-            }} />
-            <div style={{
-              background: 'white',
-              borderRadius: 16,
-              padding: '12px 16px',
-              fontWeight: 700,
-              fontSize: 15,
-              color: '#1E2D6B',
-              boxShadow: '0 2px 10px rgba(0,0,0,0.12)',
-              lineHeight: 1.4,
-            }}>
-              {currentStep.question}
+        {/* Card */}
+        <div style={{
+          background: 'rgba(255,255,255,0.15)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          borderRadius: 24,
+          padding: 32,
+          boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
+        }}>
+          {/* Character + bubble */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
+            <img
+              src={characters[step]}
+              alt="personaje"
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: '50%',
+                objectFit: 'cover',
+                flexShrink: 0,
+                boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+              }}
+            />
+            <div style={{ position: 'relative', flex: 1 }}>
+              <div style={{
+                position: 'absolute',
+                left: -10,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: 0,
+                height: 0,
+                borderTop: '8px solid transparent',
+                borderBottom: '8px solid transparent',
+                borderRight: '10px solid white',
+              }} />
+              <div style={{
+                background: 'white',
+                borderRadius: 16,
+                padding: '12px 18px',
+                fontWeight: 700,
+                fontSize: 15,
+                color: '#1E2D6B',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                lineHeight: 1.4,
+              }}>
+                {questions[step]}
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Options */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 10,
-          marginBottom: 24,
-        }}>
-          {currentStep.options.map(option => (
+          {/* Options */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
+            {optionsByStep[step].map(option => (
+              <button
+                key={option}
+                onClick={() => handleSelect(currentField, option)}
+                style={{
+                  background: currentValue === option ? '#2167AE' : 'rgba(255,255,255,0.85)',
+                  color: currentValue === option ? 'white' : '#333',
+                  border: '2px solid transparent',
+                  borderRadius: 50,
+                  padding: '12px 24px',
+                  fontWeight: 600,
+                  fontSize: 15,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  textAlign: 'left',
+                  transform: currentValue === option ? 'scale(1.02)' : 'scale(1)',
+                  boxShadow: currentValue === option
+                    ? '0 4px 12px rgba(33,103,174,0.4)'
+                    : '0 2px 6px rgba(0,0,0,0.08)',
+                }}
+                onMouseEnter={e => {
+                  if (currentValue !== option) {
+                    (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,1)';
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (currentValue !== option) {
+                    (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.85)';
+                  }
+                }}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+
+          {/* Next button */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <button
-              key={option}
-              onClick={() => handleSelect(currentStep.field, option)}
+              onClick={handleNext}
+              disabled={!currentValue}
               style={{
-                background: currentValue === option ? '#2167AE' : 'rgba(255,255,255,0.85)',
-                color: currentValue === option ? 'white' : '#333',
-                border: `2px solid ${currentValue === option ? '#2167AE' : 'transparent'}`,
+                background: currentValue ? '#1ABC9C' : 'rgba(255,255,255,0.3)',
+                color: currentValue ? 'white' : 'rgba(255,255,255,0.5)',
+                border: 'none',
                 borderRadius: 50,
-                padding: '12px 24px',
-                fontWeight: 600,
-                fontSize: 15,
-                cursor: 'pointer',
+                padding: '14px 32px',
+                fontWeight: 700,
+                fontSize: 16,
+                cursor: currentValue ? 'pointer' : 'not-allowed',
                 transition: 'all 0.2s ease',
-                textAlign: 'left',
-                transform: currentValue === option ? 'scale(1.02)' : 'scale(1)',
-                boxShadow: currentValue === option ? '0 4px 12px rgba(33,103,174,0.35)' : '0 2px 6px rgba(0,0,0,0.08)',
-              }}
-              onMouseEnter={e => {
-                if (currentValue !== option) {
-                  (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,1)';
-                  (e.currentTarget as HTMLButtonElement).style.borderColor = '#2167AE';
-                }
-              }}
-              onMouseLeave={e => {
-                if (currentValue !== option) {
-                  (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.85)';
-                  (e.currentTarget as HTMLButtonElement).style.borderColor = 'transparent';
-                }
+                boxShadow: currentValue ? '0 4px 14px rgba(26,188,156,0.4)' : 'none',
               }}
             >
-              {option}
+              {isLast ? '¡Comenzar! 🎮' : 'Siguiente →'}
             </button>
-          ))}
-        </div>
-
-        {/* Next button */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <button
-            onClick={handleNext}
-            disabled={!currentValue}
-            style={{
-              background: currentValue ? '#1ABC9C' : 'rgba(255,255,255,0.3)',
-              color: currentValue ? 'white' : 'rgba(255,255,255,0.5)',
-              border: 'none',
-              borderRadius: 50,
-              padding: '14px 32px',
-              fontWeight: 700,
-              fontSize: 16,
-              cursor: currentValue ? 'pointer' : 'not-allowed',
-              transition: 'all 0.2s ease',
-              boxShadow: currentValue ? '0 4px 14px rgba(26,188,156,0.4)' : 'none',
-            }}
-          >
-            {isLast ? '¡Comenzar el juego! 🎮' : 'Siguiente →'}
-          </button>
+          </div>
         </div>
 
       </div>
