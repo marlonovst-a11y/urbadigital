@@ -38,7 +38,7 @@ export default function LevelMap({ totalScore, nickname, participantId, complete
       style={{
         width: '100vw',
         height: '100vh',
-        backgroundImage: 'url(/retos.png)',
+        backgroundImage: 'url(/retos_fondo.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -95,17 +95,17 @@ export default function LevelMap({ totalScore, nickname, participantId, complete
         </button>
       </div>
 
-      <div style={{ position: 'absolute', top: '12%', left: '50%', transform: 'translateX(-50%)', display: 'flex', alignItems: 'center', gap: 16, zIndex: 10 }}>
-        <img src="/roberto.png" style={{ width: 'clamp(60px, 8vw, 100px)', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }} />
-        <div style={{ background: 'white', borderRadius: 16, padding: '12px 20px', maxWidth: 400, boxShadow: '0 4px 16px rgba(0,0,0,0.2)', position: 'relative' }}>
+      <div style={{ position: 'absolute', top: '18%', left: '50%', transform: 'translateX(-50%)', display: 'flex', alignItems: 'center', gap: 16, zIndex: 10 }}>
+        <img src="/roberto.png" style={{ width: 'clamp(80px, 10vw, 130px)', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }} />
+        <div style={{ background: 'white', borderRadius: 16, padding: '12px 20px', maxWidth: 320, boxShadow: '0 4px 16px rgba(0,0,0,0.2)', position: 'relative' }}>
           <div style={{ position: 'absolute', left: -12, top: '50%', transform: 'translateY(-50%)', width: 0, height: 0, borderTop: '10px solid transparent', borderBottom: '10px solid transparent', borderRight: '12px solid white' }} />
-          <p style={{ margin: 0, color: '#1E2D6B', fontWeight: 700, fontSize: 'clamp(12px, 1.4vw, 15px)', lineHeight: 1.4 }}>
+          <p style={{ margin: 0, color: '#1E2D6B', fontWeight: 700, fontSize: 'clamp(11px, 1.2vw, 13px)', lineHeight: 1.4 }}>
             ¡Bienvenido a Aprende y Previene! Completa los 5 niveles y conviértete en experto en prevención de riesgos.
           </p>
         </div>
       </div>
 
-      <div style={{ position: 'absolute', top: '62%', left: '50%', transform: 'translate(-50%, -50%)', display: 'flex', gap: 'clamp(12px, 3vw, 40px)', alignItems: 'center', zIndex: 10 }}>
+      <div style={{ position: 'absolute', top: '65%', left: '50%', transform: 'translate(-50%, -50%)', display: 'flex', gap: 'clamp(12px, 3vw, 40px)', alignItems: 'center', zIndex: 10 }}>
         {[1, 2, 3, 4, 5].map((num) => {
           const status = getLevelStatus(num);
           const isLocked = status === 'locked';
