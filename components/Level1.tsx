@@ -3,17 +3,6 @@
 import { useState, useEffect, useRef } from 'react';
 import Header from './Header';
 
-function useInlineSvg(url: string) {
-  const [svgContent, setSvgContent] = useState<string | null>(null);
-  useEffect(() => {
-    fetch(url)
-      .then(r => r.text())
-      .then(setSvgContent)
-      .catch(() => setSvgContent(null));
-  }, [url]);
-  return svgContent;
-}
-
 interface Level1Props {
   participantId: string;
   nickname: string;
@@ -75,7 +64,6 @@ const questions = [
 
 
 export default function Level1({ participantId, nickname, onComplete }: Level1Props) {
-  const svgContent = useInlineSvg('/nivel_1.svg');
   const [showInstructions, setShowInstructions] = useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [timeLeft, setTimeLeft] = useState(20);
@@ -96,7 +84,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
   }, [currentQuestion]);
 
   useEffect(() => {
-    if (showMessage || isFinished) return;
+    if (showMessage || isFinished || showInstructions) return;
 
     timerRef.current = setInterval(() => {
       setTimeLeft(prev => {
@@ -119,7 +107,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [currentQuestion, showMessage, isFinished]);
+  }, [currentQuestion, showMessage, isFinished, showInstructions]);
 
   const handleAnswer = (label: string, isCorrect: boolean) => {
     if (answeredRef.current) return;
@@ -239,174 +227,72 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
   const question = questions[currentQuestion];
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden bg-[#1E2D6B]">
+    <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel1.1.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
       <Header />
 
-      <main className="pt-12 md:pt-16 flex-1 flex items-center justify-center relative overflow-hidden">
-        <div className="relative w-full" style={{ maxHeight: 'calc(100vh - 48px)' }}>
-          <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-            {svgContent ? (
-              <div
-                className="absolute inset-0 w-full h-full nivel1-svg-wrapper"
-                dangerouslySetInnerHTML={{ __html: svgContent }}
-                style={{ lineHeight: 0 }}
-              />
-            ) : (
-              <img
-                src="/nivel_1.svg"
-                alt="Nivel 1"
-                className="absolute inset-0 w-full h-full"
-                style={{ objectFit: 'contain', objectPosition: 'center' }}
-              />
-            )}
+      <div style={{ position: 'absolute', top: 56, left: '50%', transform: 'translateX(-50%)', width: 'clamp(280px, 60vw, 600px)', zIndex: 20 }}>
+        <div style={{ height: 8, background: 'rgba(255,255,255,0.3)', borderRadius: 99, overflow: 'hidden' }}>
+          <div style={{ height: '100%', width: `${(timeLeft / 20) * 100}%`, background: timeLeft <= 5 ? '#E74C3C' : '#F9D030', borderRadius: 99, transition: 'width 1s linear' }} />
+        </div>
+        <div style={{ textAlign: 'right', color: timeLeft <= 5 ? '#E74C3C' : '#F9D030', fontWeight: 800, fontSize: 16, marginTop: 4, textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}>{timeLeft}s</div>
+      </div>
 
-            <div
-              className="absolute inset-0"
-              style={{ fontFamily: "'Zurich_Light_Condensed_BT', 'ZurichCondensed', sans-serif" }}
-            >
-              <div
-                className="absolute flex items-center justify-center text-center px-4"
-                style={{
-                  left: '26.4%',
-                  top: '8.7%',
-                  width: '56.4%',
-                  height: '22.6%',
-                }}
-              >
-                <p
-                  className="text-[#1E2D6B] leading-snug"
-                  style={{
-                    fontFamily: "'Zurich_Light_Condensed_BT', 'ZurichCondensed', sans-serif",
-                    fontSize: 'clamp(0.75rem, 1.3vw, 1.35rem)',
-                    fontWeight: 400,
-                  }}
-                >
-                  {question.question}
-                </p>
-              </div>
+      <div style={{ position: 'absolute', top: '12%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(300px, 55vw, 700px)', zIndex: 20 }}>
+        <div style={{ background: 'white', borderRadius: 16, padding: '20px 28px', border: '3px solid #1E2D6B', boxShadow: '0 4px 20px rgba(0,0,0,0.2)', position: 'relative' }}>
+          <div style={{ position: 'absolute', bottom: -16, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '14px solid transparent', borderRight: '14px solid transparent', borderTop: '16px solid #1E2D6B' }} />
+          <div style={{ position: 'absolute', bottom: -12, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '11px solid transparent', borderRight: '11px solid transparent', borderTop: '13px solid white' }} />
+          <p style={{ margin: 0, textAlign: 'center', color: '#1E2D6B', fontWeight: 700, fontSize: 'clamp(14px, 1.8vw, 22px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', lineHeight: 1.4 }}>
+            {question.question}
+          </p>
+        </div>
+      </div>
 
-              <div
-                className="absolute w-full"
-                style={{ top: '31%', left: '20%', width: '60%' }}
-              >
-                <div
-                  className="h-1.5 rounded-full overflow-hidden"
-                  style={{ background: 'rgba(30,45,107,0.25)' }}
-                >
-                  <div
-                    className="h-full rounded-full transition-all duration-1000"
-                    style={{
-                      width: `${(timeLeft / 20) * 100}%`,
-                      background: timeLeft <= 5 ? '#E74C3C' : '#F9D030'
-                    }}
-                  />
-                </div>
-              </div>
+      <div style={{ position: 'absolute', top: '42%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(300px, 70vw, 900px)', display: 'flex', gap: 16, zIndex: 20 }}>
+        {['A', 'B'].map((label, idx) => {
+          const opt = question.options[idx];
+          const feedback = optionFeedback[label];
+          return (
+            <button key={label} disabled={selectedAnswer !== null} onClick={() => handleAnswer(label, opt.correct)}
+              style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 12, background: feedback === 'correct' ? '#1ABC9C' : feedback === 'wrong' ? '#E74C3C' : 'rgba(255,255,255,0.92)', border: '3px solid', borderColor: feedback === 'correct' ? '#1ABC9C' : feedback === 'wrong' ? '#E74C3C' : '#1E2D6B', borderRadius: 50, padding: '10px 20px', cursor: selectedAnswer === null ? 'pointer' : 'default', transition: 'all 0.3s' }}>
+              <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#F9D030', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 18, color: '#1E2D6B', flexShrink: 0, fontFamily: 'RobotRadicals, sans-serif' }}>{label}</div>
+              <span style={{ color: feedback ? 'white' : '#1E2D6B', fontWeight: 600, fontSize: 'clamp(12px, 1.3vw, 16px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', textAlign: 'left' }}>{opt.text}</span>
+            </button>
+          );
+        })}
+      </div>
 
-              <button
-                disabled={selectedAnswer !== null}
-                onClick={() => handleAnswer('A', question.options[0].correct)}
-                className="absolute flex items-center justify-center text-center"
-                style={{
-                  left: '18.2%',
-                  top: '36.8%',
-                  width: '35.7%',
-                  height: '7.1%',
-                  cursor: selectedAnswer === null ? 'pointer' : 'default',
-                  background: 'transparent',
-                  border: 'none',
-                }}
-              >
-                <span
-                  className="px-6 leading-tight"
-                  style={{
-                    fontFamily: "'Zurich_Light_Condensed_BT', 'ZurichCondensed', sans-serif",
-                    fontSize: 'clamp(0.55rem, 1vw, 1rem)',
-                    fontWeight: 300,
-                    color: optionFeedback.A === 'correct' ? '#0a7c2e' : optionFeedback.A === 'wrong' ? '#c0392b' : '#1E2D6B',
-                  }}
-                >
-                  {question.options[0].text}
-                </span>
-              </button>
+      <div style={{ position: 'absolute', top: '56%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(300px, 50vw, 650px)', zIndex: 20 }}>
+        {(() => {
+          const opt = question.options[2];
+          const feedback = optionFeedback['C'];
+          return (
+            <button disabled={selectedAnswer !== null} onClick={() => handleAnswer('C', opt.correct)}
+              style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, background: feedback === 'correct' ? '#1ABC9C' : feedback === 'wrong' ? '#E74C3C' : 'rgba(255,255,255,0.92)', border: '3px solid', borderColor: feedback === 'correct' ? '#1ABC9C' : feedback === 'wrong' ? '#E74C3C' : '#1E2D6B', borderRadius: 50, padding: '10px 20px', cursor: selectedAnswer === null ? 'pointer' : 'default', transition: 'all 0.3s' }}>
+              <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#F9D030', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 18, color: '#1E2D6B', flexShrink: 0, fontFamily: 'RobotRadicals, sans-serif' }}>C</div>
+              <span style={{ color: feedback ? 'white' : '#1E2D6B', fontWeight: 600, fontSize: 'clamp(12px, 1.3vw, 16px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', textAlign: 'left' }}>{opt.text}</span>
+            </button>
+          );
+        })()}
+      </div>
 
-              <button
-                disabled={selectedAnswer !== null}
-                onClick={() => handleAnswer('B', question.options[1].correct)}
-                className="absolute flex items-center justify-center text-center"
-                style={{
-                  left: '60.6%',
-                  top: '36.8%',
-                  width: '35.7%',
-                  height: '7.1%',
-                  cursor: selectedAnswer === null ? 'pointer' : 'default',
-                  background: 'transparent',
-                  border: 'none',
-                }}
-              >
-                <span
-                  className="px-6 leading-tight"
-                  style={{
-                    fontFamily: "'Zurich_Light_Condensed_BT', 'ZurichCondensed', sans-serif",
-                    fontSize: 'clamp(0.55rem, 1vw, 1rem)',
-                    fontWeight: 300,
-                    color: optionFeedback.B === 'correct' ? '#0a7c2e' : optionFeedback.B === 'wrong' ? '#c0392b' : '#1E2D6B',
-                  }}
-                >
-                  {question.options[1].text}
-                </span>
-              </button>
+      <div style={{ position: 'absolute', bottom: '6%', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 12, zIndex: 20 }}>
+        {questions.map((_, idx) => (
+          <div key={idx} style={{ width: 44, height: 44, borderRadius: '50%', background: idx < currentQuestion ? '#1ABC9C' : idx === currentQuestion ? '#F9D030' : 'rgba(255,255,255,0.3)', border: '3px solid white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 18, color: idx === currentQuestion ? '#1E2D6B' : 'white', fontFamily: 'RobotRadicals, sans-serif', transition: 'all 0.3s', transform: idx === currentQuestion ? 'scale(1.2)' : 'scale(1)' }}>
+            {idx < currentQuestion ? '✓' : idx + 1}
+          </div>
+        ))}
+      </div>
 
-              <button
-                disabled={selectedAnswer !== null}
-                onClick={() => handleAnswer('C', question.options[2].correct)}
-                className="absolute flex items-center justify-center text-center"
-                style={{
-                  left: '33.9%',
-                  top: '48%',
-                  width: '43.2%',
-                  height: '7.3%',
-                  cursor: selectedAnswer === null ? 'pointer' : 'default',
-                  background: 'transparent',
-                  border: 'none',
-                }}
-              >
-                <span
-                  className="px-6 leading-tight"
-                  style={{
-                    fontFamily: "'Zurich_Light_Condensed_BT', 'ZurichCondensed', sans-serif",
-                    fontSize: 'clamp(0.55rem, 1vw, 1rem)',
-                    fontWeight: 300,
-                    color: optionFeedback.C === 'correct' ? '#0a7c2e' : optionFeedback.C === 'wrong' ? '#c0392b' : '#1E2D6B',
-                  }}
-                >
-                  {question.options[2].text}
-                </span>
-              </button>
-
-            </div>
+      {showMessage && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+          <div style={{ background: 'white', borderRadius: 20, padding: 'clamp(20px,4vw,40px)', maxWidth: 560, width: '100%', boxShadow: '0 8px 40px rgba(0,0,0,0.4)', textAlign: 'center' }}>
+            <p style={{ color: '#1E2D6B', fontSize: 'clamp(14px,1.8vw,20px)', fontWeight: 600, lineHeight: 1.5, marginBottom: 24, fontFamily: 'Zurich_Light_Condensed_BT, sans-serif' }}>{question.message}</p>
+            <button onClick={handleNext} style={{ width: '100%', padding: '14px 0', background: '#2167AE', color: 'white', fontWeight: 800, fontSize: 'clamp(14px,1.8vw,18px)', borderRadius: 12, border: 'none', cursor: 'pointer' }}>
+              {currentQuestion < questions.length - 1 ? 'Siguiente pregunta →' : 'Ver resultados'}
+            </button>
           </div>
         </div>
-
-        {showMessage && (
-          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl shadow-2xl p-5 md:p-8 max-w-2xl w-full">
-              <p
-                className="text-base md:text-xl text-[#1E2D6B] leading-relaxed mb-4 md:mb-6 text-center"
-                style={{ fontFamily: "'Zurich_Light_Condensed_BT', 'ZurichCondensed', sans-serif" }}
-              >
-                {question.message}
-              </p>
-              <button
-                onClick={handleNext}
-                className="w-full bg-[#2167AE] text-white font-bold py-3 md:py-4 px-6 md:px-8 rounded-lg hover:bg-[#1a5391] transition-colors text-base md:text-lg min-h-[44px]"
-              >
-                {currentQuestion < questions.length - 1 ? 'Siguiente pregunta →' : 'Ver resultados'}
-              </button>
-            </div>
-          </div>
-        )}
-      </main>
+      )}
     </div>
   );
 }
