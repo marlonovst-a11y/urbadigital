@@ -203,7 +203,7 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
         </div>
       </div>
 
-      <div style={{ position: 'absolute', top: '32%', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 'clamp(12px, 3vw, 32px)', zIndex: 20 }}>
+      <div style={{ position: 'absolute', top: '26%', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 'clamp(12px, 3vw, 32px)', zIndex: 20 }}>
         {(['ANTES', 'DURANTE', 'DESPUÉS'] as const).map((cat) => {
           const isSelected = selectedCategory === cat;
           const isCorrect = answerState !== 'idle' && currentAction.categoria === cat;
@@ -213,12 +213,12 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
               style={{
                 padding: 'clamp(12px, 2vw, 20px) clamp(24px, 4vw, 48px)',
                 borderRadius: 12,
-                border: '4px solid #1E2D6B',
+                border: '4px solid #5C3A1E',
                 background: isCorrect ? '#1ABC9C' : isWrong ? '#E74C3C' : '#F9D030',
-                color: isCorrect || isWrong ? 'white' : '#1E2D6B',
+                color: isCorrect || isWrong ? 'white' : '#5C3A1E',
                 fontWeight: 900,
                 fontSize: 'clamp(18px, 2.5vw, 32px)',
-                fontFamily: 'UniversCondensedBold, sans-serif',
+                fontFamily: 'RobotRadicals, sans-serif',
                 cursor: answerState === 'idle' ? 'pointer' : 'default',
                 boxShadow: '0 6px 20px rgba(0,0,0,0.3)',
                 transition: 'all 0.2s',
