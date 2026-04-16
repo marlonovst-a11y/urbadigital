@@ -211,13 +211,13 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
           return (
             <button key={cat} onClick={() => handleAnswer(cat)} disabled={answerState !== 'idle'}
               style={{
-                padding: 'clamp(6px, 0.8vw, 10px) clamp(8px, 1vw, 14px)',
+                padding: 'clamp(4px, 0.6vw, 8px) clamp(6px, 0.8vw, 12px)',
                 borderRadius: 12,
                 border: '4px solid #5C3A1E',
                 background: isCorrect ? '#1ABC9C' : isWrong ? '#E74C3C' : '#F9D030',
                 color: isCorrect || isWrong ? 'white' : '#5C3A1E',
                 fontWeight: 900,
-                fontSize: 'clamp(24px, 3.5vw, 44px)',
+                fontSize: 'clamp(16px, 2vw, 28px)',
                 fontFamily: 'RobotRadicals, sans-serif',
                 cursor: answerState === 'idle' ? 'pointer' : 'default',
                 boxShadow: '0 6px 20px rgba(0,0,0,0.3)',
@@ -232,7 +232,7 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
       </div>
 
       {answerState !== 'idle' && (
-        <div style={{ position: 'absolute', bottom: '18%', left: '50%', transform: 'translateX(-50%)', zIndex: 30, background: answerState === 'correct' ? 'rgba(26,188,156,0.40)' : 'rgba(231,76,60,0.40)', borderRadius: 16, padding: '12px 28px', color: 'white', fontWeight: 700, fontSize: 'clamp(13px, 1.5vw, 18px)', textAlign: 'center', backdropFilter: 'blur(8px)', boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
+        <div style={{ position: 'absolute', bottom: '18%', left: '50%', transform: 'translateX(-50%)', zIndex: 30, background: answerState === 'correct' ? 'rgba(26,188,156,0.40)' : 'rgba(231,76,60,0.40)', borderRadius: 16, padding: '12px 28px', color: '#5C3A1E', fontWeight: 700, fontSize: 'clamp(13px, 1.5vw, 18px)', textAlign: 'center', backdropFilter: 'blur(8px)', boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
           {answerState === 'correct' ? `✅ ¡Correcto! "${currentAction.accion}" es una acción de ${currentAction.categoria}.` : `❌ Incorrecto. La respuesta correcta es ${currentAction.categoria}.`}
         </div>
       )}
