@@ -241,7 +241,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
         <div style={{ background: 'white', borderRadius: 16, padding: '20px 28px', border: '3px solid #1E2D6B', boxShadow: '0 4px 20px rgba(0,0,0,0.2)', position: 'relative' }}>
           <div style={{ position: 'absolute', bottom: -16, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '14px solid transparent', borderRight: '14px solid transparent', borderTop: '16px solid #1E2D6B' }} />
           <div style={{ position: 'absolute', bottom: -12, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '11px solid transparent', borderRight: '11px solid transparent', borderTop: '13px solid white' }} />
-          <p style={{ margin: 0, textAlign: 'center', color: '#1E2D6B', fontWeight: 700, fontSize: 'clamp(16px, 2vw, 26px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', lineHeight: 1.4 }}>
+          <p style={{ margin: 0, textAlign: 'center', color: '#1E2D6B', fontWeight: 700, fontSize: 'clamp(18px, 2.4vw, 30px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', lineHeight: 1.4 }}>
             {question.question}
           </p>
         </div>
@@ -257,7 +257,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
                 {label}
               </div>
               <button disabled={selectedAnswer !== null} onClick={() => handleAnswer(label, opt.correct)}
-                style={{ flex: 1, display: 'flex', alignItems: 'center', background: feedback === 'correct' ? '#1ABC9C' : feedback === 'wrong' ? '#E74C3C' : 'rgba(255,255,255,0.92)', border: '3px solid', borderColor: feedback === 'correct' ? '#1ABC9C' : feedback === 'wrong' ? '#E74C3C' : '#1E2D6B', borderRadius: 50, padding: '10px 20px', cursor: selectedAnswer === null ? 'pointer' : 'default', transition: 'all 0.3s' }}>
+                style={{ flex: 1, display: 'flex', alignItems: 'center', background: feedback === 'correct' ? '#1ABC9C' : feedback === 'wrong' ? '#E74C3C' : 'rgba(255,255,255,0.92)', border: '3px solid', borderColor: feedback === 'correct' ? '#1ABC9C' : feedback === 'wrong' ? '#E74C3C' : '#1E2D6B', borderRadius: 50, padding: '10px 20px', cursor: selectedAnswer === null ? 'pointer' : 'default', transition: 'all 0.3s', ...(label === 'B' ? { minWidth: 'clamp(250px, 35vw, 500px)' } : {}) }}>
                 <span style={{ color: feedback ? 'white' : '#1E2D6B', fontWeight: 600, fontSize: 'clamp(15px, 1.8vw, 22px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', textAlign: 'left' }}>{opt.text}</span>
               </button>
             </div>
@@ -285,7 +285,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
 
       <div style={{ position: 'absolute', bottom: '7%', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 24, zIndex: 20, width: 'clamp(300px, 55vw, 700px)', justifyContent: 'center' }}>
         {questions.map((_, idx) => (
-          <div key={idx} style={{ width: 76, height: 76, borderRadius: '50%', background: idx < currentQuestion ? '#1ABC9C' : idx === currentQuestion ? '#F9D030' : 'rgba(255,255,255,0.3)', border: '3px solid white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 34, color: idx === currentQuestion ? '#1E2D6B' : 'white', fontFamily: 'RobotRadicals, sans-serif', transition: 'all 0.3s', transform: idx === currentQuestion ? 'scale(1.2)' : 'scale(1)' }}>
+          <div key={idx} style={{ width: 76, height: 76, borderRadius: '50%', background: idx < currentQuestion ? '#1ABC9C' : idx === currentQuestion ? '#F9D030' : 'rgba(255,255,255,0.3)', border: '3px solid white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 42, color: idx === currentQuestion ? '#1E2D6B' : 'white', fontFamily: 'RobotRadicals, sans-serif', transition: 'all 0.3s', transform: idx === currentQuestion ? 'scale(1.2)' : 'scale(1)' }}>
             {idx < currentQuestion ? '✓' : idx + 1}
           </div>
         ))}
