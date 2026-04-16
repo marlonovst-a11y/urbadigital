@@ -76,6 +76,7 @@ const questions = [
 
 export default function Level1({ participantId, nickname, onComplete }: Level1Props) {
   const svgContent = useInlineSvg('/nivel_1.svg');
+  const [showInstructions, setShowInstructions] = useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [timeLeft, setTimeLeft] = useState(20);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -163,6 +164,57 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
   };
 
   const calculateTotalScore = () => responses.reduce((sum, r) => sum + r.puntos, 0);
+
+  if (showInstructions) {
+    return (
+      <div style={{
+        width: '100vw', height: '100vh',
+        backgroundImage: 'url(/nivel1_instruccion.png)',
+        backgroundSize: 'cover', backgroundPosition: 'center',
+        position: 'relative', overflow: 'hidden'
+      }}>
+        <Header />
+        <div style={{
+          position: 'absolute', top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)',
+          display: 'flex', alignItems: 'center', gap: 24
+        }}>
+          <img src="/manuel_nivel1.png" style={{ width: 'clamp(120px, 15vw, 200px)' }} />
+          <div style={{
+            background: 'white', borderRadius: 16, padding: '20px 28px',
+            maxWidth: 420, border: '3px solid #2167AE',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.2)', position: 'relative'
+          }}>
+            <div style={{ position: 'absolute', left: -14, top: '50%', transform: 'translateY(-50%)',
+              width: 0, height: 0, borderTop: '12px solid transparent',
+              borderBottom: '12px solid transparent', borderRight: '14px solid #2167AE' }} />
+            <div style={{ position: 'absolute', left: -10, top: '50%', transform: 'translateY(-50%)',
+              width: 0, height: 0, borderTop: '10px solid transparent',
+              borderBottom: '10px solid transparent', borderRight: '12px solid white' }} />
+            <p style={{ margin: '0 0 8px', fontWeight: 800, color: '#1E2D6B',
+              fontSize: 'clamp(14px, 1.6vw, 18px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif' }}>
+              ¡Nivel 1 — Trivia de Prevención!
+            </p>
+            <p style={{ margin: '0 0 16px', color: '#444', fontSize: 'clamp(12px, 1.3vw, 15px)', lineHeight: 1.5 }}>
+              Roberto te hará <strong>5 preguntas</strong> sobre prevención de inundaciones. Tienes <strong>20 segundos</strong> por pregunta para elegir la respuesta correcta. ¡Responde rápido para ganar más puntos!
+            </p>
+            <button
+              onClick={() => setShowInstructions(false)}
+              style={{
+                width: '100%', padding: '12px 0',
+                background: '#1ABC9C', color: 'white',
+                fontWeight: 800, fontSize: 'clamp(14px, 1.5vw, 17px)',
+                borderRadius: 50, border: 'none', cursor: 'pointer',
+                boxShadow: '0 4px 12px rgba(26,188,156,0.4)'
+              }}
+            >
+              ¡Comenzar! 🎯
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (isFinished) {
     return (
