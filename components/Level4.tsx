@@ -263,7 +263,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
         </div>
       </div>
 
-      <div style={{ position: 'absolute', top: '32%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(300px, 65vw, 780px)', display: 'flex', gap: 20, zIndex: 20 }}>
+      <div style={{ position: 'absolute', top: '32%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(280px, 45vw, 560px)', display: 'flex', gap: 32, zIndex: 20 }}>
         {(['A', 'B'] as const).map(option => (
           <div key={option} onClick={() => handleSelectOption(option)} style={getCardStyle(option)}>
             {showFeedback && option === challenge.correcta && (
@@ -292,7 +292,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
         </div>
       )}
 
-      <div style={{ position: 'absolute', bottom: '12%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(200px, 30vw, 360px)', zIndex: 20 }}>
+      <div style={{ position: 'absolute', bottom: '15%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(240px, 38vw, 460px)', zIndex: 20 }}>
         {!showFeedback ? (
           <button onClick={handleConfirm} disabled={!selectedOption} style={{ width: '100%', padding: '12px 0', background: selectedOption ? '#2167AE' : 'rgba(30,45,107,0.75)', color: selectedOption ? '#fff' : 'rgba(255,255,255,0.5)', fontWeight: 800, fontSize: 'clamp(13px,1.6vw,16px)', borderRadius: 12, border: 'none', cursor: selectedOption ? 'pointer' : 'not-allowed', backdropFilter: 'blur(4px)' }}>
             Confirmar respuesta
