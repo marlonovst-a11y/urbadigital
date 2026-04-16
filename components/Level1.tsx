@@ -74,6 +74,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
   const [optionFeedback, setOptionFeedback] = useState<Record<string, 'correct' | 'wrong' | null>>({
     A: null, B: null, C: null
   });
+  const [floatingEmoji, setFloatingEmoji] = useState<{emoji: string, id: number} | null>(null);
   const answeredRef = useRef(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -123,6 +124,8 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
       if (correctLabel) newFeedback[correctLabel] = 'correct';
     }
     setOptionFeedback(newFeedback);
+    setFloatingEmoji({ emoji: isCorrect ? '✅' : '❌', id: Date.now() });
+    setTimeout(() => setFloatingEmoji(null), 1000);
 
     const timeTaken = 20 - timeLeft;
     let points = 0;
@@ -248,6 +251,17 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
       </div>
 
       <div style={{ position: 'absolute', top: '31%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(500px, 85vw, 1100px)', display: 'flex', gap: 16, zIndex: 20 }}>
+        {floatingEmoji && (
+          <div key={floatingEmoji.id} style={{
+            position: 'absolute', top: '35%', left: '50%',
+            transform: 'translateX(-50%)',
+            fontSize: 72, zIndex: 50,
+            animation: 'float-up 1s ease forwards',
+            pointerEvents: 'none'
+          }}>
+            {floatingEmoji.emoji}
+          </div>
+        )}
         {['A', 'B'].map((label, idx) => {
           const opt = question.options[idx];
           const feedback = optionFeedback[label];
@@ -257,7 +271,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
                 {label}
               </div>
               <button disabled={selectedAnswer !== null} onClick={() => handleAnswer(label, opt.correct)}
-                style={{ flex: 1, display: 'flex', alignItems: 'center', background: feedback === 'correct' ? '#2167AE' : feedback === 'wrong' ? '#E74C3C' : 'rgba(255,255,255,0.92)', border: '3px solid', borderColor: feedback === 'correct' ? '#2167AE' : feedback === 'wrong' ? '#E74C3C' : '#1E2D6B', borderRadius: 50, padding: '10px 20px', cursor: selectedAnswer === null ? 'pointer' : 'default', transition: 'all 0.3s', ...(label === 'B' ? { minWidth: 'clamp(250px, 35vw, 500px)' } : {}) }}>
+                style={{ flex: 1, display: 'flex', alignItems: 'center', background: feedback === 'correct' ? '#2167AE' : feedback === 'wrong' ? '#E74C3C' : 'rgba(255,255,255,0.92)', border: '3px solid', borderColor: feedback === 'correct' ? '#2167AE' : feedback === 'wrong' ? '#E74C3C' : '#1E2D6B', borderRadius: 50, padding: '10px 20px', cursor: selectedAnswer === null ? 'pointer' : 'default', transition: 'all 0.3s', animation: optionFeedback[label] === 'wrong' ? 'shake 0.5s ease' : optionFeedback[label] === 'correct' ? 'pulse-correct 0.5s ease' : 'none', ...(label === 'B' ? { minWidth: 'clamp(250px, 35vw, 500px)' } : {}) }}>
                 <span style={{ color: feedback ? 'white' : '#1E2D6B', fontWeight: 600, fontSize: 'clamp(15px, 1.8vw, 22px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', textAlign: 'left' }}>{opt.text}</span>
               </button>
             </div>
@@ -275,7 +289,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
                 C
               </div>
               <button disabled={selectedAnswer !== null} onClick={() => handleAnswer('C', opt.correct)}
-                style={{ flex: 1, display: 'flex', alignItems: 'center', background: feedback === 'correct' ? '#2167AE' : feedback === 'wrong' ? '#E74C3C' : 'rgba(255,255,255,0.92)', border: '3px solid', borderColor: feedback === 'correct' ? '#2167AE' : feedback === 'wrong' ? '#E74C3C' : '#1E2D6B', borderRadius: 50, padding: '10px 20px', cursor: selectedAnswer === null ? 'pointer' : 'default', transition: 'all 0.3s' }}>
+                style={{ flex: 1, display: 'flex', alignItems: 'center', background: feedback === 'correct' ? '#2167AE' : feedback === 'wrong' ? '#E74C3C' : 'rgba(255,255,255,0.92)', border: '3px solid', borderColor: feedback === 'correct' ? '#2167AE' : feedback === 'wrong' ? '#E74C3C' : '#1E2D6B', borderRadius: 50, padding: '10px 20px', cursor: selectedAnswer === null ? 'pointer' : 'default', transition: 'all 0.3s', animation: optionFeedback['C'] === 'wrong' ? 'shake 0.5s ease' : optionFeedback['C'] === 'correct' ? 'pulse-correct 0.5s ease' : 'none' }}>
                 <span style={{ color: feedback ? 'white' : '#1E2D6B', fontWeight: 600, fontSize: 'clamp(15px, 1.8vw, 22px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', textAlign: 'left' }}>{opt.text}</span>
               </button>
             </div>
