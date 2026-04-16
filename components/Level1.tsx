@@ -272,7 +272,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
               </div>
               <button disabled={selectedAnswer !== null} onClick={() => handleAnswer(label, opt.correct)}
                 style={{ flex: 1, display: 'flex', alignItems: 'center', background: feedback === 'correct' ? '#2167AE' : feedback === 'wrong' ? '#E74C3C' : 'rgba(255,255,255,0.92)', border: '3px solid', borderColor: feedback === 'correct' ? '#2167AE' : feedback === 'wrong' ? '#E74C3C' : '#1E2D6B', borderRadius: 50, padding: '10px 20px', cursor: selectedAnswer === null ? 'pointer' : 'default', transition: 'all 0.3s', animation: optionFeedback[label] === 'wrong' ? 'shake 0.5s ease' : optionFeedback[label] === 'correct' ? 'pulse-correct 0.5s ease' : 'none', ...(label === 'B' ? { minWidth: 'clamp(250px, 35vw, 500px)' } : {}) }}>
-                <span style={{ color: feedback ? 'white' : '#1E2D6B', fontWeight: 600, fontSize: 'clamp(15px, 1.8vw, 22px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', textAlign: 'left' }}>{opt.text}</span>
+                <span style={{ color: feedback ? 'white' : '#1E2D6B', fontWeight: 600, fontSize: 'clamp(15px, 1.8vw, 22px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', textAlign: 'left', lineHeight: 1.1 }}>{opt.text}</span>
               </button>
             </div>
           );
@@ -290,7 +290,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
               </div>
               <button disabled={selectedAnswer !== null} onClick={() => handleAnswer('C', opt.correct)}
                 style={{ flex: 1, display: 'flex', alignItems: 'center', background: feedback === 'correct' ? '#2167AE' : feedback === 'wrong' ? '#E74C3C' : 'rgba(255,255,255,0.92)', border: '3px solid', borderColor: feedback === 'correct' ? '#2167AE' : feedback === 'wrong' ? '#E74C3C' : '#1E2D6B', borderRadius: 50, padding: '10px 20px', cursor: selectedAnswer === null ? 'pointer' : 'default', transition: 'all 0.3s', animation: optionFeedback['C'] === 'wrong' ? 'shake 0.5s ease' : optionFeedback['C'] === 'correct' ? 'pulse-correct 0.5s ease' : 'none' }}>
-                <span style={{ color: feedback ? 'white' : '#1E2D6B', fontWeight: 600, fontSize: 'clamp(15px, 1.8vw, 22px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', textAlign: 'left' }}>{opt.text}</span>
+                <span style={{ color: feedback ? 'white' : '#1E2D6B', fontWeight: 600, fontSize: 'clamp(15px, 1.8vw, 22px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', textAlign: 'left', lineHeight: 1.1 }}>{opt.text}</span>
               </button>
             </div>
           );
