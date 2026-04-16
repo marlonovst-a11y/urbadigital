@@ -230,14 +230,14 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
     <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel1.1.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
       <Header />
 
-      <div style={{ position: 'absolute', top: '38%', left: '50%', transform: 'translateX(-50%)', zIndex: 20 }}>
+      <div style={{ position: 'absolute', top: '30%', left: '50%', transform: 'translateX(-50%)', zIndex: 20 }}>
         <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'white', border: `5px solid ${timeLeft <= 5 ? '#E74C3C' : timeLeft <= 10 ? '#F39C12' : '#1ABC9C'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(0,0,0,0.3)', flexDirection: 'column' }}>
           <span style={{ fontWeight: 900, fontSize: 22, color: timeLeft <= 5 ? '#E74C3C' : timeLeft <= 10 ? '#F39C12' : '#1E2D6B', lineHeight: 1 }}>{timeLeft}</span>
           <span style={{ fontSize: 9, color: '#888', fontWeight: 600 }}>seg</span>
         </div>
       </div>
 
-      <div style={{ position: 'absolute', top: '12%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(300px, 55vw, 700px)', zIndex: 20 }}>
+      <div style={{ position: 'absolute', top: '8%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(300px, 55vw, 700px)', zIndex: 20 }}>
         <div style={{ background: 'white', borderRadius: 16, padding: '20px 28px', border: '3px solid #1E2D6B', boxShadow: '0 4px 20px rgba(0,0,0,0.2)', position: 'relative' }}>
           <div style={{ position: 'absolute', bottom: -16, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '14px solid transparent', borderRight: '14px solid transparent', borderTop: '16px solid #1E2D6B' }} />
           <div style={{ position: 'absolute', bottom: -12, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '11px solid transparent', borderRight: '11px solid transparent', borderTop: '13px solid white' }} />
@@ -247,7 +247,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
         </div>
       </div>
 
-      <div style={{ position: 'absolute', top: '44%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(300px, 70vw, 900px)', display: 'flex', gap: 16, zIndex: 20 }}>
+      <div style={{ position: 'absolute', top: '34%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(300px, 70vw, 900px)', display: 'flex', gap: 16, zIndex: 20 }}>
         {['A', 'B'].map((label, idx) => {
           const opt = question.options[idx];
           const feedback = optionFeedback[label];
@@ -265,7 +265,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
         })}
       </div>
 
-      <div style={{ position: 'absolute', top: '60%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(300px, 50vw, 650px)', zIndex: 20 }}>
+      <div style={{ position: 'absolute', top: '48%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(300px, 50vw, 650px)', zIndex: 20 }}>
         {(() => {
           const opt = question.options[2];
           const feedback = optionFeedback['C'];
@@ -283,7 +283,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
         })()}
       </div>
 
-      <div style={{ position: 'absolute', bottom: '4%', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 24, zIndex: 20 }}>
+      <div style={{ position: 'absolute', bottom: '2%', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 24, zIndex: 20, width: 'clamp(300px, 55vw, 700px)', justifyContent: 'center' }}>
         {questions.map((_, idx) => (
           <div key={idx} style={{ width: 64, height: 64, borderRadius: '50%', background: idx < currentQuestion ? '#1ABC9C' : idx === currentQuestion ? '#F9D030' : 'rgba(255,255,255,0.3)', border: '3px solid white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 26, color: idx === currentQuestion ? '#1E2D6B' : 'white', fontFamily: 'RobotRadicals, sans-serif', transition: 'all 0.3s', transform: idx === currentQuestion ? 'scale(1.2)' : 'scale(1)' }}>
             {idx < currentQuestion ? '✓' : idx + 1}
