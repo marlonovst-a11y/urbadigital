@@ -97,7 +97,7 @@ export default function LevelMap({ totalScore, nickname, participantId, complete
 
       <div style={{ position: 'absolute', top: '18%', left: '50%', transform: 'translateX(-50%)', display: 'flex', alignItems: 'center', gap: 16, zIndex: 10 }}>
         <img src="/roberto.png" style={{ width: 'clamp(80px, 10vw, 130px)', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }} />
-        <div style={{ background: 'white', borderRadius: 16, padding: '12px 20px', maxWidth: 320, boxShadow: '0 4px 16px rgba(0,0,0,0.2)', position: 'relative' }}>
+        <div style={{ background: 'white', borderRadius: 16, padding: '12px 20px', maxWidth: 320, boxShadow: '0 4px 16px rgba(0,0,0,0.2)', position: 'relative', border: '3px solid #2167AE' }}>
           <div style={{ position: 'absolute', left: -12, top: '50%', transform: 'translateY(-50%)', width: 0, height: 0, borderTop: '10px solid transparent', borderBottom: '10px solid transparent', borderRight: '12px solid white' }} />
           <p style={{ margin: 0, color: '#1E2D6B', fontWeight: 700, fontSize: 'clamp(11px, 1.2vw, 13px)', lineHeight: 1.4 }}>
             ¡Bienvenido a Aprende y Previene! Completa los 5 niveles y conviértete en experto en prevención de riesgos.
@@ -113,17 +113,6 @@ export default function LevelMap({ totalScore, nickname, participantId, complete
 
           return (
             <div key={num} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-              <span style={{
-                color: 'white',
-                fontWeight: 700,
-                fontSize: 'clamp(11px, 1.3vw, 14px)',
-                textAlign: 'center',
-                maxWidth: 'clamp(70px, 9vw, 120px)',
-                lineHeight: 1.3,
-                textShadow: '0 1px 4px rgba(0,0,0,0.5)',
-              }}>
-                {levelNames[num - 1]}
-              </span>
               <button
                 onClick={() => !isLocked && onStartLevel(num)}
                 style={{
@@ -135,7 +124,7 @@ export default function LevelMap({ totalScore, nickname, participantId, complete
                     : isLocked
                     ? 'radial-gradient(circle at 35% 35%, #9eb3c8, #6a8aa3)'
                     : 'radial-gradient(circle at 35% 35%, #f5c842, #d4a017)',
-                  border: '4px solid rgba(255,255,255,0.6)',
+                  border: '5px solid white',
                   cursor: isLocked ? 'not-allowed' : 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -156,7 +145,7 @@ export default function LevelMap({ totalScore, nickname, participantId, complete
                 aria-label={`Nivel ${num}`}
               >
                 <span style={{
-                  color: isLocked ? '#fff' : '#1E2D6B',
+                  color: isLocked ? '#fff' : '#5C3A1E',
                   fontWeight: 900,
                   fontSize: 'clamp(22px, 3vw, 40px)',
                   lineHeight: 1,
@@ -185,6 +174,18 @@ export default function LevelMap({ totalScore, nickname, participantId, complete
                   </div>
                 )}
               </button>
+              <span style={{
+                color: 'white',
+                fontWeight: 700,
+                fontSize: 'clamp(11px, 1.3vw, 14px)',
+                textAlign: 'center',
+                maxWidth: 'clamp(70px, 9vw, 120px)',
+                lineHeight: 1.3,
+                textShadow: '0 1px 4px rgba(0,0,0,0.5)',
+                fontFamily: 'UniversCondensedBold, sans-serif',
+              }}>
+                {levelNames[num - 1]}
+              </span>
             </div>
           );
         })}
