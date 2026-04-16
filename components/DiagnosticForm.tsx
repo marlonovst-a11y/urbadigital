@@ -215,8 +215,8 @@ export default function DiagnosticForm({ onComplete }: DiagnosticFormProps) {
               onClick={handleNext}
               disabled={!currentValue}
               style={{
-                background: '#1E2D6B',
-                color: 'white',
+                background: isLast ? '#DB4E5B' : '#C1D94C',
+                color: isLast ? '#FFFFFF' : '#4273AE',
                 fontWeight: 800,
                 fontSize: 16,
                 borderRadius: 50,
