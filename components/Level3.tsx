@@ -197,7 +197,7 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
         <div style={{ background: 'white', borderRadius: 16, padding: '20px 28px', border: '3px solid #1E2D6B', boxShadow: '0 4px 20px rgba(0,0,0,0.2)', position: 'relative', textAlign: 'center' }}>
           <div style={{ position: 'absolute', bottom: -16, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '14px solid transparent', borderRight: '14px solid transparent', borderTop: '16px solid #1E2D6B' }} />
           <div style={{ position: 'absolute', bottom: -12, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '11px solid transparent', borderRight: '11px solid transparent', borderTop: '13px solid white' }} />
-          <p style={{ margin: 0, color: '#1E2D6B', fontWeight: 700, fontSize: 'clamp(22px, 3vw, 40px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', lineHeight: 1.3 }}>
+          <p style={{ margin: 0, color: '#1E2D6B', fontWeight: 700, fontSize: 'clamp(26px, 3.5vw, 48px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', lineHeight: 1.3 }}>
             {currentAction.accion}
           </p>
         </div>
@@ -211,7 +211,7 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
           return (
             <button key={cat} onClick={() => handleAnswer(cat)} disabled={answerState !== 'idle'}
               style={{
-                padding: 'clamp(12px, 2vw, 20px) clamp(24px, 4vw, 48px)',
+                padding: 'clamp(8px, 1.2vw, 14px) clamp(16px, 2.5vw, 32px)',
                 borderRadius: 12,
                 border: '4px solid #5C3A1E',
                 background: isCorrect ? '#1ABC9C' : isWrong ? '#E74C3C' : '#F9D030',
@@ -232,7 +232,7 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
       </div>
 
       {answerState !== 'idle' && (
-        <div style={{ position: 'absolute', top: '60%', left: '50%', transform: 'translateX(-50%)', zIndex: 30, background: answerState === 'correct' ? 'rgba(26,188,156,0.95)' : 'rgba(231,76,60,0.95)', borderRadius: 16, padding: '12px 28px', color: 'white', fontWeight: 700, fontSize: 'clamp(13px, 1.5vw, 18px)', textAlign: 'center', backdropFilter: 'blur(4px)', boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
+        <div style={{ position: 'absolute', top: '60%', left: '50%', transform: 'translateX(-50%)', zIndex: 30, background: answerState === 'correct' ? 'rgba(26,188,156,0.75)' : 'rgba(231,76,60,0.75)', borderRadius: 16, padding: '12px 28px', color: 'white', fontWeight: 700, fontSize: 'clamp(13px, 1.5vw, 18px)', textAlign: 'center', backdropFilter: 'blur(8px)', boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
           {answerState === 'correct' ? `✅ ¡Correcto! "${currentAction.accion}" es una acción de ${currentAction.categoria}.` : `❌ Incorrecto. La respuesta correcta es ${currentAction.categoria}.`}
         </div>
       )}
