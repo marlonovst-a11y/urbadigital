@@ -17,123 +17,129 @@ const ageOptions = ['16-18 años', '19-26 años', '27-35 años', '35 años en ad
 const genderOptions = ['Masculino', 'Femenino', 'Otro'];
 const occupationOptions = ['Estudiante', 'Desempleado', 'Funcionario Público', 'Empleado del sector privado', 'Otro'];
 
+const steps = [
+  {
+    field: 'edad' as keyof DiagnosticData,
+    question: '¿Cuál es tu edad?',
+    options: ageOptions,
+    cols: 'grid-cols-2',
+  },
+  {
+    field: 'genero' as keyof DiagnosticData,
+    question: '¿Cuál es tu género?',
+    options: genderOptions,
+    cols: 'grid-cols-3',
+  },
+  {
+    field: 'ocupacion' as keyof DiagnosticData,
+    question: '¿Cuál es tu ocupación?',
+    options: occupationOptions,
+    cols: 'grid-cols-1 sm:grid-cols-2',
+  },
+];
+
 export default function DiagnosticForm({ onComplete }: DiagnosticFormProps) {
+  const [step, setStep] = useState(0);
   const [data, setData] = useState<DiagnosticData>({
     edad: '',
     genero: '',
     ocupacion: ''
   });
 
-  const isComplete = data.edad && data.genero && data.ocupacion;
-
   const handleSelect = (field: keyof DiagnosticData, value: string) => {
     setData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleComplete = () => {
-    if (isComplete) {
+  const currentStep = steps[step];
+  const currentValue = data[currentStep.field];
+  const isLast = step === steps.length - 1;
+
+  const handleNext = () => {
+    if (!currentValue) return;
+    if (isLast) {
       onComplete(data);
+    } else {
+      setStep(s => s + 1);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#ECEEEF]">
+    <div
+      style={{
+        width: '100vw',
+        height: '100vh',
+        backgroundImage: 'url(/inicio.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        position: 'relative',
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
       <Header />
 
-      <main className="pt-14 md:pt-24 flex-1 px-3 md:px-4 pb-8">
-        <div className="max-w-2xl mx-auto">
-          <div className="bg-white rounded-lg shadow-lg p-4 md:p-8 mb-8">
-            <div className="mb-6 md:mb-8 flex items-start gap-3 md:gap-4">
-              <div className="flex-shrink-0">
-                <img src="/mama.svg" alt="Carmen" className="h-20 md:h-36" />
-              </div>
-              <div>
-                <p className="font-semibold text-gray-800 text-sm md:text-base">Hola, soy Carmen, la mamá</p>
-                <p className="text-gray-600 text-xs md:text-sm mt-1">
-                  Antes de comenzar, queremos conocerte mejor. Responde estas preguntas rápidas.
-                </p>
-              </div>
-            </div>
-
-            <div className="space-y-6 md:space-y-8">
-              <div>
-                <label className="block text-base md:text-lg font-bold text-[#1E2D6B] mb-3 md:mb-4">
-                  Pregunta 1: ¿Cuál es tu edad?
-                </label>
-                <div className="grid grid-cols-2 gap-2 md:gap-3">
-                  {ageOptions.map(option => (
-                    <button
-                      key={option}
-                      onClick={() => handleSelect('edad', option)}
-                      className={`px-3 py-3 rounded-full font-semibold transition-all duration-300 text-sm md:text-base min-h-[44px] ${
-                        data.edad === option
-                          ? 'bg-[#2167AE] text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-base md:text-lg font-bold text-[#1E2D6B] mb-3 md:mb-4">
-                  Pregunta 2: ¿Cuál es tu género?
-                </label>
-                <div className="grid grid-cols-3 gap-2 md:gap-3">
-                  {genderOptions.map(option => (
-                    <button
-                      key={option}
-                      onClick={() => handleSelect('genero', option)}
-                      className={`px-2 py-3 rounded-full font-semibold transition-all duration-300 text-sm md:text-base min-h-[44px] ${
-                        data.genero === option
-                          ? 'bg-[#2167AE] text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-base md:text-lg font-bold text-[#1E2D6B] mb-3 md:mb-4">
-                  Pregunta 3: ¿Cuál es tu ocupación?
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3">
-                  {occupationOptions.map(option => (
-                    <button
-                      key={option}
-                      onClick={() => handleSelect('ocupacion', option)}
-                      className={`px-3 py-3 rounded-full font-semibold transition-all duration-300 text-sm min-h-[44px] ${
-                        data.ocupacion === option
-                          ? 'bg-[#2167AE] text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={handleComplete}
-              disabled={!isComplete}
-              className={`w-full mt-6 md:mt-8 font-bold py-3 px-6 rounded-lg transition-colors duration-300 text-sm md:text-base min-h-[44px] ${
-                isComplete
-                  ? 'bg-[#2167AE] text-white hover:bg-[#1E2D6B]'
-                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              }`}
-            >
-              Comenzar los niveles
-            </button>
-          </div>
+      <div className="flex-1 flex flex-col items-center justify-center px-4">
+        <div className="flex gap-3 mb-8">
+          {steps.map((_, i) => (
+            <div
+              key={i}
+              className="w-3 h-3 rounded-full transition-all duration-300"
+              style={{ backgroundColor: i === step ? '#F5C400' : 'rgba(255,255,255,0.5)' }}
+            />
+          ))}
         </div>
-      </main>
+
+        <div className="w-full max-w-md flex flex-col items-center gap-5">
+          <img src="/mama.svg" alt="Carmen" className="h-40 drop-shadow-lg" />
+
+          <div
+            className="relative px-5 py-4 rounded-2xl text-center shadow-lg"
+            style={{ backgroundColor: 'rgba(255,255,255,0.92)' }}
+          >
+            <div
+              className="absolute -top-3 left-1/2 -translate-x-1/2 w-0 h-0"
+              style={{
+                borderLeft: '10px solid transparent',
+                borderRight: '10px solid transparent',
+                borderBottom: '14px solid rgba(255,255,255,0.92)',
+              }}
+            />
+            <p className="text-[#1E2D6B] font-bold text-base md:text-lg">
+              {currentStep.question}
+            </p>
+          </div>
+
+          <div className={`w-full grid ${currentStep.cols} gap-3`}>
+            {currentStep.options.map(option => (
+              <button
+                key={option}
+                onClick={() => handleSelect(currentStep.field, option)}
+                className={`px-4 py-3 rounded-full font-semibold transition-all duration-300 text-sm md:text-base min-h-[48px] shadow ${
+                  currentValue === option
+                    ? 'bg-[#2167AE] text-white scale-105'
+                    : 'bg-white/80 text-gray-800 hover:bg-white'
+                }`}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={handleNext}
+            disabled={!currentValue}
+            className={`w-full mt-2 font-bold py-3 px-6 rounded-full transition-all duration-300 text-base min-h-[48px] shadow-lg ${
+              currentValue
+                ? 'bg-[#2167AE] text-white hover:bg-[#1E2D6B] active:scale-95'
+                : 'bg-white/40 text-white/60 cursor-not-allowed'
+            }`}
+          >
+            {isLast ? 'Comenzar' : 'Siguiente'}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
