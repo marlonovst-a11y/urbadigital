@@ -14,12 +14,12 @@ interface LevelMapProps {
   onGoToEvaluation?: () => void;
 }
 
-const levelPositions = [
-  { left: '14%', top: '58%' },
-  { left: '31%', top: '58%' },
-  { left: '48%', top: '58%' },
-  { left: '65%', top: '58%' },
-  { left: '82%', top: '58%' },
+const levelNames = [
+  'Trivia de Prevención',
+  'Identifica el Riesgo',
+  'Arrastra y Decide',
+  'Reto Ambiental',
+  'Crucigrama',
 ];
 
 export default function LevelMap({ totalScore, nickname, participantId, completedLevels, onStartLevel, onGoToEvaluation }: LevelMapProps) {
@@ -38,7 +38,7 @@ export default function LevelMap({ totalScore, nickname, participantId, complete
       style={{
         width: '100vw',
         height: '100vh',
-        backgroundImage: 'url(/retos.png)',
+        backgroundImage: 'url(/retos copy.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -47,6 +47,7 @@ export default function LevelMap({ totalScore, nickname, participantId, complete
       }}
     >
       <Header />
+
       <div
         style={{
           position: 'absolute',
@@ -94,66 +95,100 @@ export default function LevelMap({ totalScore, nickname, participantId, complete
         </button>
       </div>
 
-      {[1, 2, 3, 4, 5].map((num) => {
-        const status = getLevelStatus(num);
-        const pos = levelPositions[num - 1];
-        const isLocked = status === 'locked';
-        const isCompleted = status === 'completed';
+      <div style={{ position: 'absolute', top: '5%', left: '50%', transform: 'translateX(-50%)', display: 'flex', alignItems: 'center', gap: 16, zIndex: 10 }}>
+        <img src="/roberto.png" style={{ width: 'clamp(60px, 8vw, 100px)', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }} />
+        <div style={{ background: 'white', borderRadius: 16, padding: '12px 20px', maxWidth: 400, boxShadow: '0 4px 16px rgba(0,0,0,0.2)', position: 'relative' }}>
+          <div style={{ position: 'absolute', left: -12, top: '50%', transform: 'translateY(-50%)', width: 0, height: 0, borderTop: '10px solid transparent', borderBottom: '10px solid transparent', borderRight: '12px solid white' }} />
+          <p style={{ margin: 0, color: '#1E2D6B', fontWeight: 700, fontSize: 'clamp(12px, 1.4vw, 15px)', lineHeight: 1.4 }}>
+            ¡Bienvenido a Aprende y Previene! Completa los 5 niveles y conviértete en experto en prevención de riesgos.
+          </p>
+        </div>
+      </div>
 
-        return (
-          <button
-            key={num}
-            onClick={() => !isLocked && onStartLevel(num)}
-            style={{
-              position: 'absolute',
-              left: pos.left,
-              top: pos.top,
-              transform: 'translate(-50%, -50%)',
-              width: 'clamp(90px, 11vw, 140px)',
-              height: 'clamp(90px, 11vw, 140px)',
-              borderRadius: '50%',
-              background: 'transparent',
-              border: 'none',
-              cursor: isLocked ? 'not-allowed' : 'pointer',
-              zIndex: 10,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              outline: 'none',
-              opacity: isLocked ? 0.45 : 1,
-              transition: 'transform 0.15s ease, opacity 0.2s',
-            }}
-            onMouseEnter={(e) => {
-              if (!isLocked) (e.currentTarget as HTMLButtonElement).style.transform = 'translate(-50%, -50%) scale(1.08)';
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.transform = 'translate(-50%, -50%) scale(1)';
-            }}
-            aria-label={`Nivel ${num}`}
-          >
-            {isCompleted && (
-              <div
+      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', display: 'flex', gap: 'clamp(12px, 3vw, 40px)', alignItems: 'center', zIndex: 10 }}>
+        {[1, 2, 3, 4, 5].map((num) => {
+          const status = getLevelStatus(num);
+          const isLocked = status === 'locked';
+          const isCompleted = status === 'completed';
+
+          return (
+            <div key={num} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+              <span style={{
+                color: 'white',
+                fontWeight: 700,
+                fontSize: 'clamp(11px, 1.3vw, 14px)',
+                textAlign: 'center',
+                maxWidth: 'clamp(70px, 9vw, 120px)',
+                lineHeight: 1.3,
+                textShadow: '0 1px 4px rgba(0,0,0,0.5)',
+              }}>
+                {levelNames[num - 1]}
+              </span>
+              <button
+                onClick={() => !isLocked && onStartLevel(num)}
                 style={{
-                  position: 'absolute',
-                  top: '-6px',
-                  right: '-6px',
-                  width: 'clamp(20px, 2.5vw, 32px)',
-                  height: 'clamp(20px, 2.5vw, 32px)',
+                  width: 'clamp(70px, 9vw, 120px)',
+                  height: 'clamp(70px, 9vw, 120px)',
                   borderRadius: '50%',
-                  background: '#1ABC9C',
+                  background: isCompleted
+                    ? 'radial-gradient(circle at 35% 35%, #f5c842, #d4a017)'
+                    : isLocked
+                    ? 'radial-gradient(circle at 35% 35%, #9eb3c8, #6a8aa3)'
+                    : 'radial-gradient(circle at 35% 35%, #f5c842, #d4a017)',
+                  border: '4px solid rgba(255,255,255,0.6)',
+                  cursor: isLocked ? 'not-allowed' : 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
-                  zIndex: 11,
+                  outline: 'none',
+                  opacity: isLocked ? 0.5 : 1,
+                  transition: 'transform 0.15s ease, opacity 0.2s',
+                  boxShadow: '0 6px 20px rgba(0,0,0,0.35)',
+                  position: 'relative',
+                  flexShrink: 0,
                 }}
+                onMouseEnter={(e) => {
+                  if (!isLocked) (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.08)';
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)';
+                }}
+                aria-label={`Nivel ${num}`}
               >
-                <CheckCircle style={{ width: '70%', height: '70%', color: '#fff' }} />
-              </div>
-            )}
-          </button>
-        );
-      })}
+                <span style={{
+                  color: isLocked ? '#fff' : '#1E2D6B',
+                  fontWeight: 900,
+                  fontSize: 'clamp(22px, 3vw, 40px)',
+                  lineHeight: 1,
+                  textShadow: isLocked ? '0 1px 3px rgba(0,0,0,0.3)' : 'none',
+                }}>
+                  {num}
+                </span>
+                {isCompleted && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '-6px',
+                      right: '-6px',
+                      width: 'clamp(20px, 2.5vw, 32px)',
+                      height: 'clamp(20px, 2.5vw, 32px)',
+                      borderRadius: '50%',
+                      background: '#1ABC9C',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
+                      zIndex: 11,
+                    }}
+                  >
+                    <CheckCircle style={{ width: '70%', height: '70%', color: '#fff' }} />
+                  </div>
+                )}
+              </button>
+            </div>
+          );
+        })}
+      </div>
 
       {allLevelsCompleted && onGoToEvaluation && (
         <div
