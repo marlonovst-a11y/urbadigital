@@ -150,7 +150,8 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
       setSelectedAnswer(null);
       setShowMessage(false);
     } else {
-      setIsFinished(true);
+      setShowMessage(false);
+      setTimeout(() => setIsFinished(true), 2000);
     }
   };
 
@@ -331,9 +332,15 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
           <div style={{ background: 'white', borderRadius: 20, padding: 'clamp(20px,4vw,40px)', maxWidth: 560, width: '100%', boxShadow: '0 8px 40px rgba(0,0,0,0.4)', textAlign: 'center' }}>
             <p style={{ color: '#1E2D6B', fontSize: 'clamp(14px,1.8vw,20px)', fontWeight: 600, lineHeight: 1.5, marginBottom: 24, fontFamily: 'Zurich_Light_Condensed_BT, sans-serif' }}>{question.message}</p>
-            <button onClick={handleNext} style={{ width: '100%', padding: '14px 0', background: '#2167AE', color: 'white', fontWeight: 800, fontSize: 'clamp(14px,1.8vw,18px)', borderRadius: 12, border: 'none', cursor: 'pointer' }}>
-              {currentQuestion < questions.length - 1 ? 'Siguiente pregunta →' : 'Ver resultados'}
-            </button>
+            {currentQuestion < questions.length - 1 ? (
+              <button onClick={handleNext} style={{ width: '100%', padding: '14px 0', background: '#2167AE', color: 'white', fontWeight: 800, fontSize: 'clamp(14px,1.8vw,18px)', borderRadius: 12, border: 'none', cursor: 'pointer' }}>
+                Siguiente pregunta →
+              </button>
+            ) : (
+              <p style={{ color: '#1ABC9C', fontWeight: 700, fontSize: 16, margin: 0 }}>
+                ⏳ Cargando resultados...
+              </p>
+            )}
           </div>
         </div>
       )}
