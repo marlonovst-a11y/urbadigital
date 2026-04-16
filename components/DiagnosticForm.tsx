@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Header from './Header';
 
 interface DiagnosticFormProps {
   onComplete: (data: DiagnosticData) => void;
@@ -23,23 +22,25 @@ const steps = [
     question: '¿Cuál es tu edad?',
     options: ageOptions,
     label: 'Tu edad',
-    cols: 'grid-cols-2',
+    character: '/carmen.png',
   },
   {
     field: 'genero' as keyof DiagnosticData,
     question: '¿Cuál es tu género?',
     options: genderOptions,
     label: 'Tu género',
-    cols: 'grid-cols-3',
+    character: '/roberto.png',
   },
   {
     field: 'ocupacion' as keyof DiagnosticData,
     question: '¿Cuál es tu ocupación?',
     options: occupationOptions,
     label: 'Tu ocupación',
-    cols: 'grid-cols-1 sm:grid-cols-2',
+    character: '/manuel.png',
   },
 ];
+
+const stepLabels = ['Tu edad', 'Tu género', 'Tu ocupación'];
 
 export default function DiagnosticForm({ onComplete }: DiagnosticFormProps) {
   const [step, setStep] = useState(0);
@@ -77,110 +78,165 @@ export default function DiagnosticForm({ onComplete }: DiagnosticFormProps) {
         backgroundRepeat: 'no-repeat',
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'hidden',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '24px 16px',
+        boxSizing: 'border-box',
       }}
     >
-      <Header />
+      <div style={{ width: '100%', maxWidth: 520 }}>
 
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-6">
-        <div className="w-full max-w-lg">
-          {/* Progress bar */}
-          <div className="flex items-start justify-center mb-8">
-            {steps.map((s, i) => {
-              const isCompleted = i < step;
-              const isActive = i === step;
-              return (
-                <div key={i} className="flex items-start">
-                  <div className="flex flex-col items-center">
-                    <div
-                      className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow-md transition-all duration-300"
-                      style={{
-                        backgroundColor: isCompleted ? '#1ABC9C' : isActive ? '#2167AE' : 'white',
-                        color: isCompleted || isActive ? 'white' : '#9CA3AF',
-                      }}
-                    >
-                      {isCompleted ? '✓' : i + 1}
-                    </div>
-                    <span
-                      className="mt-2 text-xs font-semibold text-center whitespace-nowrap"
-                      style={{ color: isActive ? '#1E2D6B' : isCompleted ? '#1ABC9C' : 'rgba(255,255,255,0.8)' }}
-                    >
-                      {s.label}
-                    </span>
-                  </div>
-                  {i < steps.length - 1 && (
-                    <div
-                      className="mt-5 transition-all duration-500"
-                      style={{
-                        width: '80px',
-                        height: '3px',
-                        backgroundColor: i < step ? '#2167AE' : '#D1D5DB',
-                        marginLeft: '4px',
-                        marginRight: '4px',
-                      }}
-                    />
-                  )}
+        {/* Progress bar */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0, marginBottom: 32 }}>
+          {stepLabels.map((label, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+                <div style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: '50%',
+                  background: i < step ? '#1ABC9C' : i === step ? '#2167AE' : 'white',
+                  color: i <= step ? 'white' : '#aaa',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 800,
+                  fontSize: 18,
+                  border: '3px solid',
+                  borderColor: i <= step ? 'transparent' : '#ddd',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                  transition: 'all 0.3s ease',
+                }}>
+                  {i < step ? '✓' : i + 1}
                 </div>
-              );
-            })}
-          </div>
-
-          {/* Card */}
-          <div
-            className="rounded-2xl shadow-xl overflow-hidden"
-            style={{ backgroundColor: 'rgba(255,255,255,0.92)' }}
-          >
-            {/* Carmen + bocadillo */}
-            <div className="flex items-start gap-4 px-6 pt-6 pb-4">
-              <img src="/mama.svg" alt="Carmen" className="h-20 flex-shrink-0 drop-shadow" />
-              <div className="relative mt-2">
-                <div
-                  className="absolute -left-3 top-4 w-0 h-0"
-                  style={{
-                    borderTop: '8px solid transparent',
-                    borderBottom: '8px solid transparent',
-                    borderRight: '12px solid #2167AE',
-                  }}
-                />
-                <div className="bg-[#2167AE] text-white px-4 py-3 rounded-2xl rounded-tl-none shadow text-sm md:text-base font-semibold leading-snug">
-                  {currentStep.question}
-                </div>
+                <span style={{
+                  fontSize: 11,
+                  color: i === step ? 'white' : 'rgba(255,255,255,0.6)',
+                  fontWeight: i === step ? 700 : 400,
+                }}>
+                  {label}
+                </span>
               </div>
+              {i < 2 && (
+                <div style={{
+                  width: 80,
+                  height: 3,
+                  background: i < step ? '#1ABC9C' : 'rgba(255,255,255,0.3)',
+                  marginBottom: 22,
+                  flexShrink: 0,
+                  transition: 'background 0.3s ease',
+                }} />
+              )}
             </div>
+          ))}
+        </div>
 
-            <div className="px-6 pb-6">
-              <div className={`grid ${currentStep.cols} gap-3 mb-6`}>
-                {currentStep.options.map(option => (
-                  <button
-                    key={option}
-                    onClick={() => handleSelect(currentStep.field, option)}
-                    className={`px-4 py-3 rounded-xl font-semibold transition-all duration-200 text-sm md:text-base min-h-[48px] border-2 ${
-                      currentValue === option
-                        ? 'bg-[#2167AE] text-white border-[#2167AE] scale-105 shadow-md'
-                        : 'bg-white text-gray-700 border-gray-200 hover:border-[#2167AE] hover:text-[#2167AE]'
-                    }`}
-                  >
-                    {option}
-                  </button>
-                ))}
-              </div>
-
-              <div className="flex justify-end">
-                <button
-                  onClick={handleNext}
-                  disabled={!currentValue}
-                  className={`font-bold py-3 px-8 rounded-xl transition-all duration-200 text-base min-h-[48px] shadow-lg ${
-                    currentValue
-                      ? 'bg-[#2167AE] text-white hover:bg-[#1E2D6B] active:scale-95'
-                      : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                  }`}
-                >
-                  {isLast ? 'Comenzar el juego 🎮' : 'Siguiente →'}
-                </button>
-              </div>
+        {/* Character + question bubble */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
+          <img
+            src={currentStep.character}
+            alt="personaje"
+            style={{
+              width: 80,
+              height: 80,
+              borderRadius: '50%',
+              objectFit: 'cover',
+              flexShrink: 0,
+              boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+            }}
+          />
+          <div style={{ position: 'relative' }}>
+            <div style={{
+              position: 'absolute',
+              left: -10,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              width: 0,
+              height: 0,
+              borderTop: '8px solid transparent',
+              borderBottom: '8px solid transparent',
+              borderRight: '10px solid white',
+            }} />
+            <div style={{
+              background: 'white',
+              borderRadius: 16,
+              padding: '12px 16px',
+              fontWeight: 700,
+              fontSize: 15,
+              color: '#1E2D6B',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.12)',
+              lineHeight: 1.4,
+            }}>
+              {currentStep.question}
             </div>
           </div>
         </div>
+
+        {/* Options */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 10,
+          marginBottom: 24,
+        }}>
+          {currentStep.options.map(option => (
+            <button
+              key={option}
+              onClick={() => handleSelect(currentStep.field, option)}
+              style={{
+                background: currentValue === option ? '#2167AE' : 'rgba(255,255,255,0.85)',
+                color: currentValue === option ? 'white' : '#333',
+                border: `2px solid ${currentValue === option ? '#2167AE' : 'transparent'}`,
+                borderRadius: 50,
+                padding: '12px 24px',
+                fontWeight: 600,
+                fontSize: 15,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                textAlign: 'left',
+                transform: currentValue === option ? 'scale(1.02)' : 'scale(1)',
+                boxShadow: currentValue === option ? '0 4px 12px rgba(33,103,174,0.35)' : '0 2px 6px rgba(0,0,0,0.08)',
+              }}
+              onMouseEnter={e => {
+                if (currentValue !== option) {
+                  (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,1)';
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = '#2167AE';
+                }
+              }}
+              onMouseLeave={e => {
+                if (currentValue !== option) {
+                  (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.85)';
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = 'transparent';
+                }
+              }}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+
+        {/* Next button */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <button
+            onClick={handleNext}
+            disabled={!currentValue}
+            style={{
+              background: currentValue ? '#1ABC9C' : 'rgba(255,255,255,0.3)',
+              color: currentValue ? 'white' : 'rgba(255,255,255,0.5)',
+              border: 'none',
+              borderRadius: 50,
+              padding: '14px 32px',
+              fontWeight: 700,
+              fontSize: 16,
+              cursor: currentValue ? 'pointer' : 'not-allowed',
+              transition: 'all 0.2s ease',
+              boxShadow: currentValue ? '0 4px 14px rgba(26,188,156,0.4)' : 'none',
+            }}
+          >
+            {isLast ? '¡Comenzar el juego! 🎮' : 'Siguiente →'}
+          </button>
+        </div>
+
       </div>
     </div>
   );
