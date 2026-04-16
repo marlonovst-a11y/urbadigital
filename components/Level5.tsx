@@ -175,6 +175,20 @@ export default function Level5({ participantId, nickname, onComplete }: Level5Pr
         <Header />
 
         <div style={{ position: 'absolute', top: '15%', left: '50%', transform: 'translateX(-50%)', zIndex: 10 }}>
+
+          {/* Personaje arriba izquierda — Don Manuel */}
+          <img src="/manuel_nivel5.png" style={{ position: 'absolute', left: -90, top: -20, width: 'clamp(70px, 8vw, 110px)', zIndex: 11, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }} />
+
+          {/* Personaje arriba derecha — Sofía */}
+          <img src="/sofia_nivel5.png" style={{ position: 'absolute', right: -90, top: -20, width: 'clamp(70px, 8vw, 110px)', zIndex: 11, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }} />
+
+          {/* Personaje abajo izquierda — Roberto */}
+          <img src="/roberto_nivel5.png" style={{ position: 'absolute', left: -90, bottom: -20, width: 'clamp(70px, 8vw, 110px)', zIndex: 11, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }} />
+
+          {/* Personaje abajo derecha — Carmen */}
+          <img src="/carmen_nivel5.png" style={{ position: 'absolute', right: -90, bottom: -20, width: 'clamp(70px, 8vw, 110px)', zIndex: 11, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }} />
+
+          {/* Crucigrama */}
           <div style={{ background: 'rgba(66,115,174,0.40)', padding: 12, borderRadius: 12, backdropFilter: 'blur(4px)' }}>
             <div style={{ display: 'grid', gap: 3, gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))` }}>
               {grid.map((row, i) =>
