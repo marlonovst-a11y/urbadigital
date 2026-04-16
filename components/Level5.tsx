@@ -23,12 +23,12 @@ interface Word {
 }
 
 const words: Word[] = [
-  { id: 'H1', word: 'INUNDACION', clue: 'Desastre por lluvias fuertes o ríos desbordados', direction: 'horizontal', row: 10, col: 1, number: 1, attempts: 0, completed: false, revealed: false },
+  { id: 'H1', word: 'INUNDACION', clue: 'Desastre por lluvias fuertes o ríos desbordados', direction: 'horizontal', row: 3, col: 0, number: 1, attempts: 0, completed: false, revealed: false },
   { id: 'H2', word: 'TERREMOTO', clue: 'Evento natural con movimientos sísmicos', direction: 'horizontal', row: 6, col: 2, number: 2, attempts: 0, completed: false, revealed: false },
-  { id: 'H3', word: 'INCENDIO', clue: 'Fuego descontrolado en bosques o áreas urbanas', direction: 'horizontal', row: 1, col: 2, number: 3, attempts: 0, completed: false, revealed: false },
-  { id: 'H4', word: 'DESLAVE', clue: 'Movimiento de tierra por lluvia o sismos', direction: 'horizontal', row: 4, col: 1, number: 4, attempts: 0, completed: false, revealed: false },
-  { id: 'V1', word: 'CIBERATAQUE', clue: 'Amenaza que afecta sistemas tecnológicos o digitales', direction: 'vertical', row: 0, col: 2, number: 5, attempts: 0, completed: false, revealed: false },
-  { id: 'V2', word: 'DESASTRE', clue: 'Situación de riesgo con pérdida de vidas y daños materiales', direction: 'vertical', row: 1, col: 6, number: 6, attempts: 0, completed: false, revealed: false },
+  { id: 'H3', word: 'INCENDIO', clue: 'Fuego descontrolado en bosques o áreas urbanas', direction: 'horizontal', row: 9, col: 1, number: 3, attempts: 0, completed: false, revealed: false },
+  { id: 'V1', word: 'CIBERATAQUE', clue: 'Amenaza que afecta sistemas tecnológicos o digitales', direction: 'vertical', row: 0, col: 6, number: 1, attempts: 0, completed: false, revealed: false },
+  { id: 'V2', word: 'DESASTRE', clue: 'Situación de riesgo con pérdida de vidas y daños materiales', direction: 'vertical', row: 3, col: 4, number: 2, attempts: 0, completed: false, revealed: false },
+  { id: 'V3', word: 'DESLAVE', clue: 'Movimiento de tierra por lluvia o sismos', direction: 'vertical', row: 6, col: 2, number: 3, attempts: 0, completed: false, revealed: false },
 ];
 
 export default function Level5({ participantId, nickname, onComplete }: Level5Props) {
@@ -40,7 +40,7 @@ export default function Level5({ participantId, nickname, onComplete }: Level5Pr
 
 
   const ROWS = 12;
-  const COLS = 11;
+  const COLS = 12;
 
   const getGridCells = () => {
     const grid: Array<Array<{
