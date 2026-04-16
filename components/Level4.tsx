@@ -140,7 +140,8 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
   const getCardStyle = (option: 'A' | 'B'): React.CSSProperties => {
     const base: React.CSSProperties = {
       position: 'relative',
-      border: '3px solid',
+      background: 'transparent',
+      border: 'none',
       borderRadius: 16,
       padding: '14px 18px',
       cursor: showFeedback ? 'default' : 'pointer',
@@ -155,17 +156,17 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
     };
     if (!showFeedback) {
       if (selectedOption === option) {
-        return { ...base, background: 'rgba(33,103,174,0.85)', color: '#fff', borderColor: '#2167AE', transform: 'scale(1.04)', boxShadow: '0 6px 24px rgba(33,103,174,0.5)' };
+        return { ...base, transform: 'scale(1.06)', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))' };
       }
-      return { ...base, background: 'rgba(255,255,255,0.40)', color: '#1E2D6B', borderColor: 'rgba(255,255,255,0.5)' };
+      return base;
     }
     if (option === challenge.correcta) {
-      return { ...base, background: '#1ABC9C', color: '#fff', borderColor: '#1ABC9C' };
+      return { ...base, transform: 'scale(1.06)', filter: 'drop-shadow(0 4px 12px rgba(26,188,156,0.5))' };
     }
     if (selectedOption === option) {
-      return { ...base, background: '#E74C3C', color: '#fff', borderColor: '#E74C3C' };
+      return { ...base, opacity: 0.7, filter: 'drop-shadow(0 4px 12px rgba(231,76,60,0.4))' };
     }
-    return { ...base, background: 'rgba(255,255,255,0.5)', color: '#aaa', borderColor: 'rgba(255,255,255,0.3)', opacity: 0.6 };
+    return { ...base, opacity: 0.5 };
   };
 
   if (showInstructions) {
@@ -252,7 +253,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
     <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel4_fondo.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
       <Header />
 
-      <div style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(300px, 60vw, 800px)', zIndex: 20 }}>
+      <div style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(280px, 45vw, 580px)', zIndex: 20 }}>
         <div style={{ background: 'white', borderRadius: 16, padding: '18px 28px', border: '3px solid #1E2D6B', boxShadow: '0 4px 20px rgba(0,0,0,0.2)', textAlign: 'center', position: 'relative' }}>
           <div style={{ position: 'absolute', bottom: -16, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '14px solid transparent', borderRight: '14px solid transparent', borderTop: '16px solid #1E2D6B' }} />
           <div style={{ position: 'absolute', bottom: -12, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '11px solid transparent', borderRight: '11px solid transparent', borderTop: '13px solid white' }} />
@@ -276,7 +277,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
               alt={option === 'A' ? challenge.opcionA : challenge.opcionB}
               style={{ width: '100%', maxWidth: 200, height: 160, objectFit: 'contain', borderRadius: 8 }}
             />
-            <div style={{ fontWeight: 700, fontSize: 'clamp(12px, 1.3vw, 16px)', lineHeight: 1.2, maxWidth: 200, textAlign: 'center' }}>
+            <div style={{ background: 'white', borderRadius: 50, padding: '6px 18px', border: '2px solid #1E2D6B', marginTop: 8, fontWeight: 700, fontSize: 'clamp(11px, 1.2vw, 14px)', color: '#1E2D6B', lineHeight: 1.2, textAlign: 'center', maxWidth: 200 }}>
               {option === 'A' ? challenge.opcionA : challenge.opcionB}
             </div>
           </div>
@@ -291,7 +292,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
         </div>
       )}
 
-      <div style={{ position: 'absolute', bottom: '8%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(280px, 55vw, 650px)', zIndex: 20 }}>
+      <div style={{ position: 'absolute', bottom: '12%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(200px, 30vw, 360px)', zIndex: 20 }}>
         {!showFeedback ? (
           <button onClick={handleConfirm} disabled={!selectedOption} style={{ width: '100%', padding: '12px 0', background: selectedOption ? '#2167AE' : 'rgba(30,45,107,0.75)', color: selectedOption ? '#fff' : 'rgba(255,255,255,0.5)', fontWeight: 800, fontSize: 'clamp(13px,1.6vw,16px)', borderRadius: 12, border: 'none', cursor: selectedOption ? 'pointer' : 'not-allowed', backdropFilter: 'blur(4px)' }}>
             Confirmar respuesta
@@ -303,7 +304,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
         )}
       </div>
 
-      <div style={{ position: 'absolute', bottom: '2%', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 16, zIndex: 20 }}>
+      <div style={{ position: 'absolute', bottom: '4%', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 16, zIndex: 20 }}>
         {challenges.map((_, idx) => (
           <div key={idx} style={{ width: 52, height: 52, borderRadius: '50%', background: idx < currentChallenge ? (responses[idx]?.correcta ? '#1ABC9C' : '#E74C3C') : idx === currentChallenge ? '#F9D030' : 'rgba(255,255,255,0.3)', border: '3px solid white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 22, color: idx === currentChallenge ? '#1E2D6B' : 'white', fontFamily: 'RobotRadicals, sans-serif', transition: 'all 0.3s', transform: idx === currentChallenge ? 'scale(1.2)' : 'scale(1)' }}>
             {idx < currentChallenge ? (responses[idx]?.correcta ? '✓' : '✗') : idx + 1}
