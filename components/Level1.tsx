@@ -230,14 +230,14 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
     <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel1.1.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
       <Header />
 
-      <div style={{ position: 'absolute', bottom: '22%', left: '50%', transform: 'translateX(-50%)', zIndex: 20 }}>
+      <div style={{ position: 'absolute', bottom: '25%', left: '50%', transform: 'translateX(-50%)', zIndex: 20 }}>
         <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'white', border: `5px solid ${timeLeft <= 5 ? '#E74C3C' : timeLeft <= 10 ? '#F39C12' : '#1ABC9C'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(0,0,0,0.3)', flexDirection: 'column' }}>
           <span style={{ fontWeight: 900, fontSize: 22, color: timeLeft <= 5 ? '#E74C3C' : timeLeft <= 10 ? '#F39C12' : '#1E2D6B', lineHeight: 1 }}>{timeLeft}</span>
           <span style={{ fontSize: 9, color: '#888', fontWeight: 600 }}>seg</span>
         </div>
       </div>
 
-      <div style={{ position: 'absolute', top: '11%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(400px, 80vw, 1100px)', zIndex: 20 }}>
+      <div style={{ position: 'absolute', top: '13%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(400px, 80vw, 1100px)', zIndex: 20 }}>
         <div style={{ background: 'white', borderRadius: 16, padding: '20px 28px', border: '3px solid #1E2D6B', boxShadow: '0 4px 20px rgba(0,0,0,0.2)', position: 'relative' }}>
           <div style={{ position: 'absolute', bottom: -16, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '14px solid transparent', borderRight: '14px solid transparent', borderTop: '16px solid #1E2D6B' }} />
           <div style={{ position: 'absolute', bottom: -12, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '11px solid transparent', borderRight: '11px solid transparent', borderTop: '13px solid white' }} />
@@ -257,7 +257,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
                 {label}
               </div>
               <button disabled={selectedAnswer !== null} onClick={() => handleAnswer(label, opt.correct)}
-                style={{ flex: 1, display: 'flex', alignItems: 'center', background: feedback === 'correct' ? '#1ABC9C' : feedback === 'wrong' ? '#E74C3C' : 'rgba(255,255,255,0.92)', border: '3px solid', borderColor: feedback === 'correct' ? '#1ABC9C' : feedback === 'wrong' ? '#E74C3C' : '#1E2D6B', borderRadius: 50, padding: '10px 20px', cursor: selectedAnswer === null ? 'pointer' : 'default', transition: 'all 0.3s', ...(label === 'B' ? { minWidth: 'clamp(250px, 35vw, 500px)' } : {}) }}>
+                style={{ flex: 1, display: 'flex', alignItems: 'center', background: feedback === 'correct' ? '#2167AE' : feedback === 'wrong' ? '#E74C3C' : 'rgba(255,255,255,0.92)', border: '3px solid', borderColor: feedback === 'correct' ? '#2167AE' : feedback === 'wrong' ? '#E74C3C' : '#1E2D6B', borderRadius: 50, padding: '10px 20px', cursor: selectedAnswer === null ? 'pointer' : 'default', transition: 'all 0.3s', ...(label === 'B' ? { minWidth: 'clamp(250px, 35vw, 500px)' } : {}) }}>
                 <span style={{ color: feedback ? 'white' : '#1E2D6B', fontWeight: 600, fontSize: 'clamp(15px, 1.8vw, 22px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', textAlign: 'left' }}>{opt.text}</span>
               </button>
             </div>
@@ -275,7 +275,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
                 C
               </div>
               <button disabled={selectedAnswer !== null} onClick={() => handleAnswer('C', opt.correct)}
-                style={{ flex: 1, display: 'flex', alignItems: 'center', background: feedback === 'correct' ? '#1ABC9C' : feedback === 'wrong' ? '#E74C3C' : 'rgba(255,255,255,0.92)', border: '3px solid', borderColor: feedback === 'correct' ? '#1ABC9C' : feedback === 'wrong' ? '#E74C3C' : '#1E2D6B', borderRadius: 50, padding: '10px 20px', cursor: selectedAnswer === null ? 'pointer' : 'default', transition: 'all 0.3s' }}>
+                style={{ flex: 1, display: 'flex', alignItems: 'center', background: feedback === 'correct' ? '#2167AE' : feedback === 'wrong' ? '#E74C3C' : 'rgba(255,255,255,0.92)', border: '3px solid', borderColor: feedback === 'correct' ? '#2167AE' : feedback === 'wrong' ? '#E74C3C' : '#1E2D6B', borderRadius: 50, padding: '10px 20px', cursor: selectedAnswer === null ? 'pointer' : 'default', transition: 'all 0.3s' }}>
                 <span style={{ color: feedback ? 'white' : '#1E2D6B', fontWeight: 600, fontSize: 'clamp(15px, 1.8vw, 22px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif', textAlign: 'left' }}>{opt.text}</span>
               </button>
             </div>
