@@ -65,31 +65,22 @@ export default function NicknameInput({ onContinue }: NicknameInputProps) {
   };
 
   return (
-    <div
-      style={{
-        width: '100vw',
-        height: '100vh',
-        backgroundImage: 'url(/nickname.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
-      <div
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: '55%',
-          transform: 'translate(-50%, -50%)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '12px',
-          width: '400px',
-        }}
-      >
+    <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/fondo_nickname.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24, width: '90%', maxWidth: 600 }}>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+          <img src="/roberto_retos.png" style={{ width: 'clamp(80px, 10vw, 140px)', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))' }} />
+          <div style={{ background: 'white', borderRadius: 16, padding: '16px 24px', border: '3px solid #2167AE', boxShadow: '0 4px 20px rgba(0,0,0,0.2)', position: 'relative', maxWidth: 380 }}>
+            <div style={{ position: 'absolute', left: -14, top: '50%', transform: 'translateY(-50%)', width: 0, height: 0, borderTop: '12px solid transparent', borderBottom: '12px solid transparent', borderRight: '14px solid #2167AE' }} />
+            <div style={{ position: 'absolute', left: -10, top: '50%', transform: 'translateY(-50%)', width: 0, height: 0, borderTop: '10px solid transparent', borderBottom: '10px solid transparent', borderRight: '12px solid white' }} />
+            <p style={{ margin: 0, color: '#1E2D6B', fontWeight: 700, fontSize: 'clamp(14px, 1.6vw, 20px)', lineHeight: 1.4, fontFamily: 'Zurich_Light_Condensed_BT, sans-serif' }}>
+              ¡Bienvenido a la familia!<br />
+              Antes de empezar, ¿cómo te llamas?
+            </p>
+          </div>
+        </div>
+
         <input
           type="text"
           value={nickname}
@@ -97,55 +88,23 @@ export default function NicknameInput({ onContinue }: NicknameInputProps) {
           onKeyDown={handleKeyDown}
           placeholder="Tu apodo aquí..."
           maxLength={20}
-          style={{
-            width: '400px',
-            padding: '12px 16px',
-            borderRadius: '12px',
-            border: '2px solid rgba(33, 103, 174, 0.4)',
-            background: 'rgba(255, 255, 255, 0.85)',
-            fontSize: '18px',
-            fontWeight: 500,
-            color: '#1a2a3a',
-            outline: 'none',
-            boxSizing: 'border-box',
-            textAlign: 'center',
-          }}
+          style={{ width: '100%', maxWidth: 400, padding: '14px 20px', borderRadius: 50, border: '3px solid rgba(33,103,174,0.5)', background: 'rgba(255,255,255,0.90)', fontSize: 'clamp(16px, 2vw, 20px)', fontWeight: 600, color: '#1E2D6B', outline: 'none', textAlign: 'center', boxShadow: '0 4px 16px rgba(0,0,0,0.1)', boxSizing: 'border-box' }}
         />
+
         {error && (
-          <span
-            style={{
-              color: '#c0392b',
-              fontSize: '13px',
-              fontWeight: 600,
-              background: 'rgba(255,255,255,0.8)',
-              borderRadius: '6px',
-              padding: '2px 10px',
-            }}
-          >
+          <span style={{ color: '#c0392b', fontSize: 13, fontWeight: 600, background: 'rgba(255,255,255,0.9)', borderRadius: 8, padding: '4px 14px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
             {error}
           </span>
         )}
+
         <button
           onClick={handleContinue}
           disabled={!canContinue}
-          style={{
-            width: '200px',
-            height: '60px',
-            borderRadius: '16px',
-            border: 'none',
-            background: canContinue ? '#f5c518' : 'rgba(200,200,200,0.7)',
-            color: canContinue ? '#1a2a00' : '#888',
-            fontWeight: 800,
-            fontSize: '18px',
-            letterSpacing: '0.08em',
-            cursor: canContinue ? 'pointer' : 'not-allowed',
-            fontFamily: 'inherit',
-            transition: 'background 0.2s, color 0.2s',
-            textTransform: 'uppercase',
-          }}
+          style={{ padding: 'clamp(10px,1.5vw,16px) clamp(40px,6vw,80px)', borderRadius: 16, border: '4px solid #1E2D6B', background: canContinue ? '#F9D030' : 'rgba(200,200,200,0.7)', color: canContinue ? '#1E2D6B' : '#888', fontWeight: 900, fontSize: 'clamp(18px, 2.5vw, 28px)', fontFamily: 'RobotRadicals, sans-serif', cursor: canContinue ? 'pointer' : 'not-allowed', letterSpacing: '0.05em', boxShadow: canContinue ? '0 6px 20px rgba(0,0,0,0.25)' : 'none', transition: 'all 0.2s', textTransform: 'uppercase' }}
         >
-          {isSubmitting ? 'Verificando...' : 'Continuar'}
+          {isSubmitting ? 'Verificando...' : 'CONTINUAR'}
         </button>
+
       </div>
 
       {showCooldownDialog && cooldownData && (
@@ -157,6 +116,7 @@ export default function NicknameInput({ onContinue }: NicknameInputProps) {
           remainingMinutes={cooldownData.remainingMinutes}
         />
       )}
+
     </div>
   );
 }
