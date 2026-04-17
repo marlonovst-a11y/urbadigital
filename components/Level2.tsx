@@ -102,27 +102,24 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
       }}>
         <Header />
         <div style={{
-          position: 'absolute', top: '50%', left: '50%',
-          transform: 'translate(-50%, -50%)',
-          display: 'flex', alignItems: 'center', gap: 24
+          position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          padding: '16px', gap: 16
         }}>
-          <img src="/sofia_nivel2.png" style={{ width: 'clamp(120px, 15vw, 200px)' }} />
+          <img src="/sofia_nivel2.png" style={{ width: 'clamp(80px, 18vw, 160px)', display: 'block' }} />
           <div style={{
-            background: 'white', borderRadius: 16, padding: '20px 28px',
-            maxWidth: 420, border: '3px solid #2167AE',
+            background: 'white', borderRadius: 16,
+            padding: 'clamp(16px, 3vw, 24px) clamp(18px, 3.5vw, 32px)',
+            width: 'min(88vw, 440px)', border: '3px solid #2167AE',
             boxShadow: '0 4px 20px rgba(0,0,0,0.2)', position: 'relative'
           }}>
-            <div style={{ position: 'absolute', left: -14, top: '50%', transform: 'translateY(-50%)',
-              width: 0, height: 0, borderTop: '12px solid transparent',
-              borderBottom: '12px solid transparent', borderRight: '14px solid #2167AE' }} />
-            <div style={{ position: 'absolute', left: -10, top: '50%', transform: 'translateY(-50%)',
-              width: 0, height: 0, borderTop: '10px solid transparent',
-              borderBottom: '10px solid transparent', borderRight: '12px solid white' }} />
+            <div style={{ position: 'absolute', top: -13, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '11px solid transparent', borderRight: '11px solid transparent', borderBottom: '13px solid #2167AE' }} />
+            <div style={{ position: 'absolute', top: -9, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '9px solid transparent', borderRight: '9px solid transparent', borderBottom: '11px solid white' }} />
             <p style={{ margin: '0 0 8px', fontWeight: 800, color: '#1E2D6B',
-              fontSize: 'clamp(14px, 1.6vw, 18px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif' }}>
+              fontSize: 'clamp(15px, 4vw, 18px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif' }}>
               ¡Nivel 2 — Identifica el Riesgo!
             </p>
-            <p style={{ margin: '0 0 16px', color: '#444', fontSize: 'clamp(12px, 1.3vw, 15px)', lineHeight: 1.5 }}>
+            <p style={{ margin: '0 0 16px', color: '#444', fontSize: 'clamp(12px, 3.5vw, 15px)', lineHeight: 1.5 }}>
               Sofía te guiará. Tienes <strong>25 segundos</strong> para encontrar los <strong>8 peligros</strong> escondidos en la escena. ¡Haz clic sobre cada peligro que encuentres!
             </p>
             <button

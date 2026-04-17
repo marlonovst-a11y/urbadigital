@@ -155,13 +155,13 @@ export default function Level5({ participantId, nickname, onComplete }: Level5Pr
     return (
       <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel5_instruccion.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
         <Header />
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20, maxWidth: 500, width: '90%' }}>
-          <img src="/personajes_instrucciones.png" style={{ width: '100%', maxWidth: 400 }} />
-          <div style={{ background: 'white', borderRadius: 16, padding: '20px 28px', border: '3px solid #2167AE', boxShadow: '0 4px 20px rgba(0,0,0,0.2)', textAlign: 'center' }}>
-            <p style={{ margin: '0 0 8px', fontWeight: 800, color: '#1E2D6B', fontSize: 'clamp(14px, 1.6vw, 18px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif' }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '16px', gap: 16 }}>
+          <img src="/personajes_instrucciones.png" style={{ width: 'min(85vw, 400px)', maxWidth: '100%' }} />
+          <div style={{ background: 'white', borderRadius: 16, padding: 'clamp(16px, 3vw, 24px) clamp(18px, 3.5vw, 32px)', width: 'min(88vw, 440px)', border: '3px solid #2167AE', boxShadow: '0 4px 20px rgba(0,0,0,0.2)', textAlign: 'center' }}>
+            <p style={{ margin: '0 0 8px', fontWeight: 800, color: '#1E2D6B', fontSize: 'clamp(15px, 4vw, 18px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif' }}>
               ¡Nivel 5 — Crucigrama de Multiamenazas!
             </p>
-            <p style={{ margin: '0 0 16px', color: '#444', fontSize: 'clamp(12px, 1.3vw, 15px)', lineHeight: 1.5 }}>
+            <p style={{ margin: '0 0 16px', color: '#444', fontSize: 'clamp(12px, 3.5vw, 15px)', lineHeight: 1.5 }}>
               Lee las pistas de <strong>Horizontales</strong> y <strong>Verticales</strong>, escribe la palabra correcta y presiona Verificar. Tienes <strong>3 intentos</strong> por palabra — si fallas todos, la respuesta se revelará automáticamente.
             </p>
             <button onClick={() => setShowInstructions(false)} style={{ width: '100%', padding: '12px 0', background: '#1ABC9C', color: 'white', fontWeight: 800, fontSize: 'clamp(14px, 1.5vw, 17px)', borderRadius: 50, border: 'none', cursor: 'pointer', boxShadow: '0 4px 12px rgba(26,188,156,0.4)' }}>
