@@ -77,6 +77,79 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
   const [floatingEmoji, setFloatingEmoji] = useState<{emoji: string, id: number} | null>(null);
   const answeredRef = useRef(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const getAudioCtx = () => {
+    if (!audioCtxRef.current) {
+      audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+    }
+    return audioCtxRef.current;
+  };
+  const playTick = (urgent = false) => {
+    try {
+      const ctx = getAudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = urgent ? 880 : 440;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(urgent ? 0.15 : 0.06, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.08);
+    } catch(e) {}
+  };
+  const playTimeUp = () => {
+    try {
+      const ctx = getAudioCtx();
+      [220, 180, 150].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = freq;
+        osc.type = 'sawtooth';
+        gain.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.15);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.15 + 0.2);
+        osc.start(ctx.currentTime + i * 0.15);
+        osc.stop(ctx.currentTime + i * 0.15 + 0.2);
+      });
+    } catch(e) {}
+  };
+  const playCorrect = () => {
+    try {
+      const ctx = getAudioCtx();
+      [523, 659, 784].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = freq;
+        osc.type = 'sine';
+        gain.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.1 + 0.15);
+        osc.start(ctx.currentTime + i * 0.1);
+        osc.stop(ctx.currentTime + i * 0.1 + 0.15);
+      });
+    } catch(e) {}
+  };
+  const playWrong = () => {
+    try {
+      const ctx = getAudioCtx();
+      [300, 250].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = freq;
+        osc.type = 'sawtooth';
+        gain.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.15);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.15 + 0.2);
+        osc.start(ctx.currentTime + i * 0.15);
+        osc.stop(ctx.currentTime + i * 0.15 + 0.2);
+      });
+    } catch(e) {}
+  };
 
   useEffect(() => {
     setOptionFeedback({ A: null, B: null, C: null });
@@ -99,8 +172,10 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
             }]);
             setShowMessage(true);
           }
+          playTimeUp();
           return 0;
         }
+        playTick(prev <= 5);
         return prev - 1;
       });
     }, 1000);
@@ -124,6 +199,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
       if (correctLabel) newFeedback[correctLabel] = 'correct';
     }
     setOptionFeedback(newFeedback);
+    if (isCorrect) playCorrect(); else playWrong();
     setFloatingEmoji({ emoji: isCorrect ? '✅' : '❌', id: Date.now() });
     setTimeout(() => setFloatingEmoji(null), 1000);
 
