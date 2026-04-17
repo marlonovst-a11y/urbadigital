@@ -1,4 +1,8 @@
-// Conexión via API Routes → PostgreSQL directo
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = 'https://tbtbyspwdwbgekzjbaml.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRidGJ5c3B3ZHdiZ2VrempiYW1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1Nzg0ODMsImV4cCI6MjA5MDE1NDQ4M30.4f7I4-t4cgQq97Sc3hIyDZ2k4q92X_BolCD611Jh3CI';
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const TIMEOUT_MS = 3000;
 
@@ -171,10 +175,6 @@ export async function getParticipantRanking(participantId: string): Promise<{ po
 
 export async function checkNicknameRecentPlay(nickname: string): Promise<{ played: boolean; nextAvailable?: Date }> {
   try {
-    const { createClient } = await import('@supabase/supabase-js');
-    const supabaseUrl = 'https://tbtbyspwdwbgekzjbaml.supabase.co';
-    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRidGJ5c3B3ZHdiZ2VrempiYW1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1Nzg0ODMsImV4cCI6MjA5MDE1NDQ4M30.4f7I4-t4cgQq97Sc3hIyDZ2k4q92X_BolCD611Jh3CI';
-    const supabase = createClient(supabaseUrl, supabaseAnonKey);
     const threeHoursAgo = new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString();
     const { data, error } = await supabase
       .from('participantes')
