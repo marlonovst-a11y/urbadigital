@@ -171,7 +171,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
 
   if (showInstructions) {
     return (
-      <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel4_instruccion.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ width: '100vw', height: '100vh', minHeight: '-webkit-fill-available', backgroundImage: 'url(/nivel4_instruccion.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
         <Header />
         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', display: 'flex', alignItems: 'center', gap: 24 }}>
           <img src="/manuel_nivel4.png" style={{ width: 'clamp(120px, 15vw, 200px)' }} />
@@ -195,7 +195,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
 
   if (showFinalFeedback) {
     return (
-      <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', position: 'relative', backgroundImage: 'url(/nivel4_fondo.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <div style={{ width: '100vw', height: '100vh', minHeight: '-webkit-fill-available', overflow: 'hidden', position: 'relative', backgroundImage: 'url(/nivel4_fondo.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
           <div style={{ background: '#fff', borderRadius: 20, padding: 'clamp(20px,4vw,40px)', maxWidth: 560, width: '100%', boxShadow: '0 8px 40px rgba(0,0,0,0.4)', textAlign: 'center' }}>
             <h2 style={{ fontSize: 'clamp(20px,3vw,28px)', fontWeight: 800, color: '#1E2D6B', marginBottom: 8 }}>
@@ -250,7 +250,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
   }
 
   return (
-    <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel4_fondo.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
+    <div style={{ width: '100vw', height: '100vh', minHeight: '-webkit-fill-available', backgroundImage: 'url(/nivel4_fondo.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
       <Header />
 
       <div style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(280px, 45vw, 580px)', zIndex: 20 }}>

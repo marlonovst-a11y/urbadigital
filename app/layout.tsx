@@ -17,6 +17,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className={dmSans.className}>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+      </head>
       <body className="bg-gray-50">{children}</body>
     </html>
   );

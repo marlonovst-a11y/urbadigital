@@ -70,12 +70,12 @@ export default function DiagnosticForm({ onComplete }: DiagnosticFormProps) {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '32px 16px',
+        padding: 'clamp(16px, 3vw, 32px) 16px',
         boxSizing: 'border-box',
         transition: 'background-image 0.4s ease',
       }}
     >
-      <div style={{ width: '100%', maxWidth: 560 }}>
+      <div style={{ width: '100%', maxWidth: 'clamp(320px, 90vw, 560px)' }}>
 
         {/* Progress bar */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 32 }}>

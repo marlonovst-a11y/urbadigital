@@ -52,7 +52,7 @@ export default function FinalScore({ participantId, nickname, totalScore, levelS
     <div className="min-h-screen flex flex-col" style={{ backgroundImage: 'url(/score.png)', backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh' }}>
       <Header />
       <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 64, zIndex: 10, position: 'relative' }}>
-        <img src="/personaje_puntaje_final.png" style={{ width: 'clamp(300px, 50vw, 700px)', filter: 'drop-shadow(0 4px 16px rgba(0,0,0,0.3))' }} />
+        <img src="/personaje_puntaje_final.png" style={{ width: 'clamp(180px, 40vw, 700px)', filter: 'drop-shadow(0 4px 16px rgba(0,0,0,0.3))' }} />
       </div>
       <main className="flex-1 px-3 md:px-4 pb-8">
         <div className="max-w-3xl mx-auto pt-8 md:pt-10">

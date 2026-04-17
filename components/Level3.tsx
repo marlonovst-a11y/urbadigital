@@ -93,7 +93,7 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
 
   if (showInstructions) {
     return (
-      <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel3_instruccion.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ width: '100vw', height: '100vh', minHeight: '-webkit-fill-available', backgroundImage: 'url(/nivel3_instruccion.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
         <Header />
         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', display: 'flex', alignItems: 'center', gap: 24 }}>
           <img src="/carmen_nivel3.png" style={{ width: 'clamp(120px, 15vw, 200px)' }} />
@@ -190,7 +190,7 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
   }
 
   return (
-    <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel3_fondo.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
+    <div style={{ width: '100vw', height: '100vh', minHeight: '-webkit-fill-available', backgroundImage: 'url(/nivel3_fondo.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
       <Header />
 
       <div style={{ position: 'absolute', top: '12%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(300px, 55vw, 700px)', zIndex: 20 }}>

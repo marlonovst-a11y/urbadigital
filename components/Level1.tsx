@@ -160,7 +160,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
   if (showInstructions) {
     return (
       <div style={{
-        width: '100vw', height: '100vh',
+        width: '100vw', height: '100vh', minHeight: '-webkit-fill-available',
         backgroundImage: 'url(/nivel1_instruccion.png)',
         backgroundSize: 'cover', backgroundPosition: 'center',
         position: 'relative', overflow: 'hidden'
@@ -210,7 +210,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
 
   if (isFinished) {
     return (
-      <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel1_1.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ width: '100vw', height: '100vh', minHeight: '-webkit-fill-available', backgroundImage: 'url(/nivel1_1.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Header />
         <div style={{ background: 'white', borderRadius: 20, padding: 'clamp(20px,4vw,40px)', maxWidth: 560, width: '90%', boxShadow: '0 8px 40px rgba(0,0,0,0.4)', textAlign: 'center', marginTop: 48 }}>
           <div style={{ fontSize: 56, marginBottom: 8 }}>
@@ -253,7 +253,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
   const question = questions[currentQuestion];
 
   return (
-    <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel1.1.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
+    <div style={{ width: '100vw', height: '100vh', minHeight: '-webkit-fill-available', backgroundImage: 'url(/nivel1.1.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
       <Header />
 
       <div style={{ position: 'absolute', bottom: '27%', left: '50%', transform: 'translateX(-50%)', zIndex: 20 }}>
