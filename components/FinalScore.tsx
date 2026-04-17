@@ -23,15 +23,16 @@ interface FinalScoreProps {
 
 export default function FinalScore({ participantId, nickname, totalScore, levelScores, onContinue }: FinalScoreProps) {
   const [isRankingOpen, setIsRankingOpen] = useState(false);
+  const { play } = useSound();
 
   useEffect(() => {
-    const { play } = useSound();
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       if (totalScore >= 80) play('complete');
       else if (totalScore >= 50) play('correct');
       else play('click');
     }, 500);
-  }, []);
+    return () => clearTimeout(timer);
+  }, [totalScore]);
 
   const getMessage = (score: number) => {
     if (score >= 90) return '¡Eres un experto en gestión de riesgos!';
