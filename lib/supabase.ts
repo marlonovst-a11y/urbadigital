@@ -171,17 +171,22 @@ export async function getParticipantRanking(participantId: string): Promise<{ po
 
 export async function checkNicknameRecentPlay(nickname: string): Promise<{ played: boolean; nextAvailable?: Date }> {
   try {
-    const res = await fetchWithTimeout('/api/participantes');
-    if (!res.ok) return { played: false };
-    const all = await res.json();
-    const threeHoursAgo = new Date(Date.now() - 3 * 60 * 60 * 1000);
-    const recent = all.find((p: Participant) =>
-      p.nickname === nickname &&
-      p.puntaje_formulario === 10 &&
-      new Date(p.fecha_hora) > threeHoursAgo
+    const { createClient } = await import('@supabase/supabase-js');
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
-    if (recent) {
-      const nextAvailable = new Date(new Date(recent.fecha_hora).getTime() + 3 * 60 * 60 * 1000);
+    const threeHoursAgo = new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString();
+    const { data, error } = await supabase
+      .from('participantes')
+      .select('created_at')
+      .eq('nickname', nickname)
+      .gte('created_at', threeHoursAgo)
+      .order('created_at', { ascending: false })
+      .limit(1);
+    if (error) return { played: false };
+    if (data && data.length > 0) {
+      const nextAvailable = new Date(new Date(data[0].created_at).getTime() + 3 * 60 * 60 * 1000);
       return { played: true, nextAvailable };
     }
     return { played: false };

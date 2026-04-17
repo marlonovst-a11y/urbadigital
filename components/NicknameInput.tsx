@@ -41,6 +41,7 @@ export default function NicknameInput({ onContinue }: NicknameInputProps) {
       const cooldownCheck = await checkNicknameCooldown(nickname.trim());
 
       if (cooldownCheck.played) {
+        setError('Este nombre ya fue usado recientemente. Por favor espera 3 horas o usa un nombre diferente.');
         setCooldownData({
           allowedAt: cooldownCheck.nextAvailable || new Date(),
           remainingMinutes: 180
