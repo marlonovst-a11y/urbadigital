@@ -49,10 +49,13 @@ export default function FinalScore({ participantId, nickname, totalScore, levelS
   };
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundImage: 'url(/puntaje_final.png)', backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh' }}>
+    <div className="min-h-screen flex flex-col" style={{ backgroundImage: 'url(/puntaje_final copy.png)', backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh' }}>
       <Header />
+      <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 64, zIndex: 10, position: 'relative' }}>
+        <img src="/personaje_puntaje_final.png" style={{ width: 'clamp(300px, 50vw, 700px)', filter: 'drop-shadow(0 4px 16px rgba(0,0,0,0.3))' }} />
+      </div>
       <main className="flex-1 px-3 md:px-4 pb-8">
-        <div className="max-w-3xl mx-auto pt-[440px] md:pt-[460px]">
+        <div className="max-w-3xl mx-auto pt-8 md:pt-10">
 <div className="flex flex-col items-center mb-5 md:mb-8">
               <div className="w-36 h-36 md:w-48 md:h-48 rounded-full bg-[#2167AE] flex items-center justify-center shadow-xl mb-4">
                 <div className="text-center">
@@ -65,7 +68,7 @@ export default function FinalScore({ participantId, nickname, totalScore, levelS
               </p>
             </div>
 
-            <div className="bg-white/15 rounded-lg p-4 md:p-6 mb-4 md:mb-6">
+            <div className="bg-white/20 rounded-lg p-4 md:p-6 mb-4 md:mb-6" style={{ backdropFilter: 'blur(8px)' }}>
               <h3 className="font-bold text-white mb-3 md:mb-4 text-sm md:text-base">Desglose por nivel</h3>
               <table className="w-full text-xs md:text-sm">
                 <thead>
@@ -116,7 +119,7 @@ export default function FinalScore({ participantId, nickname, totalScore, levelS
             </button>
 
             <div className="mb-4 md:mb-6">
-              <h3 className="font-bold text-[#1E2D6B] mb-2 md:mb-3 text-center text-sm md:text-base">Comparte tu logro</h3>
+              <h3 className="font-bold text-white mb-2 md:mb-3 text-center text-sm md:text-base" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.4)' }}>Comparte tu logro</h3>
               <div className="flex justify-center gap-2 md:gap-4 flex-wrap">
                 <button
                   onClick={() => handleShare('facebook')}
