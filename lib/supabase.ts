@@ -172,10 +172,9 @@ export async function getParticipantRanking(participantId: string): Promise<{ po
 export async function checkNicknameRecentPlay(nickname: string): Promise<{ played: boolean; nextAvailable?: Date }> {
   try {
     const { createClient } = await import('@supabase/supabase-js');
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
+    const supabaseUrl = 'https://tbtbyspwdwbgekzjbaml.supabase.co';
+    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRidGJ5c3B3ZHdiZ2VrempiYW1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1Nzg0ODMsImV4cCI6MjA5MDE1NDQ4M30.4f7I4-t4cgQq97Sc3hIyDZ2k4q92X_BolCD611Jh3CI';
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
     const threeHoursAgo = new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString();
     const { data, error } = await supabase
       .from('participantes')
