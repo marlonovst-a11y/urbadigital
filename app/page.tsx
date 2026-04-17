@@ -21,6 +21,40 @@ import { clearSession } from '@/lib/session';
 type Screen = 'welcome' | 'nickname' | 'diagnostic' | 'levelmap' | 'level1' | 'level2' | 'level3' | 'level4' | 'level5' | 'finalevaluation' | 'finalscore' | 'closing';
 
 export default function Home() {
+  const [assetsLoaded, setAssetsLoaded] = useState(false);
+  useEffect(() => {
+    const images = [
+      '/fondo_inicio.png',
+      '/fondo_nickname.png',
+      '/retos_fondo.png',
+      '/nivel1_1.png',
+      '/nivel1_instruccion.png',
+      '/nivel2_cuadrado.svg',
+      '/nivel3_fondo.png',
+      '/nivel3_instruccion.png',
+      '/nivel4_fondo.png',
+      '/nivel4_instruccion.png',
+      '/nivel5_fondo.png',
+      '/nivel5_instruccion.png',
+      '/evaluacion.png',
+      '/fondo_evaluacion_final.png',
+      '/score.png',
+      '/fin.png',
+      '/fondo_preguntas.png',
+      '/fondo_2.png',
+      '/fondo_3.png',
+    ];
+    let loaded = 0;
+    images.forEach(src => {
+      const img = new Image();
+      img.onload = img.onerror = () => {
+        loaded++;
+        if (loaded === images.length) setAssetsLoaded(true);
+      };
+      img.src = src;
+    });
+  }, []);
+
   const [screen, setScreen] = useState<Screen>('welcome');
   const [nickname, setNickname] = useState('');
   const [participantId, setParticipantId] = useState('');
@@ -288,6 +322,25 @@ const handleDiagnosticSubmit = async (data: DiagnosticData) => {
     setParticipantId('dev-123');
     setScreen(target);
   };
+
+  if (!assetsLoaded) {
+    return (
+      <div style={{ width: '100vw', height: '100vh', background: '#1E2D6B', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 24 }}>
+        <img src="/personajes.svg" style={{ width: 200, opacity: 0.9 }} />
+        <div style={{ width: 200, height: 8, background: 'rgba(255,255,255,0.2)', borderRadius: 99, overflow: 'hidden' }}>
+          <div style={{ height: '100%', background: '#1ABC9C', borderRadius: 99, animation: 'loading 1.5s ease-in-out infinite' }} />
+        </div>
+        <p style={{ color: 'rgba(255,255,255,0.8)', fontWeight: 600, fontSize: 16 }}>Cargando...</p>
+        <style>{`
+          @keyframes loading {
+            0% { width: 0% }
+            50% { width: 80% }
+            100% { width: 100% }
+          }
+        `}</style>
+      </div>
+    );
+  }
 
   return (
     <>
