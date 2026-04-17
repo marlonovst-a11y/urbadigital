@@ -91,7 +91,7 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
 
       <div style={{ position: 'absolute', top: '55%', left: '50%', transform: 'translate(-50%, -50%)', width: 'clamp(300px, 55vw, 620px)', zIndex: 20 }}>
         <div style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(12px)', borderRadius: 24, padding: '28px 32px', border: '2px solid rgba(255,255,255,0.3)', boxShadow: '0 8px 32px rgba(0,0,0,0.2)' }}>
-          <h3 style={{ color: 'white', fontWeight: 800, fontSize: 'clamp(16px, 1.8vw, 22px)', marginBottom: 20, textShadow: '0 2px 8px rgba(0,0,0,0.4)', lineHeight: 1.4 }}>
+          <h3 style={{ color: '#1E2D6B', fontWeight: 800, fontSize: 'clamp(16px, 1.8vw, 22px)', marginBottom: 20, textShadow: '0 2px 8px rgba(0,0,0,0.4)', lineHeight: 1.4 }}>
             {currentStep.pregunta}
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -103,7 +103,7 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
                   fontSize: 'clamp(13px, 1.4vw, 16px)',
                   ...(currentStep.value === opcion
                     ? { background: 'rgba(33,103,174,0.9)', borderColor: '#2167AE', color: 'white', boxShadow: '0 4px 16px rgba(33,103,174,0.5)', transform: 'translateY(-2px)' }
-                    : { background: 'rgba(255,255,255,0.20)', borderColor: 'rgba(255,255,255,0.5)', color: 'white', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' })
+                    : { background: 'rgba(255,255,255,0.75)', borderColor: 'rgba(255,255,255,0.5)', color: '#1E2D6B', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' })
                 }}
                 onMouseEnter={e => { if (currentStep.value !== opcion) (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)'; }}
                 onMouseLeave={e => { if (currentStep.value !== opcion) (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)'; }}>
