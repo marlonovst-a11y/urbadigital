@@ -86,7 +86,7 @@ export default function Ranking({ isOpen, onClose, participantId }: RankingProps
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden" style={{ background: 'linear-gradient(135deg, #1E2D6B 0%, #2167AE 50%, #3d9fd3 100%)' }}>
+      <div className="rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden" style={{ backgroundImage: 'url(/ranking.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <div className="p-6 relative" style={{ background: 'rgba(0,0,0,0.25)', backdropFilter: 'blur(8px)' }}>
           <button
             onClick={onClose}
