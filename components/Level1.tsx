@@ -246,27 +246,28 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
       }}>
         <Header />
         <div style={{
-          position: 'absolute', top: '50%', left: '50%',
-          transform: 'translate(-50%, -50%)',
-          display: 'flex', alignItems: 'center', gap: 24
+          position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          padding: 16, gap: 16
         }}>
-          <img src="/manuel_nivel1.png" style={{ width: 'clamp(120px, 15vw, 200px)' }} />
+          <img src="/manuel_nivel1.png" style={{ width: 'clamp(80px, 20vw, 160px)' }} />
           <div style={{
             background: 'white', borderRadius: 16, padding: '20px 28px',
-            maxWidth: 420, border: '3px solid #2167AE',
+            width: 'min(90vw, 440px)', maxWidth: '100%', margin: '0 auto',
+            border: '3px solid #2167AE',
             boxShadow: '0 4px 20px rgba(0,0,0,0.2)', position: 'relative'
           }}>
-            <div style={{ position: 'absolute', left: -14, top: '50%', transform: 'translateY(-50%)',
-              width: 0, height: 0, borderTop: '12px solid transparent',
-              borderBottom: '12px solid transparent', borderRight: '14px solid #2167AE' }} />
-            <div style={{ position: 'absolute', left: -10, top: '50%', transform: 'translateY(-50%)',
-              width: 0, height: 0, borderTop: '10px solid transparent',
-              borderBottom: '10px solid transparent', borderRight: '12px solid white' }} />
+            <div style={{ position: 'absolute', top: -14, left: '50%', transform: 'translateX(-50%)',
+              width: 0, height: 0, borderLeft: '12px solid transparent',
+              borderRight: '12px solid transparent', borderBottom: '14px solid #2167AE' }} />
+            <div style={{ position: 'absolute', top: -10, left: '50%', transform: 'translateX(-50%)',
+              width: 0, height: 0, borderLeft: '10px solid transparent',
+              borderRight: '10px solid transparent', borderBottom: '12px solid white' }} />
             <p style={{ margin: '0 0 8px', fontWeight: 800, color: '#1E2D6B',
-              fontSize: 'clamp(14px, 1.6vw, 18px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif' }}>
+              fontSize: 'clamp(15px, 4vw, 20px)', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif' }}>
               ¡Nivel 1 — Trivia de Prevención!
             </p>
-            <p style={{ margin: '0 0 16px', color: '#444', fontSize: 'clamp(12px, 1.3vw, 15px)', lineHeight: 1.5 }}>
+            <p style={{ margin: '0 0 16px', color: '#444', fontSize: 'clamp(12px, 3.5vw, 15px)', lineHeight: 1.5 }}>
               Roberto te hará <strong>5 preguntas</strong> sobre prevención de inundaciones. Tienes <strong>20 segundos</strong> por pregunta para elegir la respuesta correcta. ¡Responde rápido para ganar más puntos!
             </p>
             <button
