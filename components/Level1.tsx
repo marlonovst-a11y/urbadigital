@@ -336,8 +336,11 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
     <div style={{
       width: '100vw', height: '100vh', minHeight: '-webkit-fill-available',
       backgroundImage: 'url(/nivel1.1.png)', backgroundSize: 'cover', backgroundPosition: 'center',
-      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start',
-      overflow: 'hidden', paddingBottom: 16, boxSizing: 'border-box'
+      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between',
+      overflow: 'hidden',
+      paddingTop: 'clamp(64px, 12vh, 100px)',
+      paddingBottom: 'clamp(16px, 4vh, 32px)',
+      boxSizing: 'border-box'
     }}>
       <Header />
 
@@ -354,7 +357,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
       )}
 
       <div style={{
-        marginTop: 'clamp(60px, 10vh, 100px)',
+        marginTop: 'clamp(8px, 2vh, 20px)',
         width: 'min(90vw, 1100px)',
         background: 'white', borderRadius: 16, padding: '20px 28px',
         border: '3px solid #1E2D6B', boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
@@ -368,7 +371,8 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
       </div>
 
       <div style={{
-        marginTop: 24,
+        marginTop: 'clamp(10px, 2vh, 20px)',
+        marginBottom: 'clamp(10px, 2vh, 20px)',
         width: 64, height: 64, borderRadius: '50%',
         background: 'white',
         border: `5px solid ${timeLeft <= 5 ? '#E74C3C' : timeLeft <= 10 ? '#F39C12' : '#1ABC9C'}`,
@@ -380,9 +384,11 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
       </div>
 
       <div style={{
-        marginTop: 16,
+        marginTop: 0,
+        flex: 1,
         width: 'min(90vw, 700px)',
-        display: 'flex', flexDirection: 'column', gap: 10, zIndex: 20
+        display: 'flex', flexDirection: 'column', gap: 10, zIndex: 20,
+        justifyContent: 'center'
       }}>
         {question.options.map((opt) => {
           const label = opt.label;
@@ -426,12 +432,11 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
         })}
       </div>
 
-      <div style={{ flex: 1 }} />
-
       <div style={{
         width: 'min(90vw, 500px)',
         display: 'flex', gap: 12, justifyContent: 'center',
-        marginBottom: '5vh', zIndex: 20
+        marginTop: 'auto',
+        paddingBottom: 'clamp(8px, 2vh, 16px)', zIndex: 20
       }}>
         {questions.map((_, idx) => (
           <div key={idx} style={{
