@@ -43,17 +43,24 @@ export interface RankingEntry {
   position?: number;
 }
 
-export async function createParticipantInitial(nickname: string): Promise<Participant | null> {
+export async function createParticipantInitial(nickname: string) {
   try {
-    const res = await fetchWithTimeout('/api/participantes', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nickname })
-    });
-    if (!res.ok) throw new Error(await res.text());
-    return await res.json();
+    console.log('[supabase] Intentando crear participante:', nickname);
+    console.log('[supabase] URL:', supabaseUrl);
+
+    const { data, error } = await supabase
+      .from('participantes')
+      .insert([{ nickname }])
+      .select()
+      .single();
+    if (error) {
+      console.error('[supabase] Error al insertar:', error);
+      return null;
+    }
+    console.log('[supabase] Participante creado:', data);
+    return data;
   } catch (e) {
-    console.error('Error createParticipantInitial:', e);
+    console.error('[supabase] Excepción:', e);
     return null;
   }
 }
