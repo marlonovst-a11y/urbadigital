@@ -2,6 +2,7 @@
 
 import { useState, memo } from 'react';
 import Header from './Header';
+import { useSound } from '@/hooks/useSound';
 
 interface Level4Props {
   participantId: string;
@@ -101,6 +102,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
   const [responses, setResponses] = useState<any[]>([]);
   const [showFinalFeedback, setShowFinalFeedback] = useState(false);
 
+  const { play } = useSound();
   const challenge = challenges[currentChallenge];
 
   const handleSelectOption = (option: 'A' | 'B') => {
@@ -118,6 +120,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
       puntos: isCorrect ? 4 : 0
     };
     setResponses(prev => [...prev, response]);
+    if (isCorrect) play('correct'); else play('wrong');
     setShowFeedback(true);
   };
 
@@ -127,6 +130,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
       setSelectedOption(null);
       setShowFeedback(false);
     } else {
+      play('complete');
       setShowFinalFeedback(true);
     }
   };

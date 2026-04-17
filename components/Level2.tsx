@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Header from './Header';
+import { useSound } from '@/hooks/useSound';
 
 interface Level2Props {
   participantId: string;
@@ -31,6 +32,7 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
   const [finished, setFinished] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const { play } = useSound();
 
   useEffect(() => {
     if (finished || found.size === peligros.length) return;
@@ -39,6 +41,7 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
         if (prev <= 1) {
           clearInterval(timerRef.current!);
           setFinished(true);
+          play('timeup');
           setTimeout(() => setShowModal(true), 400);
           return 0;
         }
@@ -52,12 +55,14 @@ export default function Level2({ participantId, nickname, onComplete }: Level2Pr
     if (found.size === peligros.length && !finished) {
       clearInterval(timerRef.current!);
       setFinished(true);
+      play('complete');
       setTimeout(() => setShowModal(true), 400);
     }
   }, [found]);
 
   const handleFindHazard = (id: HazardId) => {
     if (found.has(id) || finished) return;
+    play('found');
     setFound(prev => {
       const next = new Set(prev);
       next.add(id);

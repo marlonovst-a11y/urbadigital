@@ -1,6 +1,9 @@
 'use client';
 
+import { useSound } from '@/hooks/useSound';
+
 export default function Welcome() {
+  const { play } = useSound();
   return (
     <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/fondo_inicio.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
 
@@ -26,7 +29,7 @@ export default function Welcome() {
       </div>
 
       {/* Botón INICIAR */}
-      <button style={{ background: '#F9D030', color: '#1E2D6B', fontWeight: 900, fontSize: 'clamp(20px, 3vw, 36px)', fontFamily: 'RobotRadicals, sans-serif', padding: 'clamp(12px, 1.5vw, 18px) clamp(40px, 6vw, 80px)', borderRadius: 16, border: '4px solid #1E2D6B', cursor: 'pointer', boxShadow: '0 6px 24px rgba(0,0,0,0.3)', letterSpacing: '0.05em', transition: 'transform 0.15s, box-shadow 0.15s' }}
+      <button onClick={() => play('click')} style={{ background: '#F9D030', color: '#1E2D6B', fontWeight: 900, fontSize: 'clamp(20px, 3vw, 36px)', fontFamily: 'RobotRadicals, sans-serif', padding: 'clamp(12px, 1.5vw, 18px) clamp(40px, 6vw, 80px)', borderRadius: 16, border: '4px solid #1E2D6B', cursor: 'pointer', boxShadow: '0 6px 24px rgba(0,0,0,0.3)', letterSpacing: '0.05em', transition: 'transform 0.15s, box-shadow 0.15s' }}
         onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 10px 32px rgba(0,0,0,0.4)'; }}
         onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(0,0,0,0.3)'; }}
       >

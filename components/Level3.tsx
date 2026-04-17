@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react';
 import Header from './Header';
+import { useSound } from '@/hooks/useSound';
 
 interface Level3Props {
   participantId: string;
@@ -46,6 +47,7 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
   const [totalScore, setTotalScore] = useState(0);
   const answeredRef = useRef(false);
   const answerStateRef = useRef<AnswerState>('idle');
+  const { play } = useSound();
 
   const currentAction = actions[currentIndex];
 
@@ -59,6 +61,7 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
 
     setSelectedCategory(category);
     setAnswerState(isCorrect ? 'correct' : 'wrong');
+    if (isCorrect) play('correct'); else play('wrong');
 
     const newResponse: Response = {
       accion: currentAction.accion,
@@ -80,6 +83,7 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
       } else {
         const score = Math.round(Math.min(20, updatedResponses.reduce((sum, r) => sum + r.puntos, 0)));
         setTotalScore(score);
+        play('complete');
         setShowFinalFeedback(true);
       }
     }, 1500);

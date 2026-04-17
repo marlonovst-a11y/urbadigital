@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { checkNicknameCooldown } from '@/lib/supabase';
+import { useSound } from '@/hooks/useSound';
 import NicknameCooldownDialog from './NicknameCooldownDialog';
 
 interface NicknameInputProps {
@@ -9,6 +10,7 @@ interface NicknameInputProps {
 }
 
 export default function NicknameInput({ onContinue }: NicknameInputProps) {
+  const { play } = useSound();
   const [nickname, setNickname] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -98,7 +100,7 @@ export default function NicknameInput({ onContinue }: NicknameInputProps) {
         )}
 
         <button
-          onClick={handleContinue}
+          onClick={() => { play('click'); handleContinue(); }}
           disabled={!canContinue}
           style={{ padding: 'clamp(10px,1.5vw,16px) clamp(40px,6vw,80px)', borderRadius: 16, border: '4px solid #1E2D6B', background: canContinue ? '#F9D030' : 'rgba(200,200,200,0.7)', color: canContinue ? '#1E2D6B' : '#888', fontWeight: 900, fontSize: 'clamp(18px, 2.5vw, 28px)', fontFamily: 'RobotRadicals, sans-serif', cursor: canContinue ? 'pointer' : 'not-allowed', letterSpacing: '0.05em', boxShadow: canContinue ? '0 6px 20px rgba(0,0,0,0.25)' : 'none', transition: 'all 0.2s', textTransform: 'uppercase' }}
         >

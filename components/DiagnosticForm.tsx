@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useSound } from '@/hooks/useSound';
 
 interface DiagnosticFormProps {
   onComplete: (data: DiagnosticData) => void;
@@ -33,6 +34,7 @@ const optionsByStep = [ageOptions, genderOptions, occupationOptions];
 const fields: (keyof DiagnosticData)[] = ['edad', 'genero', 'ocupacion'];
 
 export default function DiagnosticForm({ onComplete }: DiagnosticFormProps) {
+  const { play } = useSound();
   const [step, setStep] = useState(0);
   const [data, setData] = useState<DiagnosticData>({
     edad: '',
@@ -212,7 +214,7 @@ export default function DiagnosticForm({ onComplete }: DiagnosticFormProps) {
           {/* Next button */}
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <button
-              onClick={handleNext}
+              onClick={() => { play('click'); handleNext(); }}
               disabled={!currentValue}
               style={{
                 background: isLast ? '#DB4E5B' : '#C1D94C',

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Header from './Header';
+import { useSound } from '@/hooks/useSound';
 
 interface Level5Props {
   participantId: string;
@@ -32,6 +33,7 @@ const words: Word[] = [
 ];
 
 export default function Level5({ participantId, nickname, onComplete }: Level5Props) {
+  const { play } = useSound();
   const [wordStates, setWordStates] = useState<Word[]>(words);
   const [selectedWord, setSelectedWord] = useState<Word | null>(null);
   const [inputValue, setInputValue] = useState('');
@@ -107,6 +109,7 @@ export default function Level5({ participantId, nickname, onComplete }: Level5Pr
       return w;
     });
 
+    if (isCorrect) play('correct'); else play('wrong');
     setWordStates(updatedWords);
     setInputValue('');
 
@@ -116,6 +119,7 @@ export default function Level5({ participantId, nickname, onComplete }: Level5Pr
     }
 
     if (updatedWords.every(w => w.completed || w.revealed)) {
+      play('complete');
       setTimeout(() => setShowFeedback(true), 500);
     }
   };

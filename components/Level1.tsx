@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Header from './Header';
+import { useSound } from '@/hooks/useSound';
 
 interface Level1Props {
   participantId: string;
@@ -77,6 +78,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
   const [floatingEmoji, setFloatingEmoji] = useState<{emoji: string, id: number} | null>(null);
   const answeredRef = useRef(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const { play } = useSound();
   const audioCtxRef = useRef<AudioContext | null>(null);
   const getAudioCtx = () => {
     if (!audioCtxRef.current) {
@@ -172,6 +174,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
             }]);
             setShowMessage(true);
           }
+          play('timeup');
           playTimeUp();
           return 0;
         }
@@ -199,7 +202,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
       if (correctLabel) newFeedback[correctLabel] = 'correct';
     }
     setOptionFeedback(newFeedback);
-    if (isCorrect) playCorrect(); else playWrong();
+    if (isCorrect) { play('correct'); playCorrect(); } else { play('wrong'); playWrong(); }
     setFloatingEmoji({ emoji: isCorrect ? '✅' : '❌', id: Date.now() });
     setTimeout(() => setFloatingEmoji(null), 1000);
 
