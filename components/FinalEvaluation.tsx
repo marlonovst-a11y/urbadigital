@@ -75,11 +75,11 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
     <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/fondo__evalucion__final.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
       <Header />
 
-      <div style={{ position: 'absolute', top: 64, left: '50%', transform: 'translateX(-50%)', display: 'flex', alignItems: 'center', gap: 0, zIndex: 20 }}>
+      <div style={{ position: 'absolute', top: 72, left: '50%', transform: 'translateX(-50%)', display: 'flex', alignItems: 'center', gap: 8, zIndex: 20 }}>
         {['Pregunta 1', 'Pregunta 2', 'Pregunta 3'].map((label, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-              <div style={{ width: 40, height: 40, borderRadius: '50%', background: i < step ? '#1ABC9C' : i === step ? '#2167AE' : 'rgba(255,255,255,0.4)', border: '3px solid white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 16, color: 'white', boxShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>
+              <div style={{ width: 40, height: 40, borderRadius: '50%', background: i < step ? '#1ABC9C' : i === step ? '#2167AE' : 'rgba(255,255,255,0.4)', border: '3px solid white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 16, color: 'white', boxShadow: i === step ? '0 0 16px rgba(33,103,174,0.6), 0 2px 8px rgba(0,0,0,0.2)' : '0 2px 8px rgba(0,0,0,0.2)' }}>
                 {i < step ? '✓' : i + 1}
               </div>
               <span style={{ fontSize: 10, color: 'white', fontWeight: i === step ? 700 : 400, opacity: i === step ? 1 : 0.7 }}>{label}</span>
@@ -89,15 +89,24 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
         ))}
       </div>
 
-      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 'clamp(300px, 55vw, 620px)', zIndex: 20 }}>
-        <div style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', borderRadius: 20, padding: '24px 28px', border: '2px solid rgba(255,255,255,0.4)' }}>
-          <h3 style={{ color: 'white', fontWeight: 800, fontSize: 'clamp(14px, 1.6vw, 20px)', marginBottom: 20, textShadow: '0 2px 6px rgba(0,0,0,0.4)', lineHeight: 1.4 }}>
+      <div style={{ position: 'absolute', top: '55%', left: '50%', transform: 'translate(-50%, -50%)', width: 'clamp(300px, 55vw, 620px)', zIndex: 20 }}>
+        <div style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(12px)', borderRadius: 24, padding: '28px 32px', border: '2px solid rgba(255,255,255,0.3)', boxShadow: '0 8px 32px rgba(0,0,0,0.2)' }}>
+          <h3 style={{ color: 'white', fontWeight: 800, fontSize: 'clamp(16px, 1.8vw, 22px)', marginBottom: 20, textShadow: '0 2px 8px rgba(0,0,0,0.4)', lineHeight: 1.4 }}>
             {currentStep.pregunta}
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {currentStep.opciones.map((opcion) => (
               <button key={opcion} onClick={() => currentStep.setter(opcion)}
-                style={{ padding: '12px 20px', borderRadius: 50, border: '2px solid', borderColor: currentStep.value === opcion ? '#2167AE' : 'rgba(255,255,255,0.5)', background: currentStep.value === opcion ? '#2167AE' : 'rgba(255,255,255,0.15)', color: 'white', fontWeight: currentStep.value === opcion ? 700 : 500, fontSize: 'clamp(13px, 1.4vw, 16px)', cursor: 'pointer', transition: 'all 0.2s', textAlign: 'left', backdropFilter: 'blur(4px)' }}>
+                style={{
+                  padding: '12px 20px', borderRadius: 50, border: '2px solid', cursor: 'pointer', transition: 'all 0.2s', textAlign: 'left', backdropFilter: 'blur(4px)',
+                  fontWeight: currentStep.value === opcion ? 700 : 500,
+                  fontSize: 'clamp(13px, 1.4vw, 16px)',
+                  ...(currentStep.value === opcion
+                    ? { background: 'rgba(33,103,174,0.9)', borderColor: '#2167AE', color: 'white', boxShadow: '0 4px 16px rgba(33,103,174,0.5)', transform: 'translateY(-2px)' }
+                    : { background: 'rgba(255,255,255,0.20)', borderColor: 'rgba(255,255,255,0.5)', color: 'white', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' })
+                }}
+                onMouseEnter={e => { if (currentStep.value !== opcion) (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)'; }}
+                onMouseLeave={e => { if (currentStep.value !== opcion) (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)'; }}>
                 {opcion}
               </button>
             ))}
@@ -112,7 +121,14 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
             <button
               onClick={() => { if (step < 2) setStep(step + 1); else handleSubmit(); }}
               disabled={!currentStep.value}
-              style={{ flex: 2, padding: '12px 0', background: currentStep.value ? (step === 2 ? '#DB4E5B' : '#C1D94C') : 'rgba(255,255,255,0.2)', color: currentStep.value ? (step === 2 ? 'white' : '#4273AE') : 'rgba(255,255,255,0.5)', fontWeight: 800, fontSize: 15, borderRadius: 50, border: 'none', cursor: currentStep.value ? 'pointer' : 'not-allowed', transition: 'all 0.2s', boxShadow: currentStep.value ? '0 4px 12px rgba(0,0,0,0.2)' : 'none' }}>
+              style={{
+                flex: 2, padding: '12px 0', fontWeight: 900, fontSize: 15, borderRadius: 50, border: 'none', cursor: currentStep.value ? 'pointer' : 'not-allowed', transition: 'all 0.2s',
+                ...(currentStep.value
+                  ? step === 2
+                    ? { background: '#DB4E5B', color: 'white', boxShadow: '0 4px 16px rgba(219,78,91,0.5)' }
+                    : { background: '#C1D94C', color: '#1E2D6B', boxShadow: '0 4px 16px rgba(193,217,76,0.5)' }
+                  : { background: 'rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.5)', boxShadow: 'none' })
+              }}>
               {step === 2 ? 'Ver mi puntaje final 🏆' : 'Siguiente →'}
             </button>
           </div>
