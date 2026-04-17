@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Welcome from '@/components/Welcome';
 import NicknameInput from '@/components/NicknameInput';
 import DiagnosticForm, { DiagnosticData } from '@/components/DiagnosticForm';
@@ -69,10 +69,13 @@ export default function Home() {
     level5: 0,
     evaluation: 0
   });
+  const [isMuted, setIsMuted] = useState(false);
+  const bgAudioRef = useRef<HTMLAudioElement | null>(null);
   useEffect(() => {
     const bg = new Audio('/sound-bg.mp3');
     bg.loop = true;
     bg.volume = 0.15;
+    bgAudioRef.current = bg;
 
     const startBg = () => {
       bg.play().catch(() => {});
@@ -90,6 +93,13 @@ export default function Home() {
       bg.src = '';
     };
   }, []);
+
+  const toggleMute = () => {
+    if (bgAudioRef.current) {
+      bgAudioRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
 
   const [showRecoveryDialog, setShowRecoveryDialog] = useState(false);
   const [recoveryData, setRecoveryData] = useState<any>(null);
@@ -366,6 +376,32 @@ const handleDiagnosticSubmit = async (data: DiagnosticData) => {
 
   return (
     <>
+      <button
+        onClick={toggleMute}
+        style={{
+          position: 'fixed',
+          bottom: 16,
+          right: 16,
+          zIndex: 9999,
+          width: 44,
+          height: 44,
+          borderRadius: '50%',
+          background: 'rgba(30,45,107,0.85)',
+          border: '2px solid rgba(255,255,255,0.4)',
+          color: 'white',
+          fontSize: 20,
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+          backdropFilter: 'blur(4px)',
+          transition: 'transform 0.15s',
+        }}
+        title={isMuted ? 'Activar música' : 'Silenciar música'}
+      >
+        {isMuted ? '🔇' : '🔊'}
+      </button>
       {(
         <div className="hidden md:flex" style={{ position: 'fixed', top: '16px', right: '16px', zIndex: 9999, background: 'rgba(0,0,0,0.7)', borderRadius: '8px', padding: '6px 10px', gap: '6px', alignItems: 'center' }}>
           {([
