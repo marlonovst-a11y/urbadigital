@@ -67,9 +67,9 @@ export default function Ranking({ isOpen, onClose, participantId }: RankingProps
   };
 
   const getMedalIcon = (position: number) => {
-    if (position === 1) return <Trophy className="w-6 h-6 text-[#1E2D6B]" fill="currentColor" />;
-    if (position === 2) return <Medal className="w-6 h-6 text-[#1E2D6B]/80" fill="currentColor" />;
-    if (position === 3) return <Award className="w-6 h-6 text-[#1E2D6B]/60" fill="currentColor" />;
+    if (position === 1) return <Trophy className="w-6 h-6" style={{ color: '#FFD700' }} fill="#FFD700" />;
+    if (position === 2) return <Medal className="w-6 h-6" style={{ color: '#C0C0C0' }} fill="#C0C0C0" />;
+    if (position === 3) return <Award className="w-6 h-6" style={{ color: '#CD7F32' }} fill="#CD7F32" />;
     return null;
   };
 
