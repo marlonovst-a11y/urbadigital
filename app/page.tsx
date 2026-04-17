@@ -78,17 +78,29 @@ export default function Home() {
     bgAudioRef.current = bg;
 
     const startBg = () => {
-      bg.play().catch(() => {});
-      document.removeEventListener('click', startBg);
-      document.removeEventListener('touchstart', startBg);
+      const playPromise = bg.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            document.removeEventListener('click', startBg);
+            document.removeEventListener('touchstart', startBg);
+            document.removeEventListener('touchend', startBg);
+            document.removeEventListener('pointerdown', startBg);
+          })
+          .catch(() => {});
+      }
     };
 
-    document.addEventListener('click', startBg);
-    document.addEventListener('touchstart', startBg);
+    document.addEventListener('click', startBg, { passive: true });
+    document.addEventListener('touchstart', startBg, { passive: true });
+    document.addEventListener('touchend', startBg, { passive: true });
+    document.addEventListener('pointerdown', startBg, { passive: true });
 
     return () => {
       document.removeEventListener('click', startBg);
       document.removeEventListener('touchstart', startBg);
+      document.removeEventListener('touchend', startBg);
+      document.removeEventListener('pointerdown', startBg);
       bg.pause();
       bg.src = '';
     };
