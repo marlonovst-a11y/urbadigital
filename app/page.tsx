@@ -73,8 +73,22 @@ export default function Home() {
     const bg = new Audio('/sound-bg.mp3');
     bg.loop = true;
     bg.volume = 0.15;
-    bg.play().catch(() => {});
-    return () => { bg.pause(); bg.src = ''; };
+
+    const startBg = () => {
+      bg.play().catch(() => {});
+      document.removeEventListener('click', startBg);
+      document.removeEventListener('touchstart', startBg);
+    };
+
+    document.addEventListener('click', startBg);
+    document.addEventListener('touchstart', startBg);
+
+    return () => {
+      document.removeEventListener('click', startBg);
+      document.removeEventListener('touchstart', startBg);
+      bg.pause();
+      bg.src = '';
+    };
   }, []);
 
   const [showRecoveryDialog, setShowRecoveryDialog] = useState(false);
