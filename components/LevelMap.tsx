@@ -53,7 +53,7 @@ export default function LevelMap({ totalScore, nickname, participantId, complete
           position: 'absolute',
           top: '8px',
           right: '12px',
-          zIndex: 20,
+          zIndex: 30,
           display: 'flex',
           alignItems: 'center',
           gap: '8px',
@@ -95,17 +95,17 @@ export default function LevelMap({ totalScore, nickname, participantId, complete
         </button>
       </div>
 
-      <div style={{ position: 'absolute', top: '18%', left: '50%', transform: 'translateX(-50%)', display: 'flex', alignItems: 'center', gap: 16, zIndex: 10 }}>
-        <img src="/roberto_retos.png" style={{ width: 'clamp(80px, 10vw, 130px)', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }} />
-        <div style={{ background: 'white', borderRadius: 16, padding: 'clamp(12px, 2vw, 20px) clamp(16px, 2.5vw, 32px)', maxWidth: 'clamp(260px, 40vw, 512px)', boxShadow: '0 4px 16px rgba(0,0,0,0.2)', position: 'relative', border: '3px solid #1a4f8a' }}>
-          <div style={{ position: 'absolute', left: -12, top: '50%', transform: 'translateY(-50%)', width: 0, height: 0, borderTop: '10px solid transparent', borderBottom: '10px solid transparent', borderRight: '12px solid white' }} />
-          <p style={{ margin: 0, color: '#1E2D6B', fontWeight: 700, fontSize: 'clamp(16px, 1.8vw, 22px)', lineHeight: 1.4, fontFamily: "'Zurich_Light_Condensed_BT', sans-serif" }}>
+      <div style={{ position: 'absolute', top: '18%', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, zIndex: 10 }}>
+        <img src="/roberto_retos.png" style={{ width: 'clamp(60px, 15vw, 110px)', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }} />
+        <div style={{ background: 'white', borderRadius: 16, padding: 'clamp(10px, 2vw, 20px) clamp(14px, 2.5vw, 28px)', maxWidth: 'min(85vw, 420px)', boxShadow: '0 4px 16px rgba(0,0,0,0.2)', position: 'relative', border: '3px solid #1a4f8a' }}>
+          <div style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '10px solid transparent', borderRight: '10px solid transparent', borderBottom: '12px solid white' }} />
+          <p style={{ margin: 0, color: '#1E2D6B', fontWeight: 700, fontSize: 'clamp(13px, 3.8vw, 20px)', lineHeight: 1.4, fontFamily: "'Zurich_Light_Condensed_BT', sans-serif" }}>
             ¡Bienvenido a Aprende y Previene! Completa los 5 niveles y conviértete en experto en prevención de riesgos.
           </p>
         </div>
       </div>
 
-      <div style={{ position: 'absolute', top: '65%', left: '50%', transform: 'translate(-50%, -50%)', display: 'flex', gap: 'clamp(12px, 3vw, 40px)', alignItems: 'flex-start', zIndex: 10 }}>
+      <div style={{ position: 'absolute', top: '65%', left: '50%', transform: 'translate(-50%, -50%)', display: 'flex', gap: 'clamp(6px, 1.8vw, 40px)', alignItems: 'flex-start', zIndex: 10 }}>
         {[1, 2, 3, 4, 5].map((num) => {
           const status = getLevelStatus(num);
           const isLocked = status === 'locked';
@@ -120,8 +120,8 @@ export default function LevelMap({ totalScore, nickname, participantId, complete
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: 'clamp(70px, 9vw, 120px)',
-                  height: 'clamp(70px, 9vw, 120px)',
+                  width: 'clamp(54px, 13vw, 120px)',
+                  height: 'clamp(54px, 13vw, 120px)',
                   borderRadius: '50%',
                   background: isCompleted
                     ? 'radial-gradient(circle at 35% 35%, #f5c842, #d4a017)'
@@ -148,7 +148,7 @@ export default function LevelMap({ totalScore, nickname, participantId, complete
                 <span style={{
                   color: isLocked ? '#fff' : '#5C3A1E',
                   fontWeight: 900,
-                  fontSize: 'clamp(36px, 5vw, 60px)',
+                  fontSize: 'clamp(26px, 6vw, 60px)',
                   lineHeight: 1,
                   textShadow: isLocked ? '0 1px 3px rgba(0,0,0,0.3)' : 'none',
                   fontFamily: 'RobotRadicals, sans-serif',
@@ -179,12 +179,13 @@ export default function LevelMap({ totalScore, nickname, participantId, complete
               <span style={{
                 color: 'white',
                 fontWeight: 700,
-                fontSize: 'clamp(22px, 2.6vw, 28px)',
+                fontSize: 'clamp(9px, 2.2vw, 16px)',
                 textAlign: 'center',
-                maxWidth: 'clamp(70px, 9vw, 120px)',
-                lineHeight: 1.1,
+                maxWidth: 'clamp(54px, 13vw, 120px)',
+                lineHeight: 1.15,
+                wordBreak: 'break-word',
                 textShadow: '0 1px 4px rgba(0,0,0,0.5)',
-                fontFamily: 'UniversCondensedBold, sans-serif',
+                fontFamily: 'Zurich_Light_Condensed_BT, sans-serif',
               }}>
                 {levelNames[num - 1]}
               </span>
