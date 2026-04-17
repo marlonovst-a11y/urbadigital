@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Ranking from './Ranking';
 import Header from './Header';
 import { Facebook, MessageCircle, Linkedin, Trophy } from 'lucide-react';
+import { useSound } from '@/hooks/useSound';
 
 interface FinalScoreProps {
   participantId: string;
@@ -22,6 +23,15 @@ interface FinalScoreProps {
 
 export default function FinalScore({ participantId, nickname, totalScore, levelScores, onContinue }: FinalScoreProps) {
   const [isRankingOpen, setIsRankingOpen] = useState(false);
+
+  useEffect(() => {
+    const { play } = useSound();
+    setTimeout(() => {
+      if (totalScore >= 80) play('complete');
+      else if (totalScore >= 50) play('correct');
+      else play('click');
+    }, 500);
+  }, []);
 
   const getMessage = (score: number) => {
     if (score >= 90) return '¡Eres un experto en gestión de riesgos!';

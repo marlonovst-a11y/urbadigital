@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Header from './Header';
+import { useSound } from '@/hooks/useSound';
 
 interface FinalEvaluationProps {
   participantId: string;
@@ -10,6 +11,7 @@ interface FinalEvaluationProps {
 }
 
 export default function FinalEvaluation({ participantId, nickname, onComplete }: FinalEvaluationProps) {
+  const { play } = useSound();
   const [answer1, setAnswer1] = useState<string>('');
   const [answer2, setAnswer2] = useState<string>('');
   const [answer3, setAnswer3] = useState<string>('');
@@ -39,7 +41,7 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
             <p style={{ margin: '0 0 16px', color: '#444', fontSize: 'clamp(12px, 1.3vw, 15px)', lineHeight: 1.5 }}>
               Responde estas <strong>3 preguntas</strong> sobre lo que aprendiste. Esta evaluación vale <strong>10 puntos</strong> que se suman a tu puntaje total. ¡Sé honesto con tus respuestas!
             </p>
-            <button onClick={() => setShowIntro(false)} style={{ width: '100%', padding: '12px 0', background: '#1ABC9C', color: 'white', fontWeight: 800, fontSize: 'clamp(14px, 1.5vw, 17px)', borderRadius: 50, border: 'none', cursor: 'pointer', boxShadow: '0 4px 12px rgba(26,188,156,0.4)' }}>
+            <button onClick={() => { play('click'); setShowIntro(false); }} style={{ width: '100%', padding: '12px 0', background: '#1ABC9C', color: 'white', fontWeight: 800, fontSize: 'clamp(14px, 1.5vw, 17px)', borderRadius: 50, border: 'none', cursor: 'pointer', boxShadow: '0 4px 12px rgba(26,188,156,0.4)' }}>
               ¡Comenzar! ✨
             </button>
           </div>
@@ -96,7 +98,7 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {currentStep.opciones.map((opcion) => (
-              <button key={opcion} onClick={() => currentStep.setter(opcion)}
+              <button key={opcion} onClick={() => { play('click'); currentStep.setter(opcion); }}
                 style={{
                   padding: '12px 20px', borderRadius: 50, border: '2px solid', cursor: 'pointer', transition: 'all 0.2s', textAlign: 'left', backdropFilter: 'blur(4px)',
                   fontWeight: currentStep.value === opcion ? 700 : 500,
@@ -119,7 +121,7 @@ export default function FinalEvaluation({ participantId, nickname, onComplete }:
               </button>
             )}
             <button
-              onClick={() => { if (step < 2) setStep(step + 1); else handleSubmit(); }}
+              onClick={() => { play('click'); if (step < 2) setStep(step + 1); else handleSubmit(); }}
               disabled={!currentStep.value}
               style={{
                 flex: 2, padding: '12px 0', fontWeight: 900, fontSize: 15, borderRadius: 50, border: 'none', cursor: currentStep.value ? 'pointer' : 'not-allowed', transition: 'all 0.2s',

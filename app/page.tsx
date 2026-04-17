@@ -69,6 +69,14 @@ export default function Home() {
     level5: 0,
     evaluation: 0
   });
+  useEffect(() => {
+    const bg = new Audio('/sound-bg.mp3');
+    bg.loop = true;
+    bg.volume = 0.15;
+    bg.play().catch(() => {});
+    return () => { bg.pause(); bg.src = ''; };
+  }, []);
+
   const [showRecoveryDialog, setShowRecoveryDialog] = useState(false);
   const [recoveryData, setRecoveryData] = useState<any>(null);
   useEffect(() => {
