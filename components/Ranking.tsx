@@ -67,9 +67,9 @@ export default function Ranking({ isOpen, onClose, participantId }: RankingProps
   };
 
   const getMedalIcon = (position: number) => {
-    if (position === 1) return <Trophy className="w-6 h-6 text-white" fill="currentColor" />;
-    if (position === 2) return <Medal className="w-6 h-6 text-white/80" fill="currentColor" />;
-    if (position === 3) return <Award className="w-6 h-6 text-white/60" fill="currentColor" />;
+    if (position === 1) return <Trophy className="w-6 h-6 text-[#1E2D6B]" fill="currentColor" />;
+    if (position === 2) return <Medal className="w-6 h-6 text-[#1E2D6B]/80" fill="currentColor" />;
+    if (position === 3) return <Award className="w-6 h-6 text-[#1E2D6B]/60" fill="currentColor" />;
     return null;
   };
 
@@ -96,12 +96,12 @@ export default function Ranking({ isOpen, onClose, participantId }: RankingProps
           </button>
 
           <div className="flex items-center gap-3 mb-2">
-            <Trophy className="w-8 h-8 text-yellow-400" fill="currentColor" />
-            <h2 className="text-3xl font-bold text-white">
+            <Trophy className="w-8 h-8 text-yellow-500" fill="currentColor" />
+            <h2 className="text-3xl font-bold text-[#1E2D6B]">
               Ranking de Expertos
             </h2>
           </div>
-          <p className="text-white/90 text-sm">
+          <p className="text-[#1E2D6B] text-sm">
             Top 10 participantes con mayor puntaje
           </p>
         </div>
@@ -140,7 +140,7 @@ export default function Ranking({ isOpen, onClose, participantId }: RankingProps
                         {getMedalIcon(position)}
                         <span
                           className={`text-2xl font-bold ${
-                            position <= 3 ? 'text-white' : 'text-white'
+                            position <= 3 ? 'text-[#1E2D6B]' : 'text-[#1E2D6B]'
                           }`}
                         >
                           {position}
@@ -150,7 +150,7 @@ export default function Ranking({ isOpen, onClose, participantId }: RankingProps
                       <div className="flex-1">
                         <p
                           className={`font-bold text-lg ${
-                            position <= 3 ? 'text-white' : 'text-white'
+                            position <= 3 ? 'text-[#1E2D6B]' : 'text-[#1E2D6B]'
                           }`}
                         >
                           {entry.nickname}
@@ -162,11 +162,11 @@ export default function Ranking({ isOpen, onClose, participantId }: RankingProps
 
                       <div
                         className={`text-right ${
-                          position <= 3 ? 'text-white' : 'text-white'
+                          position <= 3 ? 'text-[#1E2D6B]' : 'text-[#1E2D6B]'
                         }`}
                       >
                         <p className="text-2xl font-bold">{entry.puntaje_total}</p>
-                        <p className="text-xs opacity-80">puntos</p>
+                        <p className="text-xs text-[#1E2D6B] opacity-80">puntos</p>
                       </div>
                     </div>
                   );
