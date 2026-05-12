@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Ranking from './Ranking';
 import Header from './Header';
 import { Facebook, MessageCircle, Linkedin, Trophy } from 'lucide-react';
@@ -24,6 +24,32 @@ interface FinalScoreProps {
 export default function FinalScore({ participantId, nickname, totalScore, levelScores, onContinue }: FinalScoreProps) {
   const [isRankingOpen, setIsRankingOpen] = useState(false);
   const { play } = useSound();
+
+  const confettiRef = useRef<HTMLImageElement>(null);
+  const familiaRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    let frame = 0;
+    const id = setInterval(() => {
+      if (confettiRef.current) {
+        confettiRef.current.src = `/assets/confetti/Confetti_${String(frame).padStart(5, '0')}.png`;
+      }
+      frame++;
+      if (frame > 79) clearInterval(id);
+    }, 41);
+    return () => clearInterval(id);
+  }, []);
+
+  useEffect(() => {
+    let frame = 0;
+    const id = setInterval(() => {
+      if (familiaRef.current) {
+        familiaRef.current.src = `/assets/familia/Loop-Familia_${String(frame).padStart(5, '0')}.png`;
+      }
+      frame = (frame + 1) % 80;
+    }, 41);
+    return () => clearInterval(id);
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -61,6 +87,14 @@ export default function FinalScore({ participantId, nickname, totalScore, levelS
 
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundImage: 'url(/score.png)', backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh' }}>
+      {/* Confetti — plays once */}
+      <img
+        ref={confettiRef}
+        src="/assets/confetti/Confetti_00000.png"
+        alt=""
+        aria-hidden="true"
+        style={{ position: 'fixed', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block', zIndex: 49, pointerEvents: 'none' }}
+      />
       <Header />
       <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 64, zIndex: 10, position: 'relative' }}>
         <img src="/personaje_puntaje_final.png" style={{ width: 'clamp(180px, 40vw, 700px)', filter: 'drop-shadow(0 4px 16px rgba(0,0,0,0.3))' }} />
@@ -77,6 +111,17 @@ export default function FinalScore({ participantId, nickname, totalScore, levelS
               <p className="text-lg md:text-2xl font-bold text-white text-center" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.5)' }}>
                 {getMessage(totalScore)}
               </p>
+            </div>
+
+            {/* Familia loop animation */}
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}>
+              <img
+                ref={familiaRef}
+                src="/assets/familia/Loop-Familia_00000.png"
+                alt=""
+                aria-hidden="true"
+                style={{ maxWidth: 'clamp(200px, 50vw, 320px)', height: 'auto', display: 'block' }}
+              />
             </div>
 
             <div className="bg-white/20 rounded-lg p-4 md:p-6 mb-4 md:mb-6" style={{ backdropFilter: 'blur(8px)' }}>
