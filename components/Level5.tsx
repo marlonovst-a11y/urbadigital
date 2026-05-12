@@ -176,42 +176,71 @@ export default function Level5({ participantId, nickname, onComplete }: Level5Pr
   if (!showFeedback) {
     return (
       <div style={{ width: '100vw', height: '100vh', backgroundImage: 'url(/nivel5_fondo.png.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
+        <style>{`
+          @media (max-width: 640px) {
+            .lvl5-character { display: none !important; }
+            .lvl5-grid-wrapper {
+              position: static !important;
+              transform: none !important;
+              left: auto !important;
+              top: auto !important;
+              width: 100% !important;
+              box-sizing: border-box;
+              padding: 8px !important;
+            }
+            .lvl5-grid-outer {
+              position: absolute !important;
+              top: 10% !important;
+              left: 0 !important;
+              right: 0 !important;
+              transform: none !important;
+              display: flex;
+              justify-content: center;
+            }
+            .lvl5-cell { width: calc((100vw - 52px) / 12) !important; height: calc((100vw - 52px) / 12) !important; }
+            .lvl5-clues-panel { max-height: 220px !important; overflow-y: auto !important; }
+            .lvl5-clue-text { font-size: 11px !important; line-height: 1.4 !important; }
+            .lvl5-clue-header { font-size: 12px !important; }
+          }
+        `}</style>
         <Header />
 
-        <div style={{ position: 'absolute', top: '15%', left: '50%', transform: 'translateX(-50%)', zIndex: 10 }}>
+        <div className="lvl5-grid-outer" style={{ position: 'absolute', top: '15%', left: '50%', transform: 'translateX(-50%)', zIndex: 10 }}>
+          <div className="lvl5-grid-wrapper">
+            {/* Personaje arriba izquierda — Don Manuel */}
+            <img className="lvl5-character" src="/manuel_nivel5.png" style={{ position: 'absolute', left: -90, top: -20, width: 'clamp(70px, 8vw, 110px)', zIndex: 11, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }} />
 
-          {/* Personaje arriba izquierda — Don Manuel */}
-          <img src="/manuel_nivel5.png" style={{ position: 'absolute', left: -90, top: -20, width: 'clamp(70px, 8vw, 110px)', zIndex: 11, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }} />
+            {/* Personaje arriba derecha — Sofía */}
+            <img className="lvl5-character" src="/sofia_nivel5.png" style={{ position: 'absolute', right: -90, top: -20, width: 'clamp(70px, 8vw, 110px)', zIndex: 11, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }} />
 
-          {/* Personaje arriba derecha — Sofía */}
-          <img src="/sofia_nivel5.png" style={{ position: 'absolute', right: -90, top: -20, width: 'clamp(70px, 8vw, 110px)', zIndex: 11, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }} />
+            {/* Personaje abajo izquierda — Roberto */}
+            <img className="lvl5-character" src="/roberto_nivel5.png" style={{ position: 'absolute', left: -90, bottom: -20, width: 'clamp(70px, 8vw, 110px)', zIndex: 11, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }} />
 
-          {/* Personaje abajo izquierda — Roberto */}
-          <img src="/roberto_nivel5.png" style={{ position: 'absolute', left: -90, bottom: -20, width: 'clamp(70px, 8vw, 110px)', zIndex: 11, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }} />
+            {/* Personaje abajo derecha — Carmen */}
+            <img className="lvl5-character" src="/carmen_nivel5.png" style={{ position: 'absolute', right: -90, bottom: -20, width: 'clamp(70px, 8vw, 110px)', zIndex: 11, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }} />
 
-          {/* Personaje abajo derecha — Carmen */}
-          <img src="/carmen_nivel5.png" style={{ position: 'absolute', right: -90, bottom: -20, width: 'clamp(70px, 8vw, 110px)', zIndex: 11, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }} />
-
-          {/* Crucigrama */}
-          <div style={{ background: 'rgba(66,115,174,0.40)', padding: 12, borderRadius: 12, backdropFilter: 'blur(4px)' }}>
-            <div style={{ display: 'grid', gap: 3, gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))` }}>
-              {grid.map((row, i) =>
-                row.map((cell, j) => {
-                  if (!cell.filled) return <div key={`${i}-${j}`} style={{ width: 'clamp(22px, 2.5vw, 36px)', height: 'clamp(22px, 2.5vw, 36px)', background: 'transparent' }} />;
-                  const isSelected = selectedWord && cell.wordIds.includes(selectedWord.id);
-                  return (
-                    <div key={`${i}-${j}`}
-                      onClick={() => {
-                        const word = wordStates.find(w => cell.wordIds.includes(w.id) && !w.completed && !w.revealed);
-                        if (word) { setSelectedWord(word); setInputValue(''); }
-                      }}
-                      style={{ width: 'clamp(22px, 2.5vw, 36px)', height: 'clamp(22px, 2.5vw, 36px)', background: cell.correct ? '#D4F5E0' : cell.revealed ? '#DCE9F8' : isSelected ? '#FFF9E6' : 'white', border: `2px solid ${cell.correct ? '#1ABC9C' : cell.revealed ? '#2167AE' : isSelected ? '#F39C12' : '#2167AE'}`, borderRadius: 3, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', position: 'relative', transition: 'all 0.2s' }}>
-                      {cell.number && <span style={{ position: 'absolute', top: 1, left: 2, fontSize: 'clamp(5px, 0.6vw, 8px)', fontWeight: 800, color: '#2167AE' }}>{cell.number}</span>}
-                      {(cell.correct || cell.revealed) && <span style={{ fontSize: 'clamp(10px, 1.2vw, 16px)', fontWeight: 800, color: '#1E2D6B', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif' }}>{cell.letter}</span>}
-                    </div>
-                  );
-                })
-              )}
+            {/* Crucigrama */}
+            <div style={{ background: 'rgba(66,115,174,0.40)', padding: 12, borderRadius: 12, backdropFilter: 'blur(4px)' }}>
+              <div style={{ display: 'grid', gap: 3, gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))` }}>
+                {grid.map((row, i) =>
+                  row.map((cell, j) => {
+                    if (!cell.filled) return <div key={`${i}-${j}`} className="lvl5-cell" style={{ width: 'clamp(22px, 2.5vw, 36px)', height: 'clamp(22px, 2.5vw, 36px)', background: 'transparent' }} />;
+                    const isSelected = selectedWord && cell.wordIds.includes(selectedWord.id);
+                    return (
+                      <div key={`${i}-${j}`}
+                        className="lvl5-cell"
+                        onClick={() => {
+                          const word = wordStates.find(w => cell.wordIds.includes(w.id) && !w.completed && !w.revealed);
+                          if (word) { setSelectedWord(word); setInputValue(''); }
+                        }}
+                        style={{ width: 'clamp(22px, 2.5vw, 36px)', height: 'clamp(22px, 2.5vw, 36px)', background: cell.correct ? '#D4F5E0' : cell.revealed ? '#DCE9F8' : isSelected ? '#FFF9E6' : 'white', border: `2px solid ${cell.correct ? '#1ABC9C' : cell.revealed ? '#2167AE' : isSelected ? '#F39C12' : '#2167AE'}`, borderRadius: 3, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', position: 'relative', transition: 'all 0.2s' }}>
+                        {cell.number && <span style={{ position: 'absolute', top: 1, left: 2, fontSize: 'clamp(5px, 0.6vw, 8px)', fontWeight: 800, color: '#2167AE' }}>{cell.number}</span>}
+                        {(cell.correct || cell.revealed) && <span style={{ fontSize: 'clamp(10px, 1.2vw, 16px)', fontWeight: 800, color: '#1E2D6B', fontFamily: 'Zurich_Light_Condensed_BT, sans-serif' }}>{cell.letter}</span>}
+                      </div>
+                    );
+                  })
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -241,15 +270,15 @@ export default function Level5({ participantId, nickname, onComplete }: Level5Pr
             </div>
           )}
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', background: 'rgba(10,20,40,0.88)', backdropFilter: 'blur(8px)', maxHeight: 200, overflow: 'hidden' }}>
+          <div className="lvl5-clues-panel" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', background: 'rgba(10,20,40,0.88)', backdropFilter: 'blur(8px)', maxHeight: 200, overflow: 'hidden' }}>
 
             {/* Horizontales */}
             <div style={{ borderRight: '1px solid rgba(255,255,255,0.2)', padding: '8px 12px', overflowY: 'auto' }}>
-              <p style={{ margin: '0 0 6px', color: '#F9D030', fontWeight: 800, fontSize: 13 }}>📖 Horizontales</p>
+              <p className="lvl5-clue-header" style={{ margin: '0 0 6px', color: '#F9D030', fontWeight: 800, fontSize: 13 }}>Horizontales</p>
               {wordStates.filter(w => w.direction === 'horizontal').map(word => (
                 <div key={word.id} onClick={() => { if (!word.completed && !word.revealed) { setSelectedWord(word); setInputValue(''); } }}
                   style={{ padding: '5px 8px', marginBottom: 4, borderRadius: 8, cursor: 'pointer', background: word.completed || word.revealed ? 'rgba(26,188,156,0.3)' : selectedWord?.id === word.id ? 'rgba(249,208,48,0.3)' : 'rgba(255,255,255,0.08)', border: `1px solid ${word.completed || word.revealed ? '#1ABC9C' : selectedWord?.id === word.id ? '#F9D030' : 'rgba(255,255,255,0.2)'}` }}>
-                  <p style={{ margin: 0, color: 'white', fontSize: 12 }}>
+                  <p className="lvl5-clue-text" style={{ margin: 0, color: 'white', fontSize: 12 }}>
                     <span style={{ fontWeight: 800, color: '#F9D030' }}>{word.number}. </span>{word.clue}
                     {word.attempts > 0 && !word.completed && !word.revealed && <span style={{ color: '#E74C3C', fontSize: 10, marginLeft: 6 }}>({word.attempts}/3)</span>}
                   </p>
@@ -258,11 +287,11 @@ export default function Level5({ participantId, nickname, onComplete }: Level5Pr
             </div>
             {/* Verticales */}
             <div style={{ padding: '8px 12px', overflowY: 'auto' }}>
-              <p style={{ margin: '0 0 6px', color: '#F9D030', fontWeight: 800, fontSize: 13 }}>📖 Verticales</p>
+              <p className="lvl5-clue-header" style={{ margin: '0 0 6px', color: '#F9D030', fontWeight: 800, fontSize: 13 }}>Verticales</p>
               {wordStates.filter(w => w.direction === 'vertical').map(word => (
                 <div key={word.id} onClick={() => { if (!word.completed && !word.revealed) { setSelectedWord(word); setInputValue(''); } }}
                   style={{ padding: '5px 8px', marginBottom: 4, borderRadius: 8, cursor: 'pointer', background: word.completed || word.revealed ? 'rgba(26,188,156,0.3)' : selectedWord?.id === word.id ? 'rgba(249,208,48,0.3)' : 'rgba(255,255,255,0.08)', border: `1px solid ${word.completed || word.revealed ? '#1ABC9C' : selectedWord?.id === word.id ? '#F9D030' : 'rgba(255,255,255,0.2)'}` }}>
-                  <p style={{ margin: 0, color: 'white', fontSize: 12 }}>
+                  <p className="lvl5-clue-text" style={{ margin: 0, color: 'white', fontSize: 12 }}>
                     <span style={{ fontWeight: 800, color: '#F9D030' }}>{word.number}. </span>{word.clue}
                     {word.attempts > 0 && !word.completed && !word.revealed && <span style={{ color: '#E74C3C', fontSize: 10, marginLeft: 6 }}>({word.attempts}/3)</span>}
                   </p>
