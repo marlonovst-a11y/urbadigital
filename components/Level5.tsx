@@ -198,7 +198,7 @@ export default function Level5({ participantId, nickname, onComplete }: Level5Pr
               display: flex !important;
               align-items: flex-start !important;
               justify-content: center !important;
-              padding-top: 64px !important;
+              padding-top: 80px !important;
               padding-bottom: 16px !important;
               pointer-events: none;
             }
