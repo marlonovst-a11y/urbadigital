@@ -98,9 +98,10 @@ export default function Level3({ participantId, nickname, onComplete }: Level3Pr
   if (showInstructions) {
     return (
       <div style={{ width: '100vw', height: '100vh', minHeight: '-webkit-fill-available', backgroundImage: 'url(/nivel3_instruccion.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
+        <style>{`@media (max-width: 640px) { .lvl3-character { display: none !important; } }`}</style>
         <Header />
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '16px', gap: 16 }}>
-          <img src="/carmen_nivel3.png" style={{ width: 'clamp(80px, 18vw, 160px)', display: 'block' }} />
+          <img className="lvl3-character" src="/carmen_nivel3.png" style={{ width: 'clamp(80px, 18vw, 160px)', display: 'block' }} />
           <div style={{ background: 'white', borderRadius: 16, padding: 'clamp(16px, 3vw, 24px) clamp(18px, 3.5vw, 32px)', width: 'min(88vw, 440px)', border: '3px solid #2167AE', boxShadow: '0 4px 20px rgba(0,0,0,0.2)', position: 'relative' }}>
             <div style={{ position: 'absolute', top: -13, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '11px solid transparent', borderRight: '11px solid transparent', borderBottom: '13px solid #2167AE' }} />
             <div style={{ position: 'absolute', top: -9, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '9px solid transparent', borderRight: '9px solid transparent', borderBottom: '11px solid white' }} />
