@@ -281,7 +281,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
               alt={option === 'A' ? challenge.opcionA : challenge.opcionB}
               style={{ width: '100%', maxWidth: 200, height: 160, objectFit: 'contain', borderRadius: 8 }}
             />
-            <div style={{ background: 'white', borderRadius: 50, padding: '6px 18px', border: '2px solid #1E2D6B', marginTop: 8, fontWeight: 700, fontSize: 'clamp(11px, 1.2vw, 14px)', color: '#1E2D6B', lineHeight: 1.2, textAlign: 'center', maxWidth: 200 }}>
+            <div style={{ background: 'rgba(255,255,255,0.95)', borderRadius: 8, padding: '8px 12px', marginTop: 8, fontWeight: 700, fontSize: 'clamp(14px, 1.4vw, 16px)', color: '#1E2D6B', lineHeight: 1.2, textAlign: 'center', maxWidth: 200, boxShadow: '0 2px 4px rgba(0,0,0,0.15)' }}>
               {option === 'A' ? challenge.opcionA : challenge.opcionB}
             </div>
           </div>
