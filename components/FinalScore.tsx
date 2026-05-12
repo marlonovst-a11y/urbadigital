@@ -95,8 +95,15 @@ export default function FinalScore({ participantId, nickname, totalScore, levelS
         aria-hidden="true"
         style={{ position: 'fixed', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block', zIndex: 49, pointerEvents: 'none' }}
       />
+      <style>{`
+        @media (max-width: 640px) {
+          .final-score-avatar { padding-top: 56px !important; }
+          .final-score-avatar img { max-height: 48px !important; width: auto !important; }
+          .final-score-title { font-size: 18px !important; }
+        }
+      `}</style>
       <Header />
-      <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 64, zIndex: 10, position: 'relative' }}>
+      <div className="final-score-avatar" style={{ display: 'flex', justifyContent: 'center', paddingTop: 64, zIndex: 10, position: 'relative' }}>
         <img src="/personaje_puntaje_final.png" style={{ width: 'clamp(180px, 40vw, 700px)', filter: 'drop-shadow(0 4px 16px rgba(0,0,0,0.3))' }} />
       </div>
       <main className="flex-1 px-3 md:px-4 pb-8">
@@ -104,11 +111,11 @@ export default function FinalScore({ participantId, nickname, totalScore, levelS
 <div className="flex flex-col items-center mb-5 md:mb-8">
               <div className="w-36 h-36 md:w-48 md:h-48 rounded-full bg-[#2167AE] flex items-center justify-center shadow-xl mb-4">
                 <div className="text-center">
-                  <div className="text-5xl md:text-6xl font-bold text-white">{totalScore}</div>
+                  <div className="final-score-title text-5xl md:text-6xl font-bold text-white">{totalScore}</div>
                   <div className="text-white text-base md:text-lg">/100</div>
                 </div>
               </div>
-              <p className="text-lg md:text-2xl font-bold text-white text-center" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.5)' }}>
+              <p className="final-score-title text-lg md:text-2xl font-bold text-white text-center" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.5)' }}>
                 {getMessage(totalScore)}
               </p>
             </div>
