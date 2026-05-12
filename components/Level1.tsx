@@ -219,7 +219,7 @@ export default function Level1({ participantId, nickname, onComplete }: Level1Pr
       tiempo: timeTaken, puntos: points
     }]);
 
-    setTimeout(() => setShowMessage(true), 4000);
+    setTimeout(() => setShowMessage(true), 800);
   };
 
   const handleNext = () => {
