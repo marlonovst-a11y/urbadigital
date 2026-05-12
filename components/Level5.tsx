@@ -190,12 +190,22 @@ export default function Level5({ participantId, nickname, onComplete }: Level5Pr
             }
             .lvl5-grid-outer {
               position: absolute !important;
-              top: 10% !important;
+              top: 48px !important;
+              bottom: 0 !important;
               left: 0 !important;
               right: 0 !important;
               transform: none !important;
-              display: flex;
-              justify-content: center;
+              display: flex !important;
+              align-items: center !important;
+              justify-content: center !important;
+              padding-top: 24px !important;
+              padding-bottom: 24px !important;
+              pointer-events: none;
+            }
+            .lvl5-grid-outer > .lvl5-grid-wrapper {
+              pointer-events: auto;
+              margin-top: auto !important;
+              margin-bottom: auto !important;
             }
             .lvl5-cell { width: calc((100vw - 52px) / 12) !important; height: calc((100vw - 52px) / 12) !important; }
             .lvl5-clues-panel { max-height: 220px !important; overflow-y: auto !important; }
