@@ -198,8 +198,8 @@ export default function Level5({ participantId, nickname, onComplete }: Level5Pr
               display: flex !important;
               align-items: flex-start !important;
               justify-content: center !important;
-              padding-top: 8px !important;
-              padding-bottom: 0 !important;
+              padding-top: 40px !important;
+              padding-bottom: 16px !important;
               pointer-events: none;
             }
             .lvl5-grid-outer > .lvl5-grid-wrapper {
