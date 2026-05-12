@@ -28,78 +28,96 @@ export default function Closing({ onPlayAgain, totalScore }: ClosingProps) {
     return () => clearInterval(id);
   }, []);
 
+  const scoreLabel = totalScore >= 80 ? '¡Excelente!' : totalScore >= 50 ? '¡Buen trabajo!' : '¡Nivel completado!';
+
   return (
-    <>
+    <div className="closing-root flex flex-col relative overflow-hidden" style={{ minHeight: '100vh' }}>
       <style>{`
-        @media (max-width: 640px) {
-          .closing-desktop-bg { background-image: none !important; background: linear-gradient(135deg, #2167AE, #1E2D6B) !important; }
-          .closing-mobile-layout {
-            justify-content: center !important;
-            padding-top: 32px !important;
-            padding-bottom: 32px !important;
-            gap: 20px !important;
-          }
-          .closing-score { display: flex !important; }
-          .closing-familia { display: flex !important; }
+        /* Desktop: illustrated background, content anchored to bottom */
+        .closing-root {
+          background-image: url(/fin.png);
+          background-size: cover;
+          background-position: center;
         }
-        @media (min-width: 641px) {
-          .closing-score { display: none; }
-          .closing-familia { display: none; }
+        .closing-main {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-end;
+          padding: 0 16px 24px;
+          position: relative;
+          z-index: 10;
+        }
+        .closing-score-block  { display: none; }
+        .closing-familia-block { display: none; }
+        .closing-title { font-size: clamp(30px, 5vw, 48px); margin-bottom: 24px; }
+        .closing-subtitle { font-size: clamp(16px, 2vw, 20px); margin-bottom: 48px; }
+        .closing-btn { width: auto; max-width: none; padding: 12px 32px; }
+
+        /* Mobile: gradient, centered column, all elements visible */
+        @media (max-width: 640px) {
+          .closing-root {
+            background-image: none;
+            background: linear-gradient(135deg, #2167AE, #1E2D6B);
+          }
+          .closing-main {
+            justify-content: center;
+            padding: 40px 24px 40px;
+            gap: 20px;
+          }
+          .closing-score-block  { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+          .closing-familia-block { display: flex; justify-content: center; }
+          .closing-title { font-size: 22px; margin-bottom: 0; }
+          .closing-subtitle { font-size: 15px; margin-bottom: 0; opacity: 0.9; }
+          .closing-btn { width: 100%; max-width: 280px; padding: 14px 0; }
         }
       `}</style>
-      <div
-        className="closing-desktop-bg flex flex-col relative overflow-hidden"
-        style={{ backgroundImage: 'url(/fin.png)', backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh' }}
-      >
-        <main className="closing-mobile-layout flex-1 flex flex-col items-center justify-end px-4 py-0 pb-4 md:pb-6 relative z-10">
 
-          {/* Score — mobile only */}
-          <div className="closing-score flex-col items-center" style={{ display: 'none' }}>
-            <div style={{ width: 100, height: 100, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', border: '3px solid rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 32, fontWeight: 800, color: 'white', lineHeight: 1 }}>{totalScore}</div>
-                <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.8)' }}>/100</div>
-              </div>
+      <main className="closing-main">
+        {/* 1. Score / label */}
+        <div className="closing-score-block">
+          <div style={{ width: 96, height: 96, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', border: '3px solid rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: 30, fontWeight: 800, color: 'white', lineHeight: 1 }}>{totalScore}</div>
+              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.8)' }}>/100</div>
             </div>
-            <p style={{ color: 'white', fontWeight: 700, fontSize: 14, margin: 0 }}>
-              {totalScore >= 80 ? '¡Excelente!' : totalScore >= 50 ? '¡Buen trabajo!' : '¡Nivel completado!'}
-            </p>
           </div>
+          <p style={{ color: 'white', fontWeight: 700, fontSize: 15, margin: 0 }}>{scoreLabel}</p>
+        </div>
 
-          {/* Familia loop animation — mobile only */}
-          <div className="closing-familia justify-center" style={{ display: 'none' }}>
-            <img
-              ref={familiaRef}
-              src="/assets/familia/Loop-Familia_00000.png"
-              alt=""
-              aria-hidden="true"
-              style={{ maxHeight: 180, width: 'auto', display: 'block' }}
-            />
-          </div>
+        {/* 2. Familia animation */}
+        <div className="closing-familia-block">
+          <img
+            ref={familiaRef}
+            src="/assets/familia/Loop-Familia_00000.png"
+            alt=""
+            aria-hidden="true"
+            style={{ maxHeight: 180, width: 'auto', display: 'block' }}
+          />
+        </div>
 
-          <h1
-            className="text-3xl md:text-5xl font-bold text-white mb-0 md:mb-6 text-center"
-            style={{ fontFamily: 'DM Serif Display, Georgia, serif', textShadow: '0 2px 8px rgba(0,0,0,0.4)', fontSize: 'clamp(22px, 5vw, 48px)' }}
-          >
-            Gracias por participar!
-          </h1>
+        {/* 3. Title */}
+        <h1
+          className="closing-title font-bold text-white text-center"
+          style={{ fontFamily: 'DM Serif Display, Georgia, serif', textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}
+        >
+          Gracias por participar!
+        </h1>
 
-          <p
-            className="text-white text-center leading-relaxed mb-0 md:mb-12"
-            style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)', fontSize: 'clamp(15px, 2vw, 20px)', opacity: 0.9 }}
-          >
-            Juntos construimos comunidades más seguras y resilientes.
-          </p>
+        {/* 4. Subtitle */}
+        <p className="closing-subtitle text-white text-center leading-relaxed" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
+          Juntos construimos comunidades más seguras y resilientes.
+        </p>
 
-          <button
-            onClick={onPlayAgain}
-            className="bg-white text-[#2167AE] px-6 md:px-8 py-3 md:py-4 rounded-lg font-bold text-base md:text-lg hover:bg-[#ECEEEF] transition-colors shadow-lg min-h-[44px]"
-            style={{ width: '100%', maxWidth: 280 }}
-          >
-            Jugar de nuevo
-          </button>
-        </main>
-      </div>
-    </>
+        {/* 5. Button */}
+        <button
+          onClick={onPlayAgain}
+          className="closing-btn bg-white text-[#2167AE] rounded-lg font-bold text-base md:text-lg hover:bg-[#ECEEEF] transition-colors shadow-lg min-h-[44px]"
+        >
+          Jugar de nuevo
+        </button>
+      </main>
+    </div>
   );
 }
