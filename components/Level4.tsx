@@ -255,9 +255,90 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
 
   return (
     <div style={{ width: '100vw', height: '100vh', minHeight: '-webkit-fill-available', backgroundImage: 'url(/nivel4_fondo.png)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', overflow: 'hidden' }}>
+      <style>{`
+        @media (max-width: 640px) {
+          .lvl4-options {
+            position: static !important;
+            transform: none !important;
+            display: flex !important;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            align-items: center !important;
+            width: 100% !important;
+            padding: 0 16px !important;
+            gap: 12px !important;
+            margin-top: 8px !important;
+          }
+          .lvl4-option-card {
+            flex: 0 0 auto !important;
+            width: calc(50% - 16px) !important;
+            max-width: 140px !important;
+            min-width: unset !important;
+            padding: 10px 8px !important;
+          }
+          .lvl4-option-card img {
+            height: 100px !important;
+            max-width: 100% !important;
+          }
+          .lvl4-option-card > div:last-child {
+            font-size: 11px !important;
+            padding: 6px 8px !important;
+            max-width: 100% !important;
+          }
+          .lvl4-option-badge {
+            top: -8px !important;
+            right: -8px !important;
+            left: auto !important;
+            transform: none !important;
+            font-size: 10px !important;
+            padding: 2px 8px !important;
+          }
+          .lvl4-feedback-toast {
+            position: fixed !important;
+            top: 60px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            right: auto !important;
+            width: auto !important;
+            min-width: 120px !important;
+            max-width: 90vw !important;
+            text-align: center !important;
+          }
+          .lvl4-question {
+            top: 6% !important;
+            width: calc(100vw - 32px) !important;
+          }
+          .lvl4-content-wrap {
+            position: absolute !important;
+            top: 22% !important;
+            left: 0 !important;
+            right: 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 12px !important;
+            z-index: 20 !important;
+          }
+          .lvl4-confirm-btn {
+            position: static !important;
+            transform: none !important;
+            width: calc(100% - 32px) !important;
+            max-width: 320px !important;
+          }
+          .lvl4-progress {
+            bottom: 2% !important;
+            gap: 10px !important;
+          }
+          .lvl4-progress > div {
+            width: 40px !important;
+            height: 40px !important;
+            font-size: 16px !important;
+          }
+        }
+      `}</style>
       <Header />
 
-      <div style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(280px, 45vw, 580px)', zIndex: 20 }}>
+      <div className="lvl4-question" style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(280px, 45vw, 580px)', zIndex: 20 }}>
         <div style={{ background: 'white', borderRadius: 16, padding: '18px 28px', border: '3px solid #1E2D6B', boxShadow: '0 4px 20px rgba(0,0,0,0.2)', textAlign: 'center', position: 'relative' }}>
           <div style={{ position: 'absolute', bottom: -16, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '14px solid transparent', borderRight: '14px solid transparent', borderTop: '16px solid #1E2D6B' }} />
           <div style={{ position: 'absolute', bottom: -12, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '11px solid transparent', borderRight: '11px solid transparent', borderTop: '13px solid white' }} />
@@ -267,14 +348,14 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
         </div>
       </div>
 
-      <div style={{ position: 'absolute', top: '32%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(280px, 45vw, 560px)', display: 'flex', gap: 32, zIndex: 20 }}>
+      <div className="lvl4-options" style={{ position: 'absolute', top: '32%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(280px, 45vw, 560px)', display: 'flex', gap: 32, zIndex: 20 }}>
         {(['A', 'B'] as const).map(option => (
-          <div key={option} onClick={() => handleSelectOption(option)} style={getCardStyle(option)}>
+          <div key={option} className="lvl4-option-card" onClick={() => handleSelectOption(option)} style={getCardStyle(option)}>
             {showFeedback && option === challenge.correcta && (
-              <div style={{ position: 'absolute', top: -12, right: -12, background: '#1ABC9C', color: '#fff', fontWeight: 800, fontSize: 11, borderRadius: 99, padding: '3px 10px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>¡Correcto!</div>
+              <div className="lvl4-option-badge" style={{ position: 'absolute', top: -12, right: -12, background: '#1ABC9C', color: '#fff', fontWeight: 800, fontSize: 11, borderRadius: 99, padding: '3px 10px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>¡Correcto!</div>
             )}
             {showFeedback && selectedOption === option && option !== challenge.correcta && (
-              <div style={{ position: 'absolute', top: -12, right: -12, background: '#E74C3C', color: '#fff', fontWeight: 800, fontSize: 11, borderRadius: 99, padding: '3px 10px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>Incorrecto</div>
+              <div className="lvl4-option-badge" style={{ position: 'absolute', top: -12, right: -12, background: '#E74C3C', color: '#fff', fontWeight: 800, fontSize: 11, borderRadius: 99, padding: '3px 10px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>Incorrecto</div>
             )}
             <img
               src={option === 'A' ? challenge.imagenA : challenge.imagenB}
@@ -289,7 +370,7 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
       </div>
 
       {showFeedback && (
-        <div style={{ position: 'absolute', top: '70%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(280px, 60vw, 700px)', zIndex: 20, background: 'rgba(10,20,40,0.75)', backdropFilter: 'blur(6px)', borderRadius: 12, padding: '10px 20px', textAlign: 'center' }}>
+        <div className="lvl4-feedback-toast" style={{ position: 'absolute', top: '70%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(280px, 60vw, 700px)', zIndex: 30, background: 'rgba(10,20,40,0.75)', backdropFilter: 'blur(6px)', borderRadius: 12, padding: '10px 20px', textAlign: 'center' }}>
           <p style={{ margin: 0, color: '#fff', fontSize: 'clamp(12px, 1.4vw, 15px)', fontWeight: 600, lineHeight: 1.5 }}>
             <strong>{selectedOption === challenge.correcta ? '¡Muy bien! ' : 'Aprende de esto: '}</strong>{challenge.mensaje}
           </p>
@@ -297,18 +378,20 @@ export default function Level4({ participantId, nickname, onComplete }: Level4Pr
       )}
 
       <div style={{ position: 'absolute', bottom: '15%', left: '50%', transform: 'translateX(-50%)', width: 'clamp(240px, 38vw, 460px)', zIndex: 20 }}>
-        {!showFeedback ? (
-          <button onClick={handleConfirm} disabled={!selectedOption} style={{ width: '100%', padding: '12px 0', background: selectedOption ? '#2167AE' : 'rgba(30,45,107,0.75)', color: selectedOption ? '#fff' : 'rgba(255,255,255,0.5)', fontWeight: 800, fontSize: 'clamp(13px,1.6vw,16px)', borderRadius: 12, border: 'none', cursor: selectedOption ? 'pointer' : 'not-allowed', backdropFilter: 'blur(4px)' }}>
-            Confirmar respuesta
-          </button>
-        ) : (
-          <button onClick={handleNext} style={{ width: '100%', padding: '12px 0', background: '#1ABC9C', color: '#fff', fontWeight: 800, fontSize: 'clamp(13px,1.6vw,16px)', borderRadius: 12, border: 'none', cursor: 'pointer', boxShadow: '0 4px 16px rgba(26,188,156,0.4)' }}>
-            {currentChallenge < challenges.length - 1 ? 'Siguiente reto' : 'Ver resultados'}
-          </button>
-        )}
+        <div className="lvl4-confirm-btn" style={{ width: '100%' }}>
+          {!showFeedback ? (
+            <button onClick={handleConfirm} disabled={!selectedOption} style={{ width: '100%', padding: '12px 0', background: selectedOption ? '#2167AE' : 'rgba(30,45,107,0.75)', color: selectedOption ? '#fff' : 'rgba(255,255,255,0.5)', fontWeight: 800, fontSize: 'clamp(13px,1.6vw,16px)', borderRadius: 12, border: 'none', cursor: selectedOption ? 'pointer' : 'not-allowed', backdropFilter: 'blur(4px)' }}>
+              Confirmar respuesta
+            </button>
+          ) : (
+            <button onClick={handleNext} style={{ width: '100%', padding: '12px 0', background: '#1ABC9C', color: '#fff', fontWeight: 800, fontSize: 'clamp(13px,1.6vw,16px)', borderRadius: 12, border: 'none', cursor: 'pointer', boxShadow: '0 4px 16px rgba(26,188,156,0.4)' }}>
+              {currentChallenge < challenges.length - 1 ? 'Siguiente reto' : 'Ver resultados'}
+            </button>
+          )}
+        </div>
       </div>
 
-      <div style={{ position: 'absolute', bottom: '4%', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 16, zIndex: 20 }}>
+      <div className="lvl4-progress" style={{ position: 'absolute', bottom: '4%', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 16, zIndex: 20 }}>
         {challenges.map((_, idx) => (
           <div key={idx} style={{ width: 52, height: 52, borderRadius: '50%', background: idx < currentChallenge ? (responses[idx]?.correcta ? '#1ABC9C' : '#E74C3C') : idx === currentChallenge ? '#F9D030' : 'rgba(255,255,255,0.3)', border: '3px solid white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 22, color: idx === currentChallenge ? '#1E2D6B' : 'white', fontFamily: 'RobotRadicals, sans-serif', transition: 'all 0.3s', transform: idx === currentChallenge ? 'scale(1.2)' : 'scale(1)' }}>
             {idx < currentChallenge ? (responses[idx]?.correcta ? '✓' : '✗') : idx + 1}
