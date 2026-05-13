@@ -93,7 +93,7 @@ export async function getParticipant(id: string): Promise<Participant | null> {
 }
 
 export async function updateParticipantDemographics(id: string, edad: string, genero: string, ocupacion: string): Promise<boolean> {
-  console.log(`[updateParticipantDemographics] participantId=${id}`, { edad, genero, ocupacion });
+  console.log(`Saving to Supabase: edad = ${edad}, genero = ${genero}, ocupacion = ${ocupacion} for participant ${id}`);
   try {
     const res = await fetchWithTimeout('/api/participantes', {
       method: 'PATCH',
@@ -107,8 +107,9 @@ export async function updateParticipantDemographics(id: string, edad: string, ge
   }
 }
 
-export async function updateParticipantScore(id: string, level: number, score: number, responses: Record<string, any>): Promise<boolean> {
-  console.log(`[updateParticipantScore] participantId=${id} level=${level} score=${score}`);
+export async function updateParticipantScore(id: string, level: number, score: number, responses: Record<string, any>, newTotal: number): Promise<boolean> {
+  console.log(`Saving to Supabase: puntaje_nivel_${level} = ${score} for participant ${id}`);
+  console.log(`Saving to Supabase: puntaje_total = ${newTotal} for participant ${id}`);
   try {
     const res = await fetchWithTimeout('/api/participantes', {
       method: 'PATCH',
@@ -116,25 +117,24 @@ export async function updateParticipantScore(id: string, level: number, score: n
       body: JSON.stringify({
         id,
         [`puntaje_nivel_${level}`]: score,
-        [`respuestas_nivel_${level}`]: responses
+        [`respuestas_nivel_${level}`]: responses,
+        puntaje_total: newTotal
       })
     });
     console.log(`[updateParticipantScore] Response ok=${res.ok} level=${level}`);
     return res.ok;
   } catch (e) {
     console.error('Error updateParticipantScore:', e);
-    return true; // continuar aunque falle
+    return true;
   }
 }
 
-export async function updateFinalEvaluation(id: string, evaluationResponses: Record<string, any>, startTime: number): Promise<boolean> {
+export async function updateFinalEvaluation(id: string, evaluationResponses: Record<string, any>, startTime: number, totalBeforeEval: number): Promise<boolean> {
+  const finalScore = totalBeforeEval + 10;
+  const timeElapsed = Math.floor((Date.now() - startTime) / 1000);
+  console.log(`Saving to Supabase: puntaje_formulario = 10 for participant ${id}`);
+  console.log(`Saving to Supabase: puntaje_total = ${finalScore} for participant ${id}`);
   try {
-    const timeElapsed = Math.floor((Date.now() - startTime) / 1000);
-    const resGet = await fetchWithTimeout('/api/participantes');
-    const all = await resGet.json();
-    const participant = all.find((p: Participant) => p.id === id);
-    const finalScore = (participant?.puntaje_total || 0) + 10;
-
     const res = await fetchWithTimeout('/api/participantes', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
@@ -150,7 +150,7 @@ export async function updateFinalEvaluation(id: string, evaluationResponses: Rec
     return res.ok;
   } catch (e) {
     console.error('Error updateFinalEvaluation:', e);
-    return true; // continuar aunque falle
+    return true;
   }
 }
 

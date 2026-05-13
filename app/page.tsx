@@ -189,12 +189,12 @@ console.log('[handleNicknameSubmit] Participant returned:', participant);
 
 const handleDiagnosticSubmit = async (data: DiagnosticData) => {
     if (participantId) {
-      updateParticipantDemographics(
+      await updateParticipantDemographics(
         participantId,
         data.edad,
         data.genero,
         data.ocupacion
-      ); // No esperamos respuesta
+      );
     }
     saveProgress({
       edad: data.edad,
@@ -218,13 +218,14 @@ const handleDiagnosticSubmit = async (data: DiagnosticData) => {
   };
 
   const handleLevelComplete = async (level: number, score: number, responses: any) => {
-    // Actualizar puntaje local inmediatamente
+    const newTotal = totalScore + score;
+
     setLevelScores(prev => ({
       ...prev,
       [`level${level}`]: score
     }));
-    setTotalScore(prev => prev + score);
-    
+    setTotalScore(newTotal);
+
     if (!completedLevels.includes(level)) {
       setCompletedLevels(prev => [...prev, level]);
     }
@@ -236,9 +237,8 @@ const handleDiagnosticSubmit = async (data: DiagnosticData) => {
     };
     saveProgress(progressUpdate);
 
-    // Guardar en BD sin bloquear
     if (participantId) {
-      updateParticipantScore(participantId, level, score, { responses });
+      updateParticipantScore(participantId, level, score, { responses }, newTotal);
     }
 
     setScreen('levelmap');
@@ -249,7 +249,7 @@ const handleDiagnosticSubmit = async (data: DiagnosticData) => {
     setLevelScores(prev => ({ ...prev, evaluation: 10 }));
 
     if (participantId) {
-      updateFinalEvaluation(participantId, responses, startTime);
+      updateFinalEvaluation(participantId, responses, startTime, totalScore);
       saveProgress({ evaluacionCompletada: true });
     }
 
