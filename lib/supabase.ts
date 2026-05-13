@@ -43,25 +43,27 @@ export interface RankingEntry {
   position?: number;
 }
 
-export async function createParticipantInitial(nickname: string, edad: string, genero: string, ocupacion: string) {
+export async function createParticipantInitial(
+  nickname: string,
+  edad: string,
+  genero: string,
+  ocupacion: string
+) {
   try {
-    console.log('[supabase] Intentando crear participante:', nickname);
-    console.log('[supabase] URL:', supabaseUrl);
-    console.log(`Saving to Supabase: nickname = ${nickname}, edad = ${edad}, genero = ${genero}, ocupacion = ${ocupacion}`);
-
+    console.log('[supabase] Creating participant:', { nickname, edad, genero, ocupacion });
     const { data, error } = await supabase
       .from('participantes')
       .insert([{ nickname, edad, genero, ocupacion }])
       .select()
       .single();
     if (error) {
-      console.error('[supabase] Error al insertar:', error);
+      console.error('[supabase] Insert error:', error);
       return null;
     }
-    console.log('[supabase] Participante creado:', data);
+    console.log('[supabase] Participant created:', data);
     return data;
   } catch (e) {
-    console.error('[supabase] Excepción:', e);
+    console.error('[supabase] Exception:', e);
     return null;
   }
 }
