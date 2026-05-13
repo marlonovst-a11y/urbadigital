@@ -245,21 +245,14 @@ const handleDiagnosticSubmit = async (data: DiagnosticData) => {
   };
 
   const handleFinalEvaluationComplete = async (responses: { pregunta_1: string; pregunta_2: string; pregunta_3: string }) => {
-    if (participantId) {
-      await updateFinalEvaluation(participantId, responses, startTime);
-      const participant = await getParticipant(participantId);
-      if (participant) {
-        setTotalScore(participant.puntaje_total);
-        setLevelScores(prev => ({
-          ...prev,
-          evaluation: 10
-        }));
-      }
+    setTotalScore(prev => prev + 10);
+    setLevelScores(prev => ({ ...prev, evaluation: 10 }));
 
-      saveProgress({
-        evaluacionCompletada: true
-      });
+    if (participantId) {
+      updateFinalEvaluation(participantId, responses, startTime);
+      saveProgress({ evaluacionCompletada: true });
     }
+
     setScreen('finalscore');
   };
 
