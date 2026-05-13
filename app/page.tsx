@@ -189,12 +189,16 @@ console.log('[handleNicknameSubmit] Participant returned:', participant);
 
 const handleDiagnosticSubmit = async (data: DiagnosticData) => {
     if (participantId) {
-      await updateParticipantDemographics(
-        participantId,
-        data.edad,
-        data.genero,
-        data.ocupacion
-      );
+      try {
+        await updateParticipantDemographics(
+          participantId,
+          data.edad,
+          data.genero,
+          data.ocupacion
+        );
+      } catch (e) {
+        console.error('[handleDiagnosticSubmit] Error saving demographics:', e);
+      }
     }
     saveProgress({
       edad: data.edad,

@@ -92,22 +92,30 @@ export async function getParticipant(id: string): Promise<Participant | null> {
   }
 }
 
-export async function updateParticipantDemographics(id: string, edad: string, genero: string, ocupacion: string): Promise<boolean> {
+export function updateParticipantDemographics(id: string, edad: string, genero: string, ocupacion: string): Promise<boolean> {
   console.log(`Saving to Supabase: edad = ${edad}, genero = ${genero}, ocupacion = ${ocupacion} for participant ${id}`);
-  try {
-    const { error } = await supabase
+  // Wrapped in a plain Promise to prevent any surrounding AbortController / React
+  // request context from cancelling this fetch before it completes.
+  return new Promise((resolve) => {
+    supabase
       .from('participantes')
       .update({ edad, genero, ocupacion, updated_at: new Date().toISOString() })
-      .eq('id', id);
-    if (error) {
-      console.error('Error updateParticipantDemographics:', error);
-      return false;
-    }
-    return true;
-  } catch (e) {
-    console.error('Error updateParticipantDemographics:', e);
-    return false;
-  }
+      .eq('id', id)
+      .then(
+        ({ error }) => {
+          if (error) {
+            console.error('Error updateParticipantDemographics:', error);
+            resolve(false);
+          } else {
+            resolve(true);
+          }
+        },
+        (e: unknown) => {
+          console.error('Error updateParticipantDemographics:', e);
+          resolve(false);
+        }
+      );
+  });
 }
 
 export async function updateParticipantScore(id: string, level: number, score: number, responses: Record<string, any>, newTotal: number): Promise<boolean> {
