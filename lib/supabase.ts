@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'https://tbtbyspwdwbgekzjbaml.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRidGJ5c3B3ZHdiZ2VrempiYW1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1Nzg0ODMsImV4cCI6MjA5MDE1NDQ4M30.4f7I4-t4cgQq97Sc3hIyDZ2k4q92X_BolCD611Jh3CI';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const TIMEOUT_MS = 3000;
@@ -93,6 +93,7 @@ export async function getParticipant(id: string): Promise<Participant | null> {
 }
 
 export async function updateParticipantDemographics(id: string, edad: string, genero: string, ocupacion: string): Promise<boolean> {
+  console.log(`[updateParticipantDemographics] participantId=${id}`, { edad, genero, ocupacion });
   try {
     const res = await fetchWithTimeout('/api/participantes', {
       method: 'PATCH',
@@ -107,6 +108,7 @@ export async function updateParticipantDemographics(id: string, edad: string, ge
 }
 
 export async function updateParticipantScore(id: string, level: number, score: number, responses: Record<string, any>): Promise<boolean> {
+  console.log(`[updateParticipantScore] participantId=${id} level=${level} score=${score}`);
   try {
     const res = await fetchWithTimeout('/api/participantes', {
       method: 'PATCH',
@@ -117,6 +119,7 @@ export async function updateParticipantScore(id: string, level: number, score: n
         [`respuestas_nivel_${level}`]: responses
       })
     });
+    console.log(`[updateParticipantScore] Response ok=${res.ok} level=${level}`);
     return res.ok;
   } catch (e) {
     console.error('Error updateParticipantScore:', e);
