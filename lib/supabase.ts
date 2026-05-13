@@ -43,14 +43,15 @@ export interface RankingEntry {
   position?: number;
 }
 
-export async function createParticipantInitial(nickname: string) {
+export async function createParticipantInitial(nickname: string, edad: string, genero: string, ocupacion: string) {
   try {
     console.log('[supabase] Intentando crear participante:', nickname);
     console.log('[supabase] URL:', supabaseUrl);
+    console.log(`Saving to Supabase: nickname = ${nickname}, edad = ${edad}, genero = ${genero}, ocupacion = ${ocupacion}`);
 
     const { data, error } = await supabase
       .from('participantes')
-      .insert([{ nickname }])
+      .insert([{ nickname, edad, genero, ocupacion }])
       .select()
       .single();
     if (error) {
@@ -122,21 +123,24 @@ export async function updateParticipantScore(id: string, level: number, score: n
   console.log(`Saving to Supabase: puntaje_nivel_${level} = ${score} for participant ${id}`);
   console.log(`Saving to Supabase: puntaje_total = ${newTotal} for participant ${id}`);
   try {
-    const res = await fetchWithTimeout('/api/participantes', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id,
+    const { error } = await supabase
+      .from('participantes')
+      .update({
         [`puntaje_nivel_${level}`]: score,
         [`respuestas_nivel_${level}`]: responses,
-        puntaje_total: newTotal
+        puntaje_total: newTotal,
+        updated_at: new Date().toISOString()
       })
-    });
-    console.log(`[updateParticipantScore] Response ok=${res.ok} level=${level}`);
-    return res.ok;
+      .eq('id', id);
+    if (error) {
+      console.error('Error updateParticipantScore:', error);
+      return false;
+    }
+    console.log(`[updateParticipantScore] Saved level=${level}`);
+    return true;
   } catch (e) {
     console.error('Error updateParticipantScore:', e);
-    return true;
+    return false;
   }
 }
 
@@ -146,22 +150,25 @@ export async function updateFinalEvaluation(id: string, evaluationResponses: Rec
   console.log(`Saving to Supabase: puntaje_formulario = 10 for participant ${id}`);
   console.log(`Saving to Supabase: puntaje_total = ${finalScore} for participant ${id}`);
   try {
-    const res = await fetchWithTimeout('/api/participantes', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id,
+    const { error } = await supabase
+      .from('participantes')
+      .update({
         puntaje_formulario: 10,
         puntaje_total: finalScore,
         tiempo_total: timeElapsed,
         respuestas_evaluacion: evaluationResponses,
-        fecha_hora: new Date().toISOString()
+        fecha_hora: new Date().toISOString(),
+        updated_at: new Date().toISOString()
       })
-    });
-    return res.ok;
+      .eq('id', id);
+    if (error) {
+      console.error('Error updateFinalEvaluation:', error);
+      return false;
+    }
+    return true;
   } catch (e) {
     console.error('Error updateFinalEvaluation:', e);
-    return true;
+    return false;
   }
 }
 

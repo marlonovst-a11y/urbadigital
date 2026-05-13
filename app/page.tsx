@@ -14,7 +14,7 @@ import FinalEvaluation from '@/components/FinalEvaluation';
 import FinalScore from '@/components/FinalScore';
 import Closing from '@/components/Closing';
 import SessionRecoveryDialog from '@/components/SessionRecoveryDialog';
-import { createParticipantInitial, updateParticipantDemographics, updateParticipantScore, getParticipant, updateFinalEvaluation } from '@/lib/supabase';
+import { createParticipantInitial, updateParticipantScore, getParticipant, updateFinalEvaluation } from '@/lib/supabase';
 import { saveProgress, loadProgress, clearProgress, hasIncompleteSession, getLastCompletedLevel } from '@/lib/progress';
 import { clearSession } from '@/lib/session';
 
@@ -129,81 +129,56 @@ export default function Home() {
     setScreen('nickname');
   };
 
-  const handleNicknameSubmit = async (name: string) => {
+  const handleNicknameSubmit = (name: string) => {
     console.log('[handleNicknameSubmit] Called with nickname:', name);
-
     clearSession();
     clearProgress();
-
-   let participant = await createParticipantInitial(name);
-console.log('[handleNicknameSubmit] Participant returned:', participant);
-    if (!participant) {
-  participant = {
-    id: 'local-' + Date.now(),
-    nickname: name,
-    edad: '', genero: '', ocupacion: '',
-    puntaje_nivel_1: 0, puntaje_nivel_2: 0,
-    puntaje_nivel_3: 0, puntaje_nivel_4: 0,
-    puntaje_nivel_5: 0, puntaje_formulario: 0,
-    puntaje_total: 0, tiempo_total: 0,
-    fecha_hora: new Date().toISOString(),
-    respuestas_nivel_1: null, respuestas_nivel_2: null,
-    respuestas_nivel_3: null, respuestas_nivel_4: null,
-    respuestas_nivel_5: null, respuestas_evaluacion: null
-  };
-}
-
-    if (participant) {
-      console.log('[handleNicknameSubmit] Setting state with participant ID:', participant.id);
-      setNickname(name);
-      setParticipantId(participant.id);
-      setStartTime(Math.floor(Date.now() / 1000));
-
-      saveProgress({
-        participanteId: participant.id,
-        nickname: name,
-        edad: '',
-        genero: '',
-        ocupacion: '',
-        nivel1Completado: false,
-        nivel1Puntaje: 0,
-        nivel2Completado: false,
-        nivel2Puntaje: 0,
-        nivel3Completado: false,
-        nivel3Puntaje: 0,
-        nivel4Completado: false,
-        nivel4Puntaje: 0,
-        nivel5Completado: false,
-        nivel5Puntaje: 0,
-        evaluacionCompletada: false,
-        ultimoNivel: 0,
-        timestamp: new Date().toISOString()
-      });
-
-      console.log('[handleNicknameSubmit] Moving to diagnostic screen');
-      setScreen('diagnostic');
-    } else {
-      console.error('[handleNicknameSubmit] Failed to create participant - participant is null');
-    }
+    setNickname(name);
+    setStartTime(Math.floor(Date.now() / 1000));
+    console.log('[handleNicknameSubmit] Moving to diagnostic screen');
+    setScreen('diagnostic');
   };
 
-const handleDiagnosticSubmit = async (data: DiagnosticData) => {
-    if (participantId) {
+  const handleDiagnosticSubmit = async (data: DiagnosticData) => {
+    let id = participantId;
+    if (!id) {
       try {
-        await updateParticipantDemographics(
-          participantId,
-          data.edad,
-          data.genero,
-          data.ocupacion
-        );
+        const participant = await createParticipantInitial(nickname, data.edad, data.genero, data.ocupacion);
+        if (participant) {
+          id = participant.id;
+          setParticipantId(id);
+          console.log('[handleDiagnosticSubmit] Participant created with ID:', id);
+        } else {
+          id = 'local-' + Date.now();
+          setParticipantId(id);
+          console.error('[handleDiagnosticSubmit] Supabase insert failed, using local ID:', id);
+        }
       } catch (e) {
-        console.error('[handleDiagnosticSubmit] Error saving demographics:', e);
+        console.error('[handleDiagnosticSubmit] Error creating participant:', e);
+        id = 'local-' + Date.now();
+        setParticipantId(id);
       }
     }
+
     saveProgress({
+      participanteId: id,
+      nickname,
       edad: data.edad,
       genero: data.genero,
-      ocupacion: data.ocupacion
+      ocupacion: data.ocupacion,
+      nivel1Completado: false,
+      nivel1Puntaje: 0,
+      nivel2Completado: false,
+      nivel2Puntaje: 0,
+      nivel3Completado: false,
+      nivel3Puntaje: 0,
+      nivel4Completado: false,
+      nivel4Puntaje: 0,
+      nivel5Completado: false,
+      nivel5Puntaje: 0,
+      evaluacionCompletada: false,
+      ultimoNivel: 0,
+      timestamp: new Date().toISOString()
     });
     setScreen('levelmap');
   };
