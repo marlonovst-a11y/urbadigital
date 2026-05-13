@@ -333,12 +333,6 @@ export default function Home() {
     setScreen('finalscore');
   };
 
-  const handleDevNav = (target: Screen) => {
-    setNickname('Test');
-    setParticipantId('dev-123');
-    setScreen(target);
-  };
-
   if (!assetsLoaded) {
     return (
       <div style={{ width: '100vw', height: '100vh', background: '#1E2D6B', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 24 }}>
@@ -386,29 +380,6 @@ export default function Home() {
       >
         {isMuted ? '🔇' : '🔊'}
       </button>
-      {(
-        <div className="hidden md:flex" style={{ position: 'fixed', top: '16px', right: '16px', zIndex: 9999, background: 'rgba(0,0,0,0.7)', borderRadius: '8px', padding: '6px 10px', gap: '6px', alignItems: 'center' }}>
-          {([
-            { label: 'N1', screen: 'level1' },
-            { label: 'N2', screen: 'level2' },
-            { label: 'N3', screen: 'level3' },
-            { label: 'N4', screen: 'level4' },
-            { label: 'N5', screen: 'level5' },
-            { label: 'Eval', screen: 'finalevaluation' },
-            { label: 'Score', screen: 'finalscore' },
-          ] as { label: string; screen: Screen }[]).map(({ label, screen: s }) => (
-            <button
-              key={s}
-              onClick={() => handleDevNav(s)}
-              style={{ background: 'rgba(255,255,255,0.15)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)', borderRadius: '4px', padding: '2px 8px', fontSize: '11px', fontWeight: 600, cursor: 'pointer', transition: 'background 0.15s' }}
-              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.3)')}
-              onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.15)')}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      )}
       <SessionRecoveryDialog
         open={showRecoveryDialog}
         nickname={recoveryData?.nickname || ''}
