@@ -49,23 +49,17 @@ export async function createParticipantInitial(
   genero: string,
   ocupacion: string
 ) {
-  try {
-    console.log('[supabase] Creating participant:', { nickname, edad, genero, ocupacion });
-    const { data, error } = await supabase
-      .from('participantes')
-      .insert([{ nickname, edad, genero, ocupacion }])
-      .select()
-      .single();
-    if (error) {
-      console.error('[supabase] Insert error:', error);
-      return null;
-    }
-    console.log('[supabase] Participant created:', data);
-    return data;
-  } catch (e) {
-    console.error('[supabase] Exception:', e);
+  const { data, error } = await supabase
+    .from('participantes')
+    .insert([{ nickname, edad, genero, ocupacion }])
+    .select()
+    .single();
+  if (error) {
+    console.error('[supabase] Insert error:', error);
     return null;
   }
+  console.log('[supabase] Created:', data);
+  return data;
 }
 
 export async function createParticipant(nickname: string, edad: string, genero: string, ocupacion: string): Promise<Participant | null> {
