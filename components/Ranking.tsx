@@ -10,24 +10,10 @@ interface RankingProps {
   participantId: string | null;
 }
 
-const demoData: RankingEntry[] = [
-  { id: '1', nickname: 'María G.', puntaje_total: 105, position: 1 },
-  { id: '2', nickname: 'Carlos R.', puntaje_total: 98, position: 2 },
-  { id: '3', nickname: 'Ana L.', puntaje_total: 92, position: 3 },
-  { id: '4', nickname: 'Pedro M.', puntaje_total: 88, position: 4 },
-  { id: '5', nickname: 'Laura S.', puntaje_total: 85, position: 5 },
-  { id: '6', nickname: 'Diego T.', puntaje_total: 82, position: 6 },
-  { id: '7', nickname: 'Sofía P.', puntaje_total: 78, position: 7 },
-  { id: '8', nickname: 'Juan C.', puntaje_total: 75, position: 8 },
-  { id: '9', nickname: 'Camila V.', puntaje_total: 72, position: 9 },
-  { id: '10', nickname: 'Roberto H.', puntaje_total: 68, position: 10 }
-];
-
 export default function Ranking({ isOpen, onClose, participantId }: RankingProps) {
   const [ranking, setRanking] = useState<RankingEntry[]>([]);
   const [currentUserRanking, setCurrentUserRanking] = useState<{ position: number; score: number; nickname: string } | null>(null);
   const [loading, setLoading] = useState(true);
-  const [usingDemo, setUsingDemo] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -39,18 +25,9 @@ export default function Ranking({ isOpen, onClose, participantId }: RankingProps
     setLoading(true);
 
     const topRanking = await getTopRanking(10);
-
-    if (topRanking.length === 0) {
-      setRanking(demoData);
-      setUsingDemo(true);
-      setLoading(false);
-      return;
-    }
-
     setRanking(topRanking);
-    setUsingDemo(false);
 
-    if (participantId) {
+    if (participantId && topRanking.length > 0) {
       const participant = await getParticipant(participantId);
       const rankingInfo = await getParticipantRanking(participantId);
 
@@ -112,17 +89,15 @@ export default function Ranking({ isOpen, onClose, participantId }: RankingProps
               <div className="inline-block w-12 h-12 border-4 border-[#2167AE] border-t-transparent rounded-full animate-spin"></div>
               <p className="text-gray-600 mt-4">Cargando ranking...</p>
             </div>
+          ) : ranking.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-white text-lg font-semibold">Sé el primero en completar la aplicación</p>
+            </div>
           ) : (
             <>
-              {usingDemo && (
-                <div className="bg-white/20 border border-white/40 rounded-lg p-3 mb-4 text-sm text-white">
-                  Mostrando datos de ejemplo. Sé el primero en completar la aplicación.
-                </div>
-              )}
-
               <div className="space-y-2">
                 {ranking.map((entry) => {
-                  const isCurrentUser = !usingDemo && entry.id === participantId;
+                  const isCurrentUser = entry.id === participantId;
                   const position = entry.position || 0;
 
                   return (
@@ -173,7 +148,7 @@ export default function Ranking({ isOpen, onClose, participantId }: RankingProps
                 })}
               </div>
 
-              {!usingDemo && currentUserRanking && !isCurrentUserInTop10 && (
+              {currentUserRanking && !isCurrentUserInTop10 && (
                 <div className="mt-6 pt-6 border-t-2 border-gray-200">
                   <p className="text-sm text-gray-600 mb-3 font-semibold">Tu posición:</p>
                   <div className="flex items-center gap-4 p-4 rounded-lg bg-[#A8C8E8] border-2 border-[#2167AE]">
