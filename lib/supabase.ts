@@ -95,15 +95,18 @@ export async function getParticipant(id: string): Promise<Participant | null> {
 export async function updateParticipantDemographics(id: string, edad: string, genero: string, ocupacion: string): Promise<boolean> {
   console.log(`Saving to Supabase: edad = ${edad}, genero = ${genero}, ocupacion = ${ocupacion} for participant ${id}`);
   try {
-    const res = await fetchWithTimeout('/api/participantes', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id, edad, genero, ocupacion })
-    });
-    return res.ok;
+    const { error } = await supabase
+      .from('participantes')
+      .update({ edad, genero, ocupacion, updated_at: new Date().toISOString() })
+      .eq('id', id);
+    if (error) {
+      console.error('Error updateParticipantDemographics:', error);
+      return false;
+    }
+    return true;
   } catch (e) {
     console.error('Error updateParticipantDemographics:', e);
-    return true; // continuar aunque falle
+    return false;
   }
 }
 
