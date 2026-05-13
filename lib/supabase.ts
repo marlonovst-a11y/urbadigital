@@ -4,14 +4,6 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-const TIMEOUT_MS = 3000;
-
-function fetchWithTimeout(url: string, options: RequestInit = {}): Promise<Response> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
-  return fetch(url, { ...options, signal: controller.signal })
-    .finally(() => clearTimeout(timeout));
-}
 
 export interface Participant {
   id: string;
@@ -62,31 +54,18 @@ export async function createParticipantInitial(
   return data;
 }
 
-export async function createParticipant(nickname: string, edad: string, genero: string, ocupacion: string): Promise<Participant | null> {
-  try {
-    const res = await fetchWithTimeout('/api/participantes', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nickname, edad, genero, ocupacion })
-    });
-    if (!res.ok) return null;
-    return await res.json();
-  } catch (e) {
-    console.error('Error createParticipant:', e);
-    return null;
-  }
-}
 
 export async function getParticipant(id: string): Promise<Participant | null> {
-  try {
-    const res = await fetchWithTimeout('/api/participantes');
-    if (!res.ok) return null;
-    const all = await res.json();
-    return all.find((p: Participant) => p.id === id) || null;
-  } catch (e) {
-    console.error('Error getParticipant:', e);
+  const { data, error } = await supabase
+    .from('participantes')
+    .select('*')
+    .eq('id', id)
+    .maybeSingle();
+  if (error) {
+    console.error('Error getParticipant:', error);
     return null;
   }
+  return data;
 }
 
 export function updateParticipantDemographics(id: string, edad: string, genero: string, ocupacion: string): Promise<boolean> {
@@ -169,32 +148,31 @@ export async function updateFinalEvaluation(id: string, evaluationResponses: Rec
 }
 
 export async function getTopRanking(limit: number = 10): Promise<RankingEntry[]> {
-  try {
-    const res = await fetchWithTimeout('/api/ranking');
-    if (!res.ok) return [];
-    const data = await res.json();
-    return data.map((entry: RankingEntry, index: number) => ({
-      ...entry,
-      position: index + 1
-    }));
-  } catch (e) {
-    console.error('Error getTopRanking:', e);
+  const { data, error } = await supabase
+    .from('participantes')
+    .select('id, nickname, puntaje_total')
+    .order('puntaje_total', { ascending: false })
+    .limit(limit);
+  if (error) {
+    console.error('Error getTopRanking:', error);
     return [];
   }
+  return (data ?? []).map((entry, index) => ({ ...entry, position: index + 1 }));
 }
 
 export async function getParticipantRanking(participantId: string): Promise<{ position: number; totalParticipants: number } | null> {
-  try {
-    const res = await fetchWithTimeout('/api/ranking');
-    if (!res.ok) return null;
-    const all = await res.json();
-    const position = all.findIndex((p: RankingEntry) => p.id === participantId);
-    if (position === -1) return null;
-    return { position: position + 1, totalParticipants: all.length };
-  } catch (e) {
-    console.error('Error getParticipantRanking:', e);
+  const { data, error } = await supabase
+    .from('participantes')
+    .select('id, puntaje_total')
+    .order('puntaje_total', { ascending: false });
+  if (error) {
+    console.error('Error getParticipantRanking:', error);
     return null;
   }
+  const all = data ?? [];
+  const position = all.findIndex((p) => p.id === participantId);
+  if (position === -1) return null;
+  return { position: position + 1, totalParticipants: all.length };
 }
 
 export async function checkNicknameRecentPlay(nickname: string): Promise<{ played: boolean; nextAvailable?: Date }> {
