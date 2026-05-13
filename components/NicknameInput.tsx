@@ -42,12 +42,10 @@ export default function NicknameInput({ onContinue }: NicknameInputProps) {
     try {
       const cooldownCheck = await checkNicknameCooldown(nickname.trim());
 
-      if (cooldownCheck.played) {
-        setError('Este nombre ya fue usado recientemente. Por favor espera 3 horas o usa un nombre diferente.');
-        setCooldownData({
-          allowedAt: cooldownCheck.nextAvailable || new Date(),
-          remainingMinutes: 180
-        });
+      if (cooldownCheck.played && cooldownCheck.nextAvailable) {
+        const remainingMs = cooldownCheck.nextAvailable.getTime() - Date.now();
+        const remainingMinutes = Math.max(1, Math.ceil(remainingMs / 60000));
+        setCooldownData({ allowedAt: cooldownCheck.nextAvailable, remainingMinutes });
         setShowCooldownDialog(true);
         setIsSubmitting(false);
         return;

@@ -42,13 +42,13 @@ export default function NicknameCooldownDialog({
           </AlertDialogDescription>
           <div className="pt-4 text-center">
             <p className="text-gray-700 mb-2">
-              Podrás volver a jugar a las:
+              Podrás volver a jugar en:
             </p>
             <p className="text-3xl font-bold text-[#2167AE]">
-              {formattedTime}
+              {remainingMinutes} {remainingMinutes === 1 ? 'minuto' : 'minutos'}
             </p>
             <p className="text-sm text-gray-500 mt-2">
-              (en aproximadamente {remainingMinutes} minutos)
+              (a las {formattedTime})
             </p>
           </div>
         </AlertDialogHeader>

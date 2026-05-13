@@ -175,19 +175,21 @@ export async function getParticipantRanking(participantId: string): Promise<{ po
   return { position: position + 1, totalParticipants: all.length };
 }
 
+const COOLDOWN_MS = 30 * 60 * 1000;
+
 export async function checkNicknameRecentPlay(nickname: string): Promise<{ played: boolean; nextAvailable?: Date }> {
   try {
-    const threeHoursAgo = new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString();
+    const cutoff = new Date(Date.now() - COOLDOWN_MS).toISOString();
     const { data, error } = await supabase
       .from('participantes')
       .select('created_at')
       .eq('nickname', nickname)
-      .gte('created_at', threeHoursAgo)
+      .gte('created_at', cutoff)
       .order('created_at', { ascending: false })
       .limit(1);
     if (error) return { played: false };
     if (data && data.length > 0) {
-      const nextAvailable = new Date(new Date(data[0].created_at).getTime() + 3 * 60 * 60 * 1000);
+      const nextAvailable = new Date(new Date(data[0].created_at).getTime() + COOLDOWN_MS);
       return { played: true, nextAvailable };
     }
     return { played: false };
