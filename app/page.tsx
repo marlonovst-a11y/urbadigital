@@ -134,7 +134,7 @@ export default function Home() {
     clearSession();
     clearProgress();
     setNickname(name);
-    setStartTime(Math.floor(Date.now() / 1000));
+    setStartTime(Date.now());
     console.log('[handleNicknameSubmit] Moving to diagnostic screen');
     setScreen('diagnostic');
   };

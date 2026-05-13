@@ -40,7 +40,7 @@ export default function NicknameInput({ onContinue }: NicknameInputProps) {
     }
     setIsSubmitting(true);
     try {
-      const cooldownCheck = await checkNicknameCooldown(nickname.trim());
+      const cooldownCheck = await checkNicknameCooldown(nickname.trim().toLowerCase());
 
       if (cooldownCheck.played && cooldownCheck.nextAvailable) {
         const remainingMs = cooldownCheck.nextAvailable.getTime() - Date.now();
@@ -51,7 +51,7 @@ export default function NicknameInput({ onContinue }: NicknameInputProps) {
         return;
       }
 
-      await onContinue(nickname.trim());
+      await onContinue(nickname.trim().toLowerCase());
     } catch (error) {
       setError('Error al guardar. Por favor intenta de nuevo.');
       setIsSubmitting(false);

@@ -43,7 +43,7 @@ export async function createParticipantInitial(
 ) {
   const { data, error } = await supabase
     .from('participantes')
-    .insert([{ nickname, edad, genero, ocupacion }])
+    .insert([{ nickname: nickname.toLowerCase(), edad, genero, ocupacion }])
     .select()
     .single();
   if (error) {
@@ -183,7 +183,7 @@ export async function checkNicknameRecentPlay(nickname: string): Promise<{ playe
     const { data, error } = await supabase
       .from('participantes')
       .select('created_at')
-      .eq('nickname', nickname)
+      .eq('nickname', nickname.toLowerCase())
       .gte('created_at', cutoff)
       .order('created_at', { ascending: false })
       .limit(1);
